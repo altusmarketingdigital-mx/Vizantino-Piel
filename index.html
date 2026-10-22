@@ -153,9 +153,10 @@
       </a>
 
       <!-- Enlaces Centrales (Desktop) -->
-      <nav class="hidden lg:flex items-center gap-8 text-xs uppercase tracking-[0.2em] font-medium text-zinc-300">
+      <nav class="hidden lg:flex items-center gap-7 text-xs uppercase tracking-[0.2em] font-medium text-zinc-300">
         <a href="#inicio" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Inicio</a>
         <a href="#catalogo" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Catálogo</a>
+        <a href="#nosotros" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Nosotros</a>
         <a href="#sucursales" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Sucursales</a>
         <a href="#contacto" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Contacto</a>
       </nav>
@@ -217,6 +218,7 @@
     <nav class="flex flex-col p-8 gap-5 text-sm tracking-widest uppercase font-medium text-zinc-300">
       <a href="#inicio" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Inicio</a>
       <a href="#catalogo" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Catálogo Completo</a>
+      <a href="#nosotros" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Nosotros (Misión & Valores)</a>
       <a href="#sucursales" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Nuestras Sucursales</a>
       <a href="#contacto" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Contacto y Redes</a>
       <div class="pt-6 border-t border-cardBorder space-y-4">
@@ -363,6 +365,130 @@
         <button onclick="filterCategory('todos'); document.getElementById('searchInput').value='';" class="mt-4 px-6 py-2 bg-gold-500/20 text-gold-400 border border-gold-500/30 rounded text-xs uppercase tracking-widest hover:bg-gold-500 hover:text-black transition">
           Ver todo el catálogo
         </button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- NUEVA SECCIÓN: MISIÓN, VISIÓN Y VALORES -->
+    <!-- ========================================== -->
+    <section id="nosotros" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-cardBorder">
+      <!-- Título de Sección -->
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-semibold tracking-[0.3em] uppercase text-gold-400">Identidad de Marca</span>
+        <h2 class="font-serif text-3xl sm:text-4xl text-white font-bold mt-2">Nuestra Esencia y Filosofía</h2>
+        <div class="w-16 h-0.5 bg-gold-500 mx-auto mt-4 mb-4"></div>
+        <p class="font-serif text-lg sm:text-xl text-gold-300 italic">
+          "VIZANTINO — Diseñado para distinguir. Creado para trascender."
+        </p>
+      </div>
+
+      <!-- Misión y Visión (Tarjetas destacadas) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <!-- Misión -->
+        <div class="bg-gradient-to-br from-cardBg to-darkSurface p-8 rounded-xl border border-gold-500/30 gold-border-glow relative flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[10px] tracking-[0.3em] uppercase font-bold text-gold-400 bg-gold-500/10 px-3 py-1 rounded border border-gold-500/20">
+                Propósito Fundamental
+              </span>
+              <i class="fa-solid fa-compass text-2xl text-gold-500/40"></i>
+            </div>
+            <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold mb-4">
+              MISIÓN <span class="text-gold-400 font-light">| VIZANTINO</span>
+            </h3>
+            <p class="text-zinc-300 text-sm leading-relaxed">
+              Crear piezas de piel genuina únicas y personalizadas que expresen identidad, satisfaciendo las necesidades de nuestros clientes con calidad.
+            </p>
+          </div>
+          <div class="pt-6 mt-6 border-t border-cardBorder/60 flex items-center gap-2 text-xs text-zinc-500">
+            <i class="fa-solid fa-feather text-gold-500"></i>
+            <span>Manos artesanas en Tlaquepaque y Tonalá</span>
+          </div>
+        </div>
+
+        <!-- Visión -->
+        <div class="bg-gradient-to-br from-cardBg to-darkSurface p-8 rounded-xl border border-gold-500/30 gold-border-glow relative flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[10px] tracking-[0.3em] uppercase font-bold text-gold-400 bg-gold-500/10 px-3 py-1 rounded border border-gold-500/20">
+                Rumbo & Liderazgo
+              </span>
+              <i class="fa-solid fa-eye text-2xl text-gold-500/40"></i>
+            </div>
+            <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold mb-4">
+              VISIÓN <span class="text-gold-400 font-light">| VIZANTINO</span>
+            </h3>
+            <p class="text-zinc-300 text-sm leading-relaxed">
+              Liderar el mercado de artículos de piel en México y convertirnos en un referente internacional de autenticidad, innovación y prestigio.
+            </p>
+          </div>
+          <div class="pt-6 mt-6 border-t border-cardBorder/60 flex items-center gap-2 text-xs text-zinc-500">
+            <i class="fa-solid fa-earth-americas text-gold-500"></i>
+            <span>Proyección y excelencia internacional</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nuestros Valores -->
+      <div class="bg-darkSurface p-8 sm:p-10 rounded-xl border border-cardBorder">
+        <div class="text-center max-w-xl mx-auto mb-10">
+          <span class="text-[11px] font-semibold tracking-[0.25em] uppercase text-gold-400">Pilares Fundamentales</span>
+          <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold mt-1">Nuestros Valores | VIZANTINO piel</h3>
+          <p class="text-xs text-zinc-400 mt-2">Principios éticos que guían cada corte, costura y relación con nuestros clientes.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- Calidad -->
+          <div class="bg-cardBg p-5 rounded-lg border border-cardBorder hover:border-gold-500/40 transition">
+            <div class="text-xl mb-2">✨</div>
+            <h4 class="font-serif text-lg text-white font-bold mb-1">Calidad</h4>
+            <p class="text-xs text-zinc-400 leading-relaxed">Piel genuina, atención a cada detalle.</p>
+          </div>
+
+          <!-- Honestidad -->
+          <div class="bg-cardBg p-5 rounded-lg border border-cardBorder hover:border-gold-500/40 transition">
+            <div class="text-xl mb-2">🤝</div>
+            <h4 class="font-serif text-lg text-white font-bold mb-1">Honestidad</h4>
+            <p class="text-xs text-zinc-400 leading-relaxed">Transparencia y confianza.</p>
+          </div>
+
+          <!-- Exclusividad -->
+          <div class="bg-cardBg p-5 rounded-lg border border-cardBorder hover:border-gold-500/40 transition">
+            <div class="text-xl mb-2">👜</div>
+            <h4 class="font-serif text-lg text-white font-bold mb-1">Exclusividad</h4>
+            <p class="text-xs text-zinc-400 leading-relaxed">Cada pieza es única.</p>
+          </div>
+
+          <!-- Innovación -->
+          <div class="bg-cardBg p-5 rounded-lg border border-cardBorder hover:border-gold-500/40 transition">
+            <div class="text-xl mb-2">💡</div>
+            <h4 class="font-serif text-lg text-white font-bold mb-1">Innovación</h4>
+            <p class="text-xs text-zinc-400 leading-relaxed">Diseño y funcionalidad.</p>
+          </div>
+
+          <!-- Compromiso -->
+          <div class="bg-cardBg p-5 rounded-lg border border-cardBorder hover:border-gold-500/40 transition">
+            <div class="text-xl mb-2">❤️</div>
+            <h4 class="font-serif text-lg text-white font-bold mb-1">Compromiso</h4>
+            <p class="text-xs text-zinc-400 leading-relaxed">Calidad en cada entrega.</p>
+          </div>
+
+          <!-- Servicio -->
+          <div class="bg-cardBg p-5 rounded-lg border border-cardBorder hover:border-gold-500/40 transition">
+            <div class="text-xl mb-2">⭐</div>
+            <h4 class="font-serif text-lg text-white font-bold mb-1">Servicio</h4>
+            <p class="text-xs text-zinc-400 leading-relaxed">Atención cercana y personalizada.</p>
+          </div>
+
+        </div>
+
+        <!-- Sello final de valores -->
+        <div class="mt-8 pt-6 border-t border-cardBorder text-center">
+          <span class="text-xs tracking-[0.25em] uppercase text-zinc-400 font-semibold">
+            VIZANTINO piel — <span class="gold-gradient-text font-bold">Calidad y Autenticidad en cada pieza.</span>
+          </span>
+        </div>
       </div>
     </section>
 
