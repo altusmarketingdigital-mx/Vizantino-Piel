@@ -527,7 +527,7 @@
           <li><span>Email: contacto@vizantinopiel.com</span></li>
           <li><span>Horario: Lun - Dom 10:00 - 20:30 hrs</span></li>
           <li><button onclick="handleUserAuthClick()" class="hover:text-gold-400 transition text-left">Mi Portal de Cliente</button></li>
-          <li><a href="javascript:void(0)" onclick="alert('Políticas de Garantía: Todos nuestros productos cuentan con garantía de satisfacción en costuras y herrajes.');" class="hover:text-gold-400 transition">Garantías & Devoluciones</a></li>
+          <li><a href="javascript:void(0)" onclick="openWarrantyModal()" class="hover:text-gold-400 transition">Garantías & Devoluciones</a></li>
         </ul>
       </div>
 
@@ -1319,6 +1319,135 @@
     </div>
   </div>
 
+  <!-- ========================================== -->
+  <!-- MODAL DE POLÍTICAS, GARANTÍAS Y DEVOLUCIONES -->
+  <!-- ========================================== -->
+  <div id="warrantyModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-6">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeWarrantyModal()"></div>
+    
+    <div class="relative bg-cardBg border border-gold-500/40 rounded-xl max-w-2xl w-full p-6 sm:p-8 z-10 max-h-[90vh] overflow-y-auto shadow-2xl space-y-6">
+      
+      <!-- Botón Cerrar -->
+      <button onclick="closeWarrantyModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <!-- Cabecera -->
+      <div class="border-b border-cardBorder pb-4 text-center sm:text-left">
+        <div class="flex items-center gap-2 justify-center sm:justify-start text-gold-400 text-xs font-semibold tracking-[0.25em] uppercase mb-1">
+          <i class="fa-solid fa-shield-halved"></i> Respaldo & Compromiso Artesanal
+        </div>
+        <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold leading-tight">
+          Políticas de Cambios, Devoluciones y Garantía
+        </h3>
+        <div class="flex items-center gap-2 mt-2">
+          <img src="logo-gold.png" alt="Vizantino" class="h-5 w-auto object-contain">
+          <span class="text-[11px] tracking-[0.3em] text-zinc-400 uppercase font-light">
+            PIEL · CADA PIEZA ES ÚNICA
+          </span>
+        </div>
+      </div>
+
+      <!-- Contenido de las 7 Políticas Oficiales -->
+      <div class="space-y-5 text-xs text-zinc-300 leading-relaxed">
+        
+        <!-- 1 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">1</span>
+            Características de la Piel Genuina
+          </h4>
+          <p class="text-zinc-400">
+            Al ser un material natural, cada pieza puede presentar variaciones de color, textura, vetas y marcas propias de la piel. Estas características no constituyen defectos por sí mismas, siempre que no afecten la calidad o funcionalidad del producto.
+          </p>
+        </div>
+
+        <!-- 2 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">2</span>
+            Garantía
+          </h4>
+          <p class="text-zinc-400">
+            Todos nuestros productos cuentan con una garantía mínima de <strong>90 días contra defectos de fabricación</strong>, conforme a la legislación aplicable. Los <strong>cierres y broches cuentan con 6 meses de garantía</strong> por fallas de fabricación. La garantía no cubre daños por mal uso, accidentes o desgaste normal.
+          </p>
+        </div>
+
+        <!-- 3 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">3</span>
+            Cambios y Devoluciones
+          </h4>
+          <p class="text-zinc-400">
+            Aceptamos solicitudes por inconformidad dentro de los primeros <strong>7 días naturales posteriores a la recepción</strong>, sujetas a revisión y a las condiciones aplicables. Los productos deberán estar sin uso y en condiciones adecuadas. Este plazo comercial no limita los derechos legales de cancelación, garantía o devolución del consumidor.
+          </p>
+        </div>
+
+        <!-- 4 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">4</span>
+            Productos Personalizados
+          </h4>
+          <p class="text-zinc-400">
+            Los artículos personalizados con nombres, iniciales o logotipos pueden tener restricciones para devoluciones por cambio de opinión. Esto no limita los derechos del consumidor cuando existan defectos, incumplimientos u otras causas previstas por la ley.
+          </p>
+        </div>
+
+        <!-- 5 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">5</span>
+            Envíos
+          </h4>
+          <p class="text-zinc-400">
+            <strong>VIZANTINO</strong> cubre gastos de envío por cambios, devoluciones o garantías autorizados conforme a estas políticas.
+          </p>
+        </div>
+
+        <!-- 6 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">6</span>
+            Cancelaciones y Reembolsos
+          </h4>
+          <p class="text-zinc-400">
+            En compras por internet, el consumidor podrá ejercer el derecho de revocación dentro del plazo legal aplicable, conforme al artículo 56 de la Ley Federal de Protección al Consumidor y sus excepciones. Cuando corresponda un reembolso, se realizará conforme a la legislación aplicable y al medio de pago utilizado.
+          </p>
+        </div>
+
+        <!-- 7 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">7</span>
+            Cómo Solicitar una Devolución o Garantía
+          </h4>
+          <p class="text-zinc-400 mb-3">
+            Contacta a nuestro servicio de atención al cliente con tu número de pedido, una descripción del motivo y fotografías o videos cuando corresponda. Te indicaremos los pasos para resolver tu solicitud.
+          </p>
+          <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20deseo%20hacer%20válida%20una%20solicitud%20de%20garantía%20o%20devolución" 
+             target="_blank" rel="noopener noreferrer" 
+             class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded font-semibold text-[11px] hover:bg-emerald-600 hover:text-white transition">
+            <i class="fa-brands fa-whatsapp"></i> Contactar Atención a Clientes WhatsApp
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Pie del Modal -->
+      <div class="pt-4 border-t border-cardBorder flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
+        <span class="italic text-gold-400/80 font-serif text-sm">
+          VIZANTINO piel — Cada pieza es única.
+        </span>
+        <button onclick="closeWarrantyModal()" class="w-full sm:w-auto px-6 py-2.5 bg-darkSurface border border-cardBorder hover:border-gold-500 text-zinc-300 rounded uppercase tracking-wider text-[11px] font-semibold transition">
+          Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- SISTEMA DE NOTIFICACIONES TOAST -->
   <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
@@ -2044,6 +2173,17 @@
 
     function closeQuickView() {
       document.getElementById('quickViewModal').classList.add('hidden');
+    }
+
+    /* ==========================================
+       MODAL DE GARANTÍAS Y DEVOLUCIONES
+    ========================================== */
+    function openWarrantyModal() {
+      document.getElementById('warrantyModal').classList.remove('hidden');
+    }
+
+    function closeWarrantyModal() {
+      document.getElementById('warrantyModal').classList.add('hidden');
     }
 
     /* ==========================================
