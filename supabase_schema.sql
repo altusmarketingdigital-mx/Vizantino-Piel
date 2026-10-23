@@ -1,44 +1,44 @@
 -- ==========================================================
 -- ESQUEMA DE BASE DE DATOS PARA VIZANTINO PIEL (SUPABASE / POSTGRESQL)
--- Tienda Online Oficial y Preparación para Punto de Venta (POS)
+-- 100% Compatible con el editor SQL de Supabase
 -- ==========================================================
 
 -- 1. EXTENSIONES
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- 2. TABLA DE USUARIOS / CLIENTES
+-- 2. TABLA DE CLIENTES
 CREATE TABLE IF NOT EXISTS public.customers (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    phone VARCHAR(50),
-    city VARCHAR(150),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    phone TEXT,
+    city TEXT,
     address TEXT,
-    password_hash TEXT, -- Para autenticación directa o vincular con auth.users
-    role VARCHAR(20) DEFAULT 'customer', -- 'customer' o 'admin'
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+    password_hash TEXT,
+    role TEXT DEFAULT 'customer',
+    created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 -- Habilitar RLS en customers
 ALTER TABLE public.customers ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Lectura pública de clientes propios" 
-ON public.customers FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Lectura pública de clientes propios" ON public.customers;
+CREATE POLICY "Lectura pública de clientes propios" ON public.customers FOR SELECT USING (true);
 
-CREATE POLICY "Inserción pública para registro de clientes" 
-ON public.customers FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "Inserción pública para registro de clientes" ON public.customers;
+CREATE POLICY "Inserción pública para registro de clientes" ON public.customers FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "Actualización de datos por el propio cliente" 
-ON public.customers FOR UPDATE USING (true);
+DROP POLICY IF EXISTS "Actualización de datos por el propio cliente" ON public.customers;
+CREATE POLICY "Actualización de datos por el propio cliente" ON public.customers FOR UPDATE USING (true);
 
 
 -- 3. TABLA DE PRODUCTOS (CATÁLOGO E INVENTARIO MULTI-SUCURSAL)
 CREATE TABLE IF NOT EXISTS public.products (
     id SERIAL PRIMARY KEY,
-    sku VARCHAR(50) UNIQUE,
-    barcode VARCHAR(100),
-    name VARCHAR(255) NOT NULL,
-    category VARCHAR(100) NOT NULL,
+    sku TEXT UNIQUE,
+    barcode TEXT,
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
     price NUMERIC(10, 2) NOT NULL,
     stock INTEGER DEFAULT 0 NOT NULL,
     stock_independencia INTEGER DEFAULT 0,
@@ -47,18 +47,18 @@ CREATE TABLE IF NOT EXISTS public.products (
     image TEXT NOT NULL,
     description TEXT,
     active BOOLEAN DEFAULT true NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+    created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 -- Habilitar RLS en products
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Lectura pública de productos activos" 
-ON public.products FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Lectura pública de productos activos" ON public.products;
+CREATE POLICY "Lectura pública de productos activos" ON public.products FOR SELECT USING (true);
 
-CREATE POLICY "Control administrativo de productos" 
-ON public.products FOR ALL USING (true);
+DROP POLICY IF EXISTS "Control administrativo de productos" ON public.products;
+CREATE POLICY "Control administrativo de productos" ON public.products FOR ALL USING (true);
 
 
 -- 4. INSERTAR LOS 11 PRODUCTOS OFICIALES DE VIZANTINO PIEL
@@ -82,49 +82,51 @@ ON CONFLICT (id) DO UPDATE SET
 
 -- 5. TABLA DE PEDIDOS / ÓRDENES (E-COMMERCE & POS)
 CREATE TABLE IF NOT EXISTS public.orders (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    folio VARCHAR(50) UNIQUE NOT NULL,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    folio TEXT UNIQUE NOT NULL,
     customer_id UUID REFERENCES public.customers(id),
-    customer_name VARCHAR(255) NOT NULL,
-    customer_email VARCHAR(255) NOT NULL,
-    customer_phone VARCHAR(50) NOT NULL,
-    customer_city VARCHAR(150),
+    customer_name TEXT NOT NULL,
+    customer_email TEXT NOT NULL,
+    customer_phone TEXT NOT NULL,
+    customer_city TEXT,
     customer_address TEXT,
     items JSONB NOT NULL,
     subtotal NUMERIC(10, 2) NOT NULL,
-    shipping NUMERIC(10, 2) DEFAULT 0.00 NOT NULL,
+    shipping_cost NUMERIC(10, 2) DEFAULT 0.00 NOT NULL,
     total NUMERIC(10, 2) NOT NULL,
-    payment_method VARCHAR(100) NOT NULL,
+    payment_method TEXT NOT NULL,
     customization TEXT,
-    status VARCHAR(50) DEFAULT 'En Preparación' NOT NULL, -- 'Registrado', 'En Preparación', 'En Camino', 'Entregado'
-    channel VARCHAR(50) DEFAULT 'ONLINE' NOT NULL, -- 'ONLINE', 'POS_INDEPENDENCIA', 'POS_ALFAREROS', 'POS_TONALA'
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+    status TEXT DEFAULT 'En Preparación' NOT NULL,
+    channel TEXT DEFAULT 'ONLINE' NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 -- Habilitar RLS en orders
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Lectura de órdenes por cliente o admin" 
-ON public.orders FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Lectura de órdenes por cliente o admin" ON public.orders;
+CREATE POLICY "Lectura de órdenes por cliente o admin" ON public.orders FOR SELECT USING (true);
 
-CREATE POLICY "Creación de nuevas órdenes" 
-ON public.orders FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "Creación de nuevas órdenes" ON public.orders;
+CREATE POLICY "Creación de nuevas órdenes" ON public.orders FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "Actualización de estatus de órdenes" 
-ON public.orders FOR UPDATE USING (true);
+DROP POLICY IF EXISTS "Actualización de estatus de órdenes" ON public.orders;
+CREATE POLICY "Actualización de estatus de órdenes" ON public.orders FOR UPDATE USING (true);
 
 
 -- 6. TABLA DE ADMINISTRADORES
 CREATE TABLE IF NOT EXISTS public.admin_users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    name VARCHAR(150) DEFAULT 'Administrador Vizantino',
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    name TEXT DEFAULT 'Administrador General Vizantino',
     active BOOLEAN DEFAULT true,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+    created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Lectura interna administradores" ON public.admin_users;
 CREATE POLICY "Lectura interna administradores" ON public.admin_users FOR SELECT USING (true);
 
 -- Insertar el Administrador Maestro Oficial
