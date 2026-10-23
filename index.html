@@ -613,7 +613,7 @@
             <i class="fa-solid fa-truck-fast"></i>
           </div>
           <h4 class="font-serif text-base text-white font-bold mb-1">Envío Gratis Desde $1,800</h4>
-          <p class="text-xs text-zinc-400">Envío nacional sin costo a partir de $1,800.0 MXN o difiere a 3 MSI.</p>
+          <p class="text-xs text-zinc-400">Envío nacional sin costo a partir de $1,800.0 MXN (o $250.0 para paquetes menores a 3kg) y 3 MSI.</p>
         </div>
 
         <div class="p-6 bg-darkSurface/50 rounded-lg border border-cardBorder/60 hover:border-gold-500/40 transition">
@@ -695,7 +695,16 @@
               <i class="fa-brands fa-whatsapp text-emerald-400"></i> Tel/WA: 3329089920
             </a>
           </li>
-          <li><span>Email: contacto@vizantinopiel.com</span></li>
+          <li>
+            <a href="mailto:vizantinopiel@gmail.com" class="hover:text-gold-400 transition flex items-center gap-1.5">
+              <i class="fa-regular fa-envelope text-gold-400"></i> vizantinopiel@gmail.com
+            </a>
+          </li>
+          <li>
+            <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20solicito%20asistencia%20para%20la%20facturación%20de%20mi%20compra" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-emerald-400 transition flex items-center gap-1.5">
+              <i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i> ¿Deseas Factura? Solicítala por WhatsApp
+            </a>
+          </li>
           <li class="pt-1 text-[11px] text-zinc-500">
             <span class="text-gold-400 font-semibold block mb-1">Nuestras Sucursales:</span>
             • Independencia #248, Tlaquepaque centro<br>
@@ -905,21 +914,90 @@
           </div>
         </div>
 
-        <!-- Paso 2: Método de Pago Multicanal -->
+        <!-- Paso 2: Personalización Artesanal Gratis -->
+        <div class="pt-4 border-t border-cardBorder">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs tracking-widest uppercase font-semibold text-zinc-200 flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-gold-500 text-carbon font-bold flex items-center justify-center text-[10px]">2</span>
+              Personalización Artesanal Gratis
+            </h4>
+            <span class="text-[10px] uppercase font-bold tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">
+              Cortesía
+            </span>
+          </div>
+          <p class="text-[11px] text-zinc-400 mb-3">
+            Graba tu nombre, iniciales o logotipo sin costo adicional en tus piezas de piel.
+          </p>
+
+          <div class="bg-cardBg p-4 rounded-lg border border-cardBorder space-y-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-zinc-400 mb-1">Texto a Grabar (Iniciales, Nombre o Frase)</label>
+                <input type="text" id="customText" placeholder="Ej. H.M. / Hugo Morales" oninput="updateCustomPreview()"
+                       class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div>
+                <label class="block text-zinc-400 mb-1">Estilo de Tipografía</label>
+                <select id="customFont" onchange="updateCustomPreview()" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500 font-sans">
+                  <option value="serif">Cormorant Garamond (Elegante Clásica Serif)</option>
+                  <option value="sans">Montserrat (Moderna Minimalista Sans)</option>
+                  <option value="cursive">Cursiva Artesanal (Caligráfica Exclusiva)</option>
+                  <option value="mono">Monospace Grabado Técnico (Tipo Máquina)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-zinc-400 mb-1">Ubicación del Grabado en la Pieza</label>
+                <select id="customPlacement" onchange="updateCustomPreview()" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+                  <option value="Frente Inferior Derecho">Frente - Esquina Inferior Derecha</option>
+                  <option value="Frente Centrado Discreto">Frente - Centrado Discreto</option>
+                  <option value="Interior Discreto">Interior - Discreto (Bolsillo interno)</option>
+                  <option value="Llavero o Tarjetero Colgante">Colgante / Llavero de la pieza</option>
+                  <option value="Sin Personalización">No deseo grabado en esta ocasión</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-zinc-400 mb-1">¿Deseas grabar un Logotipo?</label>
+                <input type="text" id="customLogoNote" placeholder="Ej. Sí, compartiré archivo por WhatsApp" 
+                       class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+            </div>
+
+            <!-- Vista previa en vivo del grabado sobre piel -->
+            <div class="p-3 bg-neutral-950 rounded border border-gold-500/30 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] text-zinc-500 uppercase tracking-widest block">Simulación en Piel:</span>
+                <div id="customPreviewOutput" class="text-base text-gold-300 font-serif italic tracking-wider transition-all duration-300">
+                  "Tu grabado aquí"
+                </div>
+              </div>
+              <div class="text-[10px] text-zinc-500 text-right">
+                <span id="customPreviewPlacement" class="block text-zinc-400">Frente - Esquina Inferior Derecha</span>
+                <span class="text-gold-400 font-medium">Grabado a fuego en Tlaquepaque</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 3: Método de Pago Multicanal -->
         <div class="pt-4 border-t border-cardBorder">
           <h4 class="text-xs tracking-widest uppercase font-semibold text-zinc-200 mb-3 flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-gold-500 text-carbon font-bold flex items-center justify-center text-[10px]">2</span>
+            <span class="w-5 h-5 rounded-full bg-gold-500 text-carbon font-bold flex items-center justify-center text-[10px]">3</span>
             Selecciona Método de Pago
           </h4>
 
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-            <button type="button" onclick="selectPaymentMethod('card')" id="payTab-card" class="payment-tab active p-3 bg-cardBg border border-gold-500 rounded text-center text-xs text-white flex flex-col items-center gap-1.5 transition">
-              <i class="fa-solid fa-credit-card text-gold-400 text-lg"></i>
-              <span class="font-medium">Tarjeta</span>
-            </button>
-            <button type="button" onclick="selectPaymentMethod('mp')" id="payTab-mp" class="payment-tab p-3 bg-cardBg border border-cardBorder rounded text-center text-xs text-zinc-400 flex flex-col items-center gap-1.5 transition">
+            <button type="button" onclick="selectPaymentMethod('mp')" id="payTab-mp" class="payment-tab active p-3 bg-cardBg border border-gold-500 rounded text-center text-xs text-white flex flex-col items-center gap-1.5 transition">
               <i class="fa-solid fa-handshake-angle text-sky-400 text-lg"></i>
               <span class="font-medium">Mercado Pago</span>
+            </button>
+            <button type="button" onclick="selectPaymentMethod('card')" id="payTab-card" class="payment-tab p-3 bg-cardBg border border-cardBorder rounded text-center text-xs text-zinc-400 flex flex-col items-center gap-1.5 transition">
+              <i class="fa-solid fa-credit-card text-gold-400 text-lg"></i>
+              <span class="font-medium">Tarjeta</span>
             </button>
             <button type="button" onclick="selectPaymentMethod('paypal')" id="payTab-paypal" class="payment-tab p-3 bg-cardBg border border-cardBorder rounded text-center text-xs text-zinc-400 flex flex-col items-center gap-1.5 transition">
               <i class="fa-brands fa-paypal text-sky-500 text-lg"></i>
@@ -932,8 +1010,47 @@
           </div>
 
           <div class="bg-cardBg p-4 rounded-lg border border-cardBorder text-xs">
-            <!-- Tarjeta -->
-            <div id="payContent-card" class="space-y-3">
+            <!-- 1. Mercado Pago (Principal Oficial) -->
+            <div id="payContent-mp" class="space-y-4 py-2">
+              <div class="flex items-center justify-between pb-2 border-b border-cardBorder">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span class="font-bold text-sky-400 tracking-wider uppercase text-[11px]">Pasarela Oficial Mercado Pago México</span>
+                </div>
+                <div class="flex gap-2 text-base text-zinc-300">
+                  <i class="fa-brands fa-cc-visa"></i>
+                  <i class="fa-brands fa-cc-mastercard"></i>
+                  <i class="fa-brands fa-cc-amex"></i>
+                  <span class="text-[10px] bg-sky-950 px-1.5 py-0.5 rounded text-sky-300 font-bold">3 MSI</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+                <div class="p-3 bg-darkSurface rounded border border-cardBorder">
+                  <i class="fa-solid fa-credit-card text-gold-400 text-lg mb-1"></i>
+                  <div class="font-semibold text-white">Tarjetas Crédito/Débito</div>
+                  <div class="text-[10px] text-zinc-400">Hasta 3 MSI en compras calificadas</div>
+                </div>
+                <div class="p-3 bg-darkSurface rounded border border-cardBorder">
+                  <i class="fa-solid fa-wallet text-sky-400 text-lg mb-1"></i>
+                  <div class="font-semibold text-white">Saldo Mercado Pago</div>
+                  <div class="text-[10px] text-zinc-400">Acreditación inmediata</div>
+                </div>
+                <div class="p-3 bg-darkSurface rounded border border-cardBorder">
+                  <i class="fa-solid fa-store text-emerald-400 text-lg mb-1"></i>
+                  <div class="font-semibold text-white">Efectivo en OXXO / SPEI</div>
+                  <div class="text-[10px] text-zinc-400">Convenio directo Mercado Pago</div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-sky-950/40 border border-sky-500/30 rounded text-center text-xs text-sky-200">
+                <i class="fa-solid fa-shield-halved text-sky-400 mr-1.5"></i>
+                Tu pago está protegido de extremo a extremo por el Programa de Protección al Comprador de <strong>Mercado Pago</strong>.
+              </div>
+            </div>
+
+            <!-- Tarjeta Directa -->
+            <div id="payContent-card" class="space-y-3 hidden">
               <div class="flex items-center justify-between text-zinc-400 pb-2 border-b border-cardBorder">
                 <span>Pasarela Segura TLS</span>
                 <div class="flex gap-2 text-base text-zinc-300">
@@ -965,13 +1082,7 @@
             </div>
 
             <!-- Mercado Pago -->
-            <div id="payContent-mp" class="hidden space-y-3 text-center py-3">
-              <i class="fa-solid fa-bolt text-3xl text-sky-400"></i>
-              <h5 class="font-serif text-lg text-white font-bold">Pago Instantáneo con Mercado Pago</h5>
-              <p class="text-zinc-400 text-xs max-w-md mx-auto">
-                Paga con dinero en cuenta de Mercado Pago o tarjetas de débito/crédito a meses.
-              </p>
-            </div>
+            <div id="payContent-mp-old" class="hidden"></div>
 
             <!-- PayPal -->
             <div id="payContent-paypal" class="hidden space-y-3 text-center py-3">
@@ -1048,6 +1159,10 @@
           <span id="receiptCustomerPhone" class="font-mono"></span>
         </div>
         <div class="flex justify-between text-zinc-300">
+          <span>Personalización:</span>
+          <span id="receiptCustomization" class="text-gold-400 font-medium"></span>
+        </div>
+        <div class="flex justify-between text-zinc-300">
           <span>Método de Pago:</span>
           <span id="receiptPaymentMethod" class="text-gold-400 font-medium"></span>
         </div>
@@ -1059,6 +1174,11 @@
           <span>Total Pagado:</span>
           <span id="receiptTotalAmount" class="font-mono text-gold-400"></span>
         </div>
+      </div>
+
+      <div class="my-3 p-3 bg-darkSurface rounded border border-cardBorder text-[11px] text-zinc-400">
+        <i class="fa-solid fa-file-invoice-dollar text-emerald-400 mr-1"></i>
+        <span>¿Requieres factura fiscal CFDI? Puedes solicitarla directamente con tu folio de compra al WhatsApp oficial o correo <strong>vizantinopiel@gmail.com</strong></span>
       </div>
 
       <div class="space-y-3">
@@ -1754,9 +1874,9 @@
     let currentUser = null;
     let currentCategoryFilter = "todos";
     let currentSearchQuery = "";
-    let selectedPayment = "card";
-
-    const FREE_SHIPPING_THRESHOLD = 1800;
+    let selectedPayment = "mp";
+    const SHIPPING_COST_STANDARD = 250; // Envío paquetes menores a 3kg
+    const FREE_SHIPPING_THRESHOLD = 1800; // Gratis desde $1,800.0 MXN
 
     // Inicialización al cargar el DOM
     document.addEventListener("DOMContentLoaded", () => {
@@ -2512,11 +2632,11 @@
 
       const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
       const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
-      const shippingCost = isFreeShipping ? 0 : 180;
+      const shippingCost = isFreeShipping ? 0 : SHIPPING_COST_STANDARD;
       const total = subtotal + shippingCost;
 
       subtotalEl.textContent = `$${subtotal.toLocaleString('es-MX')} MXN`;
-      shippingEl.textContent = isFreeShipping ? "GRATIS" : `$${shippingCost.toLocaleString('es-MX')} MXN`;
+      shippingEl.textContent = isFreeShipping ? "GRATIS" : `$${shippingCost.toLocaleString('es-MX')} MXN (< 3kg)`;
       if (isFreeShipping) {
         shippingEl.className = "font-mono text-emerald-400 font-bold";
       } else {
@@ -2549,7 +2669,7 @@
 
       const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
       const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
-      const total = subtotal + (isFreeShipping ? 0 : 180);
+      const total = subtotal + (isFreeShipping ? 0 : SHIPPING_COST_STANDARD);
 
       document.getElementById('checkoutTotalAmount').textContent = `$${total.toLocaleString('es-MX')} MXN`;
 
@@ -2571,6 +2691,42 @@
 
     function closeCheckoutModal() {
       document.getElementById('checkoutModal').classList.add('hidden');
+    }
+
+    /* Simulador de Personalización en vivo */
+    function updateCustomPreview() {
+      const text = document.getElementById('customText').value.trim();
+      const font = document.getElementById('customFont').value;
+      const placement = document.getElementById('customPlacement').value;
+      const previewText = document.getElementById('customPreviewOutput');
+      const previewPlacement = document.getElementById('customPreviewPlacement');
+
+      if (previewText) {
+        previewText.textContent = text ? `"${text}"` : `"Tu grabado aquí"`;
+
+        // Ajustar familia tipográfica
+        if (font === 'serif') {
+          previewText.style.fontFamily = "'Cormorant Garamond', serif";
+          previewText.style.letterSpacing = "0.15em";
+          previewText.style.fontWeight = "600";
+        } else if (font === 'sans') {
+          previewText.style.fontFamily = "'Montserrat', sans-serif";
+          previewText.style.letterSpacing = "0.2em";
+          previewText.style.fontWeight = "500";
+        } else if (font === 'cursive') {
+          previewText.style.fontFamily = "cursive, 'Brush Script MT', italic";
+          previewText.style.letterSpacing = "0.08em";
+          previewText.style.fontWeight = "400";
+        } else if (font === 'mono') {
+          previewText.style.fontFamily = "monospace";
+          previewText.style.letterSpacing = "0.25em";
+          previewText.style.fontWeight = "700";
+        }
+      }
+
+      if (previewPlacement) {
+        previewPlacement.textContent = placement;
+      }
     }
 
     function selectPaymentMethod(method) {
@@ -2621,17 +2777,37 @@
       });
       saveProductsToStorage();
 
+      // Captura de datos de personalización artesanal
+      const customText = document.getElementById('customText').value.trim();
+      const customFont = document.getElementById('customFont').value;
+      const customPlacement = document.getElementById('customPlacement').value;
+      const customLogoNote = document.getElementById('customLogoNote').value.trim();
+
+      const fontLabels = {
+        serif: "Cormorant Garamond (Serif Clásica)",
+        sans: "Montserrat (Sans Moderna)",
+        cursive: "Cursiva Artesanal",
+        mono: "Monospace Grabado Técnico"
+      };
+
+      let customizationSummary = "Sin personalización";
+      if (customPlacement !== "Sin Personalización" && (customText || customLogoNote)) {
+        customizationSummary = `${customText ? `Texto: "${customText}"` : ''} | Tipografía: ${fontLabels[customFont]} | Ubicación: ${customPlacement}${customLogoNote ? ` | Nota Logo: ${customLogoNote}` : ''}`;
+      } else if (customPlacement === "Sin Personalización") {
+        customizationSummary = "No solicita grabado";
+      }
+
       // Generar orden
       const randomFolio = "#VZ-" + Math.floor(100000 + Math.random() * 900000);
       const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-      const shipping = (subtotal >= FREE_SHIPPING_THRESHOLD) ? 0 : 180;
+      const shipping = (subtotal >= FREE_SHIPPING_THRESHOLD) ? 0 : SHIPPING_COST_STANDARD;
       const total = subtotal + shipping;
 
       const methodLabels = {
         card: "Tarjeta de Crédito / Débito (Stripe)",
-        mp: "Mercado Pago",
+        mp: "Mercado Pago México (Tarjetas / OXXO / Saldo MP)",
         paypal: "PayPal Express",
-        spei: "SPEI / OXXO Pay"
+        spei: "SPEI Bancario / OXXO Pay"
       };
 
       const newOrder = {
@@ -2642,6 +2818,7 @@
         customerPhone: phone,
         customerCity: city,
         customerAddress: address,
+        customization: customizationSummary,
         paymentMethod: methodLabels[selectedPayment],
         status: "En Preparación",
         items: [...cart],
@@ -2661,7 +2838,8 @@
         `*Email:* ${email}%0A` +
         `*Destino:* ${address}, ${city}%0A%0A` +
         `*Artículos Solicitados:*%0A${orderSummaryLines}%0A%0A` +
-        `*Envío:* ${shipping === 0 ? 'GRATIS' : '$180 MXN'}%0A` +
+        `*Personalización de Pieza:*%0A${customizationSummary}%0A%0A` +
+        `*Envío:* ${shipping === 0 ? 'GRATIS' : `$${SHIPPING_COST_STANDARD} MXN (< 3kg)`}%0A` +
         `*Total a Liquidar:* $${total.toLocaleString('es-MX')} MXN%0A` +
         `*Método Elegido:* ${methodLabels[selectedPayment]}%0A%0A` +
         `_Agradezco confirmar la disponibilidad y dar seguimiento a mi pedido._`;
@@ -2672,6 +2850,7 @@
       document.getElementById('receiptFolio').textContent = randomFolio;
       document.getElementById('receiptCustomerName').textContent = name;
       document.getElementById('receiptCustomerPhone').textContent = phone;
+      document.getElementById('receiptCustomization').textContent = customizationSummary;
       document.getElementById('receiptPaymentMethod').textContent = methodLabels[selectedPayment];
       document.getElementById('receiptAddress').textContent = `${address}, ${city}`;
       document.getElementById('receiptTotalAmount').textContent = `$${total.toLocaleString('es-MX')} MXN`;
