@@ -2995,6 +2995,9 @@
       saveOrdersToStorage();
       syncOrderToCloud(newOrder); // Sincronización instantánea de orden en Supabase
 
+      // Enviar notificación automática por correo electrónico a administración y agencia
+      sendOrderEmailNotification(newOrder);
+
       // Descontar inventario en la nube para cada producto vendido
       cart.forEach(item => {
         const prod = products.find(p => p.id === item.id);
@@ -3034,6 +3037,49 @@
 
       closeCheckoutModal();
       document.getElementById('orderReceiptModal').classList.remove('hidden');
+    }
+
+    /* Envío Automático de Notificaciones por Correo */
+    async function sendOrderEmailNotification(order) {
+      const recipientEmails = ["vizantinopiel@gmail.com", "altusmarketingdigital@gmail.com"];
+      const itemsList = order.items.map(i => `• ${i.name} (Cantidad: ${i.qty}) - $${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('\n');
+
+      const emailPayload = {
+        _subject: `🛍️ NUEVA VENTA VIZANTINO PIEL: Orden ${order.folio} ($${order.total.toLocaleString('es-MX')} MXN)`,
+        folio: order.folio,
+        fecha: order.date,
+        cliente: order.customerName,
+        telefono_whatsapp: order.customerPhone,
+        correo_cliente: order.customerEmail,
+        direccion_entrega: `${order.customerAddress}, ${order.customerCity}`,
+        articulos_comprados: itemsList,
+        personalizacion_artesanal: order.customization || 'Sin grabado',
+        metodo_de_pago: order.paymentMethod,
+        envio: order.shipping === 0 ? 'GRATIS' : `$${order.shipping} MXN`,
+        total_pagado: `$${order.total.toLocaleString('es-MX')} MXN`,
+        notificar_a: recipientEmails.join(', ')
+      };
+
+      // Envío asíncrono vía servicio de notificación transaccional
+      try {
+        await Promise.all(recipientEmails.map(targetEmail => {
+          return fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+            method: "POST",
+            headers: { 
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify({
+              ...emailPayload,
+              _template: "table",
+              _captcha: "false"
+            })
+          });
+        }));
+        console.log("Notificaciones por correo enviadas exitosamente a:", recipientEmails);
+      } catch (err) {
+        console.warn("Aviso de envío por correo en proceso de fondo:", err);
+      }
     }
 
     function closeReceiptModal() {
