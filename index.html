@@ -14,6 +14,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- Supabase JS Client Oficial -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -1871,7 +1874,20 @@
       }
     ];
 
-    // Claves en LocalStorage
+    // Configuración Oficial de Supabase
+    const SUPABASE_URL = "https://zujfslxqgllzmxdoioie.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_wtDtY_vgZboOjEsob9Y4QQ_GpvMr3D8";
+    let supabaseClient = null;
+
+    try {
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch (err) {
+      console.warn("Supabase client init fallback:", err);
+    }
+
+    // Claves en LocalStorage (Caché local offline)
     const STORAGE_KEY_PRODUCTS = "vizantino_products_v1";
     const STORAGE_KEY_CART = "vizantino_cart_v1";
     const STORAGE_KEY_ADMIN = "vizantino_admin_logged";
@@ -1892,10 +1908,10 @@
     const FREE_SHIPPING_THRESHOLD = 1800; // Gratis desde $1,800.0 MXN
 
     // Inicialización al cargar el DOM
-    document.addEventListener("DOMContentLoaded", () => {
-      loadProductsFromStorage();
-      loadUsersFromStorage();
-      loadOrdersFromStorage();
+    document.addEventListener("DOMContentLoaded", async () => {
+      await loadProducts();
+      await loadUsers();
+      await loadOrders();
       loadCartFromStorage();
       checkCustomerSession();
       renderCatalog();
@@ -1904,25 +1920,69 @@
     });
 
     /* ==========================================
-       GESTIÓN DE PRODUCTOS Y ALMACENAMIENTO
+       GESTIÓN DE PRODUCTOS (SUPABASE + CACHÉ LOCAL)
     ========================================== */
-    function loadProductsFromStorage() {
+    async function loadProducts() {
+      // 1. Intentar cargar desde Supabase en la nube
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('products')
+            .select('*')
+            .order('id', { ascending: true });
+
+          if (!error && data && data.length > 0) {
+            products = data.map(p => ({
+              ...p,
+              price: parseFloat(p.price)
+            }));
+            localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+            updateCategoryCounts();
+            renderCatalog();
+            return;
+          }
+        } catch (e) {
+          console.warn("Fallo temporal Supabase, cargando caché local:", e);
+        }
+      }
+
+      // 2. Respaldo desde LocalStorage / Catálogo inicial
       const stored = localStorage.getItem(STORAGE_KEY_PRODUCTS);
       if (stored) {
         try {
           products = JSON.parse(stored);
         } catch (e) {
           products = [...INITIAL_PRODUCTS];
-          saveProductsToStorage();
         }
       } else {
         products = [...INITIAL_PRODUCTS];
-        saveProductsToStorage();
       }
       updateCategoryCounts();
+      renderCatalog();
     }
 
-    function saveProductsToStorage() {
+    async function syncProductToCloud(product) {
+      if (!supabaseClient) return;
+      try {
+        await supabaseClient
+          .from('products')
+          .upsert({
+            id: product.id,
+            sku: product.sku || `VZ-PROD-${product.id}`,
+            name: product.name,
+            category: product.category,
+            price: product.price,
+            stock: product.stock,
+            image: product.image,
+            description: product.description,
+            active: product.stock > 0
+          });
+      } catch (e) {
+        console.error("Error sincronizando producto a Supabase:", e);
+      }
+    }
+
+    async function saveProductsToStorage() {
       localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
       updateCategoryCounts();
       renderCatalog();
@@ -1940,18 +2000,39 @@
     }
 
     /* ==========================================
-       GESTIÓN DE CLIENTES / USUARIOS
+       GESTIÓN DE CLIENTES / USUARIOS (SUPABASE)
     ========================================== */
-    function loadUsersFromStorage() {
+    async function loadUsers() {
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('customers')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && data && data.length > 0) {
+            users = data.map(u => ({
+              id: u.id,
+              name: u.name,
+              email: u.email,
+              phone: u.phone,
+              city: u.city,
+              address: u.address,
+              password: u.password_hash,
+              registeredAt: u.created_at ? u.created_at.split('T')[0] : '2026'
+            }));
+            localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+            return;
+          }
+        } catch (e) {
+          console.warn("Fallo temporal cargando clientes de Supabase:", e);
+        }
+      }
+
       const stored = localStorage.getItem(STORAGE_KEY_USERS);
       if (stored) {
-        try {
-          users = JSON.parse(stored);
-        } catch (e) {
-          users = [];
-        }
+        try { users = JSON.parse(stored); } catch (e) { users = []; }
       } else {
-        // Usuario inicial de muestra
         users = [
           {
             id: 101,
@@ -1965,6 +2046,24 @@
           }
         ];
         saveUsersToStorage();
+      }
+    }
+
+    async function syncCustomerToCloud(customer) {
+      if (!supabaseClient) return;
+      try {
+        await supabaseClient
+          .from('customers')
+          .upsert({
+            name: customer.name,
+            email: customer.email,
+            phone: customer.phone,
+            city: customer.city,
+            address: customer.address,
+            password_hash: customer.password
+          }, { onConflict: 'email' });
+      } catch (e) {
+        console.error("Error sincronizando cliente a Supabase:", e);
       }
     }
 
@@ -2055,6 +2154,7 @@
 
       users.push(newUser);
       saveUsersToStorage();
+      syncCustomerToCloud(newUser); // Sincronización en la nube Supabase
 
       currentUser = newUser;
       localStorage.setItem(STORAGE_KEY_CURRENT_USER, JSON.stringify(currentUser));
@@ -2267,18 +2367,44 @@
     }
 
     /* ==========================================
-       GESTIÓN DE PEDIDOS Y ALMACENAMIENTO
+       GESTIÓN DE PEDIDOS Y ALMACENAMIENTO (SUPABASE)
     ========================================== */
-    function loadOrdersFromStorage() {
+    async function loadOrders() {
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('orders')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && data && data.length > 0) {
+            orders = data.map(o => ({
+              folio: o.folio,
+              date: o.created_at ? o.created_at.split('T')[0] : '2026',
+              customerName: o.customer_name,
+              customerEmail: o.customer_email,
+              customerPhone: o.customer_phone,
+              customerCity: o.customer_city,
+              customerAddress: o.customer_address,
+              paymentMethod: o.payment_method,
+              customization: o.customization,
+              status: o.status,
+              items: o.items || [],
+              shipping: parseFloat(o.shipping_cost || 0),
+              total: parseFloat(o.total || 0)
+            }));
+            localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(orders));
+            return;
+          }
+        } catch (e) {
+          console.warn("Fallo temporal cargando órdenes de Supabase:", e);
+        }
+      }
+
       const stored = localStorage.getItem(STORAGE_KEY_ORDERS);
       if (stored) {
-        try {
-          orders = JSON.parse(stored);
-        } catch (e) {
-          orders = [];
-        }
+        try { orders = JSON.parse(stored); } catch (e) { orders = []; }
       } else {
-        // Pedido inicial de muestra
         orders = [
           {
             folio: "#VZ-982341",
@@ -2298,6 +2424,32 @@
           }
         ];
         saveOrdersToStorage();
+      }
+    }
+
+    async function syncOrderToCloud(order) {
+      if (!supabaseClient) return;
+      try {
+        await supabaseClient
+          .from('orders')
+          .insert({
+            folio: order.folio,
+            customer_name: order.customerName,
+            customer_email: order.customerEmail,
+            customer_phone: order.customerPhone,
+            customer_city: order.customerCity,
+            customer_address: order.customerAddress,
+            payment_method: order.paymentMethod,
+            customization: order.customization,
+            items: order.items,
+            subtotal: order.total - order.shipping,
+            shipping_cost: order.shipping,
+            total: order.total,
+            status: order.status || 'En Preparación',
+            channel: 'ONLINE'
+          });
+      } catch (e) {
+        console.error("Error sincronizando orden a Supabase:", e);
       }
     }
 
@@ -2841,6 +2993,13 @@
 
       orders.unshift(newOrder);
       saveOrdersToStorage();
+      syncOrderToCloud(newOrder); // Sincronización instantánea de orden en Supabase
+
+      // Descontar inventario en la nube para cada producto vendido
+      cart.forEach(item => {
+        const prod = products.find(p => p.id === item.id);
+        if (prod) syncProductToCloud(prod);
+      });
 
       // Mensaje WhatsApp
       let orderSummaryLines = cart.map(i => `• ${i.name} (x${i.qty}) - $${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('%0A');
@@ -3109,6 +3268,13 @@
       if (orders[orderIndex]) {
         orders[orderIndex].status = newStatus;
         saveOrdersToStorage();
+        if (supabaseClient) {
+          supabaseClient
+            .from('orders')
+            .update({ status: newStatus })
+            .eq('folio', orders[orderIndex].folio)
+            .then(() => console.log('Orden actualizada en Supabase'));
+        }
         showToast(`Orden ${orders[orderIndex].folio} actualizada a "${newStatus}"`, "success");
         if (currentUser) renderCustomerOrders();
       }
@@ -3151,6 +3317,7 @@
       if (prod) {
         prod.stock = Math.max(0, prod.stock + delta);
         saveProductsToStorage();
+        syncProductToCloud(prod);
         showToast(`Stock de "${prod.name}" actualizado a ${prod.stock}`, "info");
       }
     }
@@ -3161,6 +3328,7 @@
         const parsed = parseInt(val, 10);
         prod.stock = isNaN(parsed) ? 0 : Math.max(0, parsed);
         saveProductsToStorage();
+        syncProductToCloud(prod);
         showToast(`Stock actualizado a ${prod.stock}`, "info");
       }
     }
@@ -3172,6 +3340,7 @@
         if (!isNaN(parsed) && parsed > 0) {
           prod.price = parsed;
           saveProductsToStorage();
+          syncProductToCloud(prod);
           showToast(`Precio actualizado a $${prod.price.toLocaleString('es-MX')} MXN`, "success");
         }
       }
