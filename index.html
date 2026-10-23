@@ -2895,6 +2895,12 @@
     }
 
     function closeAdminModal() {
+      // Cerrar sesión automáticamente al hacer clic en la X o fuera del modal
+      if (isAdminLoggedIn()) {
+        localStorage.removeItem(STORAGE_KEY_ADMIN);
+        checkAdminSession();
+        showToast("Sesión de administrador cerrada", "info");
+      }
       document.getElementById('adminModal').classList.add('hidden');
     }
 
