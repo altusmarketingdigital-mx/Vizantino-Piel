@@ -1373,22 +1373,35 @@
       </button>
 
       <!-- Vista Login Administrador -->
-      <div id="adminLoginForm" class="max-w-md mx-auto py-12 text-center">
+      <div id="adminLoginForm" class="max-w-md mx-auto py-10 text-center">
         <div class="w-16 h-16 mx-auto rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-2xl mb-4">
-          <i class="fa-solid fa-lock"></i>
+          <i class="fa-solid fa-shield-halved"></i>
         </div>
         <h3 class="font-serif text-3xl text-white font-bold mb-2">Panel Administrativo</h3>
-        <p class="text-zinc-400 text-xs mb-6">Ingresa la clave de administrador para gestionar productos, pedidos de clientes y usuarios.</p>
+        <p class="text-zinc-400 text-xs mb-6">Acceso exclusivo para gestión de catálogo, inventario, clientes y órdenes.</p>
         
-        <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-          <div class="relative">
-            <input type="password" id="adminPasswordInput" placeholder="Contraseña (por defecto: admin)" required
-                   class="w-full bg-cardBg border border-cardBorder rounded-lg px-4 py-3 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-gold-500 text-center tracking-widest">
+        <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left text-xs">
+          <div>
+            <label class="block text-zinc-400 mb-1">Correo de Administrador</label>
+            <div class="relative">
+              <input type="email" id="adminEmailInput" placeholder="admin@vizantino.com" required
+                     class="w-full bg-cardBg border border-cardBorder rounded-lg px-3.5 py-2.5 pl-9 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-gold-500">
+              <i class="fa-regular fa-envelope absolute left-3 top-3 text-zinc-500 text-xs"></i>
+            </div>
           </div>
-          <button type="submit" class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-widest uppercase rounded shadow transition">
-            Iniciar Sesión
+
+          <div>
+            <label class="block text-zinc-400 mb-1">Contraseña Maestra</label>
+            <div class="relative">
+              <input type="password" id="adminPasswordInput" placeholder="••••••••••••" required
+                     class="w-full bg-cardBg border border-cardBorder rounded-lg px-3.5 py-2.5 pl-9 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-gold-500">
+              <i class="fa-solid fa-lock absolute left-3 top-3 text-zinc-500 text-xs"></i>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-widest uppercase rounded shadow transition mt-2">
+            Iniciar Sesión como Administrador
           </button>
-          <p class="text-[11px] text-zinc-500">Clave de demostración predeterminada: <strong class="text-gold-400">admin</strong></p>
         </form>
       </div>
 
@@ -2906,14 +2919,18 @@
 
     function handleAdminLogin(event) {
       event.preventDefault();
+      const email = document.getElementById('adminEmailInput').value.trim().toLowerCase();
       const pwd = document.getElementById('adminPasswordInput').value;
-      if (pwd === "admin") {
+
+      // Credenciales Oficiales de Administrador
+      if (email === "admin@vizantino.com" && pwd === "VizantinoAdmin2026") {
         localStorage.setItem(STORAGE_KEY_ADMIN, "true");
+        document.getElementById('adminEmailInput').value = "";
         document.getElementById('adminPasswordInput').value = "";
         checkAdminSession();
-        showToast("Sesión de administrador iniciada", "success");
+        showToast("Sesión de administrador iniciada con éxito", "success");
       } else {
-        showToast("Contraseña incorrecta", "error");
+        showToast("Correo o contraseña de administrador incorrectos", "error");
       }
     }
 
