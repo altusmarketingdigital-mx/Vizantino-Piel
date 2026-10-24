@@ -419,10 +419,10 @@
     <!-- ========================================== -->
     
     <!-- ========================================== -->
-    <!-- NUEVA SECCIÓN: PIEZAS MAESTRAS DESTACADAS (ADMIN SELECCIONABLES) -->
+    <!-- NUEVA SECCIÓN: PIEZAS MAESTRAS DESTACADAS (CARRUSEL INTERACTIVO) -->
     <!-- ========================================== -->
-    <section id="destacados" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-cardBorder">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 reveal-on-scroll">
+    <section id="destacados" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-cardBorder relative">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 reveal-on-scroll">
         <div>
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs tracking-[0.25em] uppercase font-semibold mb-3">
             <i class="fa-solid fa-star text-[10px]"></i> Selección Exclusiva
@@ -432,21 +432,36 @@
           </h2>
           <div class="w-20 h-0.5 bg-gradient-to-r from-gold-500 to-transparent mt-3 mb-2"></div>
           <p class="text-zinc-400 text-xs sm:text-sm max-w-xl">
-            Modelos insignias en piel genuina corte vacuno seleccionados directamente por el taller para entrega inmediata.
+            Modelos insignia en piel genuina corte vacuno seleccionados directamente por el taller para entrega inmediata.
           </p>
         </div>
 
+        <!-- Controles del Carrusel (Flechas y Ver Catálogo) -->
         <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <button onclick="scrollFeaturedCarousel(-1)" aria-label="Anterior" 
+                    class="w-10 h-10 rounded-full bg-cardBg border border-gold-500/40 hover:bg-gold-500 hover:text-black text-gold-400 flex items-center justify-center transition shadow-lg active:scale-95">
+              <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <button onclick="scrollFeaturedCarousel(1)" aria-label="Siguiente" 
+                    class="w-10 h-10 rounded-full bg-cardBg border border-gold-500/40 hover:bg-gold-500 hover:text-black text-gold-400 flex items-center justify-center transition shadow-lg active:scale-95">
+              <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+          </div>
           <a href="catalogo.html" class="px-5 py-2.5 bg-cardBg hover:bg-gold-500 hover:text-black border border-gold-500/40 text-gold-400 text-xs font-semibold uppercase tracking-wider rounded-lg transition duration-300 flex items-center gap-2 shadow-md">
-            <span>Ver Catálogo Completo</span>
+            <span class="hidden sm:inline">Ver Todo</span>
             <i class="fa-solid fa-arrow-right text-[10px]"></i>
           </a>
         </div>
       </div>
 
-      <!-- Grid de Destacados -->
-      <div id="featuredProductsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
-        <!-- Renderizado dinámicamente por renderFeaturedProducts() -->
+      <!-- Contenedor Carrusel Horizontal con Scroll Suave y Snap -->
+      <div class="relative">
+        <div id="featuredProductsGrid" 
+             class="flex gap-6 overflow-x-auto pb-6 scroll-smooth snap-x snap-mandatory scrollbar-none"
+             style="scrollbar-width: none; -ms-overflow-style: none;">
+          <!-- Renderizado dinámicamente por renderFeaturedProducts() -->
+        </div>
       </div>
     </section>
 
@@ -2247,7 +2262,15 @@
     }
 
     
-    /* Renderizado de Productos Destacados en Página de Inicio */
+    /* Controles de Navegación del Carrusel de Destacados */
+    function scrollFeaturedCarousel(direction) {
+      const container = document.getElementById('featuredProductsGrid');
+      if (!container) return;
+      const cardWidth = container.firstElementChild ? container.firstElementChild.offsetWidth + 24 : 320;
+      container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    }
+
+    /* Renderizado de Productos Destacados en Página de Inicio (Modo Carrusel) */
     function renderFeaturedProducts() {
       const container = document.getElementById('featuredProductsGrid');
       if (!container) return;
@@ -2255,9 +2278,9 @@
       // Filter products marked with barcode === 'FEATURED'
       let featured = products.filter(p => p.barcode === 'FEATURED' && p.active !== false);
 
-      // Fallback: if none marked, pick the first 4 products
+      // Fallback: if none marked, pick the first 6 products
       if (featured.length === 0 && products.length > 0) {
-        featured = products.slice(0, 4);
+        featured = products.slice(0, 6);
       }
 
       container.innerHTML = featured.map((product, idx) => {
@@ -2274,7 +2297,7 @@
         }
 
         return `
-          <div class="group bg-cardBg rounded-xl border border-cardBorder hover:border-gold-500/60 transition-all duration-300 flex flex-col justify-between overflow-hidden relative shadow-lg hover-lift reveal-on-scroll">
+          <div class="snap-start flex-shrink-0 w-[280px] sm:w-[320px] md:w-[340px] group bg-cardBg rounded-xl border border-cardBorder hover:border-gold-500/60 transition-all duration-300 flex flex-col justify-between overflow-hidden relative shadow-xl hover-lift">
             
             <!-- Etiqueta de Destacado Oficial -->
             <div class="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 bg-neutral-950/90 border border-gold-500/60 rounded-full text-[10px] font-bold text-gold-400 shadow-md backdrop-blur-sm">
@@ -2312,7 +2335,7 @@
               <div class="pt-3 border-t border-cardBorder flex items-center justify-between">
                 <div>
                   <span class="text-[10px] text-zinc-500 uppercase tracking-widest block">Precio Taller</span>
-                  <span class="font-serif text-xl text-gold-400 font-bold">${product.price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
+                  <span class="font-serif text-xl text-gold-400 font-bold">$${product.price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
                 </div>
                 <button onclick="addToCart(${product.id})" 
                         ${isOutOfStock ? 'disabled' : ''}
@@ -2326,11 +2349,6 @@
           </div>
         `;
       }).join('');
-
-      // Refresh scroll reveal observer for the newly rendered cards
-      if (typeof initScrollAnimations === 'function') {
-        initScrollAnimations();
-      }
     }
 
     function renderCatalog() {
