@@ -184,6 +184,10 @@
               <i class="fa-solid fa-suitcase text-[11px] text-gold-400"></i>
               <span>Mochilas</span>
             </a>
+            <a href="#catalogo" onclick="filterCategory('Accesorios')" class="px-4 py-2.5 text-zinc-300 hover:text-gold-400 hover:bg-darkSurface/80 transition flex items-center gap-2.5">
+              <i class="fa-solid fa-gem text-[11px] text-gold-400"></i>
+              <span>Accesorios</span>
+            </a>
             <a href="#catalogo" onclick="filterCategory('Ropa')" class="px-4 py-2.5 text-zinc-300 hover:text-gold-400 hover:bg-darkSurface/80 transition flex items-center gap-2.5 border-t border-cardBorder">
               <i class="fa-solid fa-vest text-[11px] text-gold-400"></i>
               <span>Ropa</span>
@@ -271,6 +275,9 @@
           </a>
           <a href="#catalogo" onclick="filterCategory('Mochilas'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
             <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Mochilas
+          </a>
+          <a href="#catalogo" onclick="filterCategory('Accesorios'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Accesorios
           </a>
           <a href="#catalogo" onclick="filterCategory('Ropa'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5 col-span-2">
             <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Ropa (Chamarras y Chalecos)
@@ -394,6 +401,9 @@
         </button>
         <button onclick="filterCategory('Mochilas')" class="filter-btn px-4 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
           Mochilas (<span id="count-Mochilas">0</span>)
+        </button>
+        <button onclick="filterCategory('Accesorios')" class="filter-btn px-4 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
+          Accesorios (<span id="count-Accesorios">0</span>)
         </button>
         <button onclick="filterCategory('Ropa')" class="filter-btn px-4 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
           Ropa (<span id="count-Ropa">0</span>)
