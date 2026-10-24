@@ -158,7 +158,39 @@
       <!-- Enlaces Centrales (Desktop) -->
       <nav class="hidden lg:flex items-center gap-7 text-xs uppercase tracking-[0.2em] font-medium text-zinc-300">
         <a href="#inicio" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Inicio</a>
-        <a href="#catalogo" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Catálogo</a>
+        
+        <!-- Catálogo con Submenú Desplegable Oficial -->
+        <div class="relative group py-2">
+          <a href="#catalogo" onclick="filterCategory('todos')" class="hover:text-gold-400 transition flex items-center gap-1.5 py-1 border-b-2 border-transparent group-hover:border-gold-500">
+            <span>Catálogo</span>
+            <i class="fa-solid fa-chevron-down text-[9px] text-gold-400 transition-transform duration-300 group-hover:rotate-180"></i>
+          </a>
+          
+          <!-- Dropdown Menú -->
+          <div class="absolute left-0 top-full hidden group-hover:flex flex-col bg-cardBg/95 backdrop-blur-md border border-gold-500/30 rounded-lg shadow-2xl py-2 min-w-[190px] z-50">
+            <a href="#catalogo" onclick="filterCategory('Bolsos')" class="px-4 py-2.5 text-zinc-300 hover:text-gold-400 hover:bg-darkSurface/80 transition flex items-center gap-2.5">
+              <i class="fa-solid fa-bag-shopping text-[11px] text-gold-400"></i>
+              <span>Bolsos</span>
+            </a>
+            <a href="#catalogo" onclick="filterCategory('Carteras')" class="px-4 py-2.5 text-zinc-300 hover:text-gold-400 hover:bg-darkSurface/80 transition flex items-center gap-2.5">
+              <i class="fa-solid fa-wallet text-[11px] text-gold-400"></i>
+              <span>Carteras</span>
+            </a>
+            <a href="#catalogo" onclick="filterCategory('Crossbody')" class="px-4 py-2.5 text-zinc-300 hover:text-gold-400 hover:bg-darkSurface/80 transition flex items-center gap-2.5">
+              <i class="fa-solid fa-shield-halved text-[11px] text-gold-400"></i>
+              <span>Crossbody</span>
+            </a>
+            <a href="#catalogo" onclick="filterCategory('Mochilas')" class="px-4 py-2.5 text-zinc-300 hover:text-gold-400 hover:bg-darkSurface/80 transition flex items-center gap-2.5">
+              <i class="fa-solid fa-suitcase text-[11px] text-gold-400"></i>
+              <span>Mochilas</span>
+            </a>
+            <a href="#catalogo" onclick="filterCategory('Ropa')" class="px-4 py-2.5 text-zinc-300 hover:text-gold-400 hover:bg-darkSurface/80 transition flex items-center gap-2.5 border-t border-cardBorder">
+              <i class="fa-solid fa-vest text-[11px] text-gold-400"></i>
+              <span>Ropa</span>
+            </a>
+          </div>
+        </div>
+
         <a href="#nosotros" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Nosotros</a>
         <a href="#sucursales" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Sucursales</a>
         <a href="#contacto" class="hover:text-gold-400 transition py-1 border-b-2 border-transparent hover:border-gold-500">Contacto</a>
@@ -218,9 +250,34 @@
         <i class="fa-solid fa-xmark text-2xl"></i>
       </button>
     </div>
-    <nav class="flex flex-col p-8 gap-5 text-sm tracking-widest uppercase font-medium text-zinc-300">
+    <nav class="flex flex-col p-8 gap-4 text-sm tracking-widest uppercase font-medium text-zinc-300">
       <a href="#inicio" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Inicio</a>
-      <a href="#catalogo" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Catálogo Completo</a>
+      
+      <!-- Acordeón Móvil Catálogo -->
+      <div class="border-y border-cardBorder py-3 space-y-2">
+        <div class="flex items-center justify-between text-gold-400 font-bold">
+          <span>Catálogo</span>
+          <a href="#catalogo" onclick="filterCategory('todos'); toggleMobileMenu();" class="text-[11px] text-zinc-400 hover:text-white underline">Ver Todo</a>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs text-zinc-400 pl-2">
+          <a href="#catalogo" onclick="filterCategory('Bolsos'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Bolsos
+          </a>
+          <a href="#catalogo" onclick="filterCategory('Carteras'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Carteras
+          </a>
+          <a href="#catalogo" onclick="filterCategory('Crossbody'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Crossbody
+          </a>
+          <a href="#catalogo" onclick="filterCategory('Mochilas'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Mochilas
+          </a>
+          <a href="#catalogo" onclick="filterCategory('Ropa'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5 col-span-2">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Ropa (Chamarras y Chalecos)
+          </a>
+        </div>
+      </div>
+
       <a href="#nosotros" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Nosotros (Misión & Valores)</a>
       <a href="#sucursales" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Nuestras Sucursales</a>
       <a href="#contacto" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Contacto y Redes</a>
@@ -339,19 +396,25 @@
         </p>
       </div>
 
-      <!-- Filtros por Pestañas -->
+      <!-- Filtros por Pestañas Oficiales -->
       <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10" id="categoryFilterContainer">
-        <button onclick="filterCategory('todos')" class="filter-btn active px-5 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-gold-500 bg-gold-500 text-carbon transition">
+        <button onclick="filterCategory('todos')" class="filter-btn active px-4 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-gold-500 bg-gold-500 text-carbon transition">
           Todos (<span id="count-todos">0</span>)
         </button>
-        <button onclick="filterCategory('Bolsos')" class="filter-btn px-5 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
+        <button onclick="filterCategory('Bolsos')" class="filter-btn px-4 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
           Bolsos (<span id="count-Bolsos">0</span>)
         </button>
-        <button onclick="filterCategory('Carteras')" class="filter-btn px-5 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
-          Carteras & Tarjeteros (<span id="count-Carteras">0</span>)
+        <button onclick="filterCategory('Carteras')" class="filter-btn px-4 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
+          Carteras (<span id="count-Carteras">0</span>)
         </button>
-        <button onclick="filterCategory('Crossbody & Mochilas')" class="filter-btn px-5 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
-          Crossbody & Mochilas (<span id="count-CrossbodyMochilas">0</span>)
+        <button onclick="filterCategory('Crossbody')" class="filter-btn px-4 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
+          Crossbody (<span id="count-Crossbody">0</span>)
+        </button>
+        <button onclick="filterCategory('Mochilas')" class="filter-btn px-4 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
+          Mochilas (<span id="count-Mochilas">0</span>)
+        </button>
+        <button onclick="filterCategory('Ropa')" class="filter-btn px-4 py-2 rounded-full text-xs tracking-wider uppercase font-medium border border-cardBorder bg-darkSurface text-zinc-300 hover:border-gold-500/50 transition">
+          Ropa (<span id="count-Ropa">0</span>)
         </button>
       </div>
 
@@ -1477,9 +1540,10 @@
               <select id="adminCategorySelect" onchange="renderAdminTable()" class="bg-darkSurface border border-cardBorder text-xs text-zinc-200 rounded px-2.5 py-1.5 focus:outline-none focus:border-gold-500 w-full sm:w-auto">
                 <option value="all">Todas las Categorías</option>
                 <option value="Bolsos">Bolsos</option>
-                <option value="Carteras">Carteras & Tarjeteros</option>
+                <option value="Carteras">Carteras</option>
                 <option value="Crossbody">Crossbody</option>
                 <option value="Mochilas">Mochilas</option>
+                <option value="Ropa">Ropa</option>
               </select>
 
               <button onclick="openNewProductModal()" class="px-4 py-1.5 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs uppercase tracking-wider rounded transition flex items-center gap-1.5 whitespace-nowrap">
@@ -1603,6 +1667,7 @@
             <option value="Carteras">Carteras</option>
             <option value="Crossbody">Crossbody</option>
             <option value="Mochilas">Mochilas</option>
+            <option value="Ropa">Ropa</option>
           </select>
         </div>
 
@@ -1871,6 +1936,24 @@
         stock: 4,
         image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
         description: "Mochila estructurada en cuero vacuno grueso pero flexible. Compartimento acolchado para dispositivos y tirantes ergonómicos."
+      },
+      {
+        id: 12,
+        name: "Chamarra Clásica Biker Piel Genuina",
+        price: 4800,
+        category: "Ropa",
+        stock: 5,
+        image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80",
+        description: "Chamarra de corte biker en piel genuina de vacuno suave al tacto con forro térmico satinado y cierres metálicos dorados de alta resistencia."
+      },
+      {
+        id: 13,
+        name: "Chaleco Artesanal de Piel Corte Vacuno",
+        price: 2600,
+        category: "Ropa",
+        stock: 4,
+        image: "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=800&q=80",
+        description: "Chaleco tradicional de marroquinería con bolsillos frontales reforzados, ajuste ergonómico y acabados hechos a mano en Tlaquepaque."
       }
     ];
 
@@ -2465,13 +2548,17 @@
         todos: products.length,
         Bolsos: products.filter(p => p.category === 'Bolsos').length,
         Carteras: products.filter(p => p.category === 'Carteras').length,
-        CrossbodyMochilas: products.filter(p => p.category === 'Crossbody' || p.category === 'Mochilas').length,
+        Crossbody: products.filter(p => p.category === 'Crossbody').length,
+        Mochilas: products.filter(p => p.category === 'Mochilas').length,
+        Ropa: products.filter(p => p.category === 'Ropa').length
       };
 
-      document.getElementById('count-todos').textContent = counts.todos;
-      document.getElementById('count-Bolsos').textContent = counts.Bolsos;
-      document.getElementById('count-Carteras').textContent = counts.Carteras;
-      document.getElementById('count-CrossbodyMochilas').textContent = counts.CrossbodyMochilas;
+      if (document.getElementById('count-todos')) document.getElementById('count-todos').textContent = counts.todos;
+      if (document.getElementById('count-Bolsos')) document.getElementById('count-Bolsos').textContent = counts.Bolsos;
+      if (document.getElementById('count-Carteras')) document.getElementById('count-Carteras').textContent = counts.Carteras;
+      if (document.getElementById('count-Crossbody')) document.getElementById('count-Crossbody').textContent = counts.Crossbody;
+      if (document.getElementById('count-Mochilas')) document.getElementById('count-Mochilas').textContent = counts.Mochilas;
+      if (document.getElementById('count-Ropa')) document.getElementById('count-Ropa').textContent = counts.Ropa;
     }
 
     function filterCategory(cat) {
@@ -2482,7 +2569,7 @@
         btn.classList.add('bg-darkSurface', 'text-zinc-300', 'border-cardBorder');
       });
 
-      const activeBtn = event ? event.currentTarget : document.querySelector(`.filter-btn[onclick*="${cat}"]`);
+      const activeBtn = document.querySelector(`.filter-btn[onclick*="${cat}"]`);
       if (activeBtn) {
         activeBtn.classList.add('active', 'bg-gold-500', 'text-carbon', 'border-gold-500');
         activeBtn.classList.remove('bg-darkSurface', 'text-zinc-300', 'border-cardBorder');
@@ -2505,8 +2592,6 @@
         let matchCat = false;
         if (currentCategoryFilter === 'todos') {
           matchCat = true;
-        } else if (currentCategoryFilter === 'Crossbody & Mochilas') {
-          matchCat = (item.category === 'Crossbody' || item.category === 'Mochilas');
         } else {
           matchCat = (item.category === currentCategoryFilter);
         }
