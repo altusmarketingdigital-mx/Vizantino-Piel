@@ -32,10 +32,10 @@
       theme: {
         extend: {
           colors: {
-            carbon: '#0b0b0b',
-            darkSurface: '#121212',
-            cardBg: '#181818',
-            cardBorder: '#272727',
+            carbon: '#12100e',
+            darkSurface: '#1a1613',
+            cardBg: '#201b17',
+            cardBorder: '#342c24',
             gold: {
               300: '#f0d28d',
               400: '#dfb96c',
@@ -55,10 +55,18 @@
 
   <style>
     body {
-      background-color: #0b0b0b;
-      color: #e5e5e5;
+      /* Fondo cálido y envolvente: Ébano profundo con halos sutiles tono cuero cognac y ámbar ahumado */
+      background-color: #12100e;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(197, 160, 89, 0.07) 0%, transparent 45%),
+        radial-gradient(circle at 85% 35%, rgba(138, 92, 42, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 50% 80%, rgba(197, 160, 89, 0.05) 0%, transparent 60%),
+        linear-gradient(180deg, #13110f 0%, #171411 35%, #14110e 70%, #0f0d0b 100%);
+      background-attachment: fixed;
+      color: #eae5de;
       font-family: 'Montserrat', sans-serif;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
     /* Scrollbar personalizada dorada */
@@ -263,7 +271,7 @@
   <!-- ========================================== -->
   <!-- 2. HEADER Y NAVEGACIÓN -->
   <!-- ========================================== -->
-  <header class="sticky top-0 z-40 bg-carbon/95 backdrop-blur-md border-b border-cardBorder transition-all duration-300" id="mainHeader">
+  <header class="sticky top-0 z-40 bg-[#14110e]/95 backdrop-blur-md border-b border-cardBorder transition-all duration-300" id="mainHeader">
     <div class="max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-10 h-20 flex items-center justify-between gap-6 xl:gap-8">
       
       <!-- Menú Hamburguesa Móvil -->
