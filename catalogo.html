@@ -578,6 +578,10 @@
           <span class="font-serif">Total Estimado</span>
           <span id="cartTotal" class="font-mono text-gold-400">$0.00 MXN</span>
         </div>
+        <div id="cartInstallmentsBanner" class="p-2 rounded bg-sky-950/40 border border-sky-500/30 text-[11px] text-sky-300 flex items-center justify-between">
+          <span class="flex items-center gap-1.5"><i class="fa-solid fa-credit-card text-sky-400"></i> O paga a 3 MSI de:</span>
+          <strong id="cartInstallmentAmount" class="font-mono text-emerald-400">$0.00</strong>
+        </div>
       </div>
 
       <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-carbon font-bold text-xs tracking-widest uppercase rounded shadow-lg shadow-gold-500/10 transition">
@@ -606,7 +610,24 @@
         <div class="space-y-4">
           <span id="qvCategory" class="text-xs uppercase tracking-widest text-gold-400 font-semibold"></span>
           <h3 id="qvTitle" class="font-serif text-2xl text-white font-bold leading-tight"></h3>
-          <div class="text-2xl font-serif text-gold-300 font-bold" id="qvPrice"></div>
+          
+          <div>
+            <div class="text-2xl font-serif text-gold-300 font-bold" id="qvPrice"></div>
+            <div id="qvInstallments" class="mt-1.5 p-2.5 bg-neutral-900 border border-sky-500/30 rounded-lg text-xs space-y-1">
+              <div class="flex items-center gap-1.5 text-sky-400 font-bold text-[11px]">
+                <i class="fa-solid fa-handshake-angle text-sky-400"></i>
+                <span>Hasta 12 cuotas con Mercado Pago</span>
+              </div>
+              <div class="text-zinc-300 text-[11px] flex items-center justify-between">
+                <span>3 Meses Sin Intereses de:</span>
+                <strong id="qvMsiAmount" class="text-emerald-400 font-mono font-bold">$0.00</strong>
+              </div>
+              <div class="text-zinc-400 text-[10px] flex items-center justify-between">
+                <span>o hasta 12 pagos de:</span>
+                <span id="qv12xAmount" class="text-zinc-300 font-mono">$0.00</span>
+              </div>
+            </div>
+          </div>
           <div id="qvStockBadge"></div>
           <p id="qvDescription" class="text-xs text-zinc-400 leading-relaxed"></p>
           
@@ -780,6 +801,38 @@
           <div class="bg-cardBg p-4 rounded-lg border border-cardBorder text-xs">
             <!-- 1. Mercado Pago (Principal Oficial) -->
             <div id="payContent-mp" class="space-y-4 py-2">
+              <!-- Calculadora y Selector de Parcelas / Cuotas Mercado Pago -->
+              <div class="p-3.5 bg-neutral-900/90 border border-sky-500/40 rounded-lg space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.5/mercadopago/favicon.svg" alt="MP" class="w-5 h-5">
+                    <span class="font-bold text-sky-400 uppercase tracking-wider text-xs">Elige tus Parcelas / Cuotas</span>
+                  </div>
+                  <span class="px-2 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-500/40 rounded text-[10px] font-bold">3 MSI Sin Intereses</span>
+                </div>
+
+                <div class="space-y-1.5 text-xs">
+                  <label class="block text-zinc-300 text-[11px] font-semibold">Plan de pago seleccionado con Mercado Pago:</label>
+                  <select id="mpInstallmentSelect" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-100 font-medium text-xs focus:outline-none focus:border-sky-400">
+                    <option value="1">1 pago de contado (Sin recargo)</option>
+                    <option value="3" selected>3 Meses Sin Intereses (3 MSI de <span id="ckOpt3">$0.00</span>)</option>
+                    <option value="6">6 cuotas fijas mensuales</option>
+                    <option value="9">9 cuotas fijas mensuales</option>
+                    <option value="12">12 cuotas fijas mensuales</option>
+                  </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 pt-1 text-[11px]">
+                  <div class="p-2 bg-darkSurface rounded border border-cardBorder text-center">
+                    <span class="text-zinc-400 block text-[10px]">3 Meses Sin Intereses:</span>
+                    <strong id="checkoutMsiAmount" class="text-emerald-400 font-mono text-sm">$0.00</strong>
+                  </div>
+                  <div class="p-2 bg-darkSurface rounded border border-cardBorder text-center">
+                    <span class="text-zinc-400 block text-[10px]">Hasta 12 cuotas desde:</span>
+                    <strong id="checkout12xAmount" class="text-sky-300 font-mono text-sm">$0.00</strong>
+                  </div>
+                </div>
+              </div>
               <div class="flex items-center justify-between pb-2 border-b border-cardBorder">
                 <div class="flex items-center gap-2">
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -2274,7 +2327,13 @@
       document.getElementById('qvImage').src = prod.image;
       document.getElementById('qvCategory').textContent = prod.category + " · Tlaquepaque, Jal.";
       document.getElementById('qvTitle').textContent = prod.name;
-      document.getElementById('qvPrice').innerHTML = `$${prod.price.toLocaleString('es-MX')} <span class="text-xs text-zinc-400 font-sans">MXN</span>`;
+      document.getElementById('qvPrice').innerHTML = `${prod.price.toLocaleString('es-MX')} <span class="text-xs text-zinc-400 font-sans">MXN</span>`;
+      const msi3 = (prod.price / 3).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const cuotas12 = ((prod.price * 1.15) / 12).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const qvMsi = document.getElementById('qvMsiAmount');
+      const qv12 = document.getElementById('qv12xAmount');
+      if (qvMsi) qvMsi.textContent = `${msi3} MXN`;
+      if (qv12) qv12.textContent = `${cuotas12} MXN`;
       document.getElementById('qvDescription').textContent = prod.description;
 
       const stockBadge = document.getElementById('qvStockBadge');
