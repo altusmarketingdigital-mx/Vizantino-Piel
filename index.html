@@ -345,39 +345,21 @@
           </div>
         </div>
 
-        <!-- Tarjeta Insignia -->
+        <!-- Tarjeta Insignia (Estado en espera de nuevos productos) -->
         <div class="lg:col-span-5 flex justify-center">
-          <div class="relative w-full max-w-sm sm:max-w-md bg-gradient-to-b from-cardBg to-darkSurface p-6 rounded-lg border border-gold-500/30 gold-border-glow">
-            <div class="absolute -top-3 left-6 bg-gold-500 text-carbon text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-sm shadow-md">
-              Pieza Insignia
+          <div class="relative w-full max-w-sm sm:max-w-md bg-gradient-to-b from-cardBg to-darkSurface p-6 rounded-lg border border-gold-500/30 gold-border-glow text-center">
+            <div class="w-14 h-14 mx-auto rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-2xl mb-4">
+              <i class="fa-solid fa-gem"></i>
             </div>
-
-            <div class="relative aspect-square w-full rounded overflow-hidden bg-black/60 mb-5 group">
-              <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80" 
-                   alt="Bolso Calidad Élite" 
-                   class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-              <div class="absolute bottom-3 left-4 right-4 flex justify-between items-end">
-                <div>
-                  <span class="text-[11px] tracking-widest text-gold-400 uppercase font-semibold">Bolsos de Alta Gama</span>
-                  <h3 class="font-serif text-xl text-white font-bold">Bolso Calidad Élite</h3>
-                </div>
-                <span class="font-serif text-2xl text-gold-300 font-bold">$3,000 <span class="text-xs text-zinc-400">MXN</span></span>
-              </div>
-            </div>
-
-            <p class="text-xs text-zinc-400 line-clamp-2 mb-4 leading-relaxed">
-              Confeccionado con la selección más selecta de cuero vacuno curtido con métodos tradicionales. Herrajes dorados de latón y acabados a mano.
+            <span class="text-[10px] tracking-[0.3em] uppercase font-bold text-gold-400 block mb-2">Vizantino Piel</span>
+            <h3 class="font-serif text-2xl text-white font-bold mb-3">Colección Artesanal en Preparación</h3>
+            <p class="text-zinc-400 text-xs leading-relaxed mb-6">
+              Estamos actualizando nuestras piezas de piel genuina corte vacuno hechas a mano en Tlaquepaque, Jalisco.
             </p>
-
-            <div class="flex items-center gap-3">
-              <button onclick="addToCart(1)" class="flex-1 py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-widest uppercase rounded transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-bag-shopping"></i> Agregar al Carrito
-              </button>
-              <button onclick="openQuickView(1)" class="p-3 bg-zinc-800/80 hover:bg-zinc-700 border border-cardBorder text-zinc-300 rounded transition" title="Vista rápida">
-                <i class="fa-regular fa-eye"></i>
-              </button>
-            </div>
+            <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20deseo%20conocer%20los%20modelos%20disponibles%20en%20taller" target="_blank" rel="noopener noreferrer" 
+               class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-widest uppercase rounded shadow transition">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Consultar por WhatsApp
+            </a>
           </div>
         </div>
       </div>
@@ -424,13 +406,24 @@
       </div>
 
       <!-- Estado Vacío -->
-      <div id="noProductsFound" class="hidden text-center py-16">
-        <i class="fa-solid fa-magnifying-glass text-4xl text-zinc-600 mb-4"></i>
-        <h3 class="font-serif text-2xl text-zinc-300">No se encontraron productos</h3>
-        <p class="text-zinc-500 text-sm mt-1">Prueba con otra palabra clave o selecciona otra categoría.</p>
-        <button onclick="filterCategory('todos'); document.getElementById('searchInput').value='';" class="mt-4 px-6 py-2 bg-gold-500/20 text-gold-400 border border-gold-500/30 rounded text-xs uppercase tracking-widest hover:bg-gold-500 hover:text-black transition">
-          Ver todo el catálogo
-        </button>
+      <div id="noProductsFound" class="text-center py-20 bg-darkSurface/40 border border-cardBorder/60 rounded-xl p-8 max-w-2xl mx-auto">
+        <div class="w-16 h-16 mx-auto rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-2xl mb-4">
+          <i class="fa-solid fa-boxes-packing"></i>
+        </div>
+        <span class="text-[10px] tracking-[0.25em] uppercase font-bold text-gold-400 block mb-1">Catálogo en Actualización</span>
+        <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold mb-2">Próximamente Nuevos Modelos</h3>
+        <p class="text-zinc-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed mb-6">
+          Estamos preparando las nuevas piezas de piel genuina corte vacuno. Puedes consultar existencias en taller o dar de alta productos desde el Panel Administrativo.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20deseo%20información%20sobre%20artículos%20de%20piel%20disponibles" target="_blank" rel="noopener noreferrer" 
+             class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-bold tracking-wider uppercase transition flex items-center gap-2">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Preguntar en WhatsApp
+          </a>
+          <button onclick="openAdminModal()" class="px-5 py-2.5 bg-darkSurface hover:bg-cardBg border border-gold-500/40 text-gold-400 rounded text-xs font-bold tracking-wider uppercase transition flex items-center gap-1.5">
+            <i class="fa-solid fa-plus text-[10px]"></i> Cargar Producto en Admin
+          </button>
+        </div>
       </div>
     </section>
 
@@ -1836,126 +1829,8 @@
      * VIZANTINO PIEL - SPA CON MÓDULOS DE CLIENTE Y ADMINISTRADOR
      */
 
-    // Catálogo Inicial Oficial de 11 Productos
-    const INITIAL_PRODUCTS = [
-      {
-        id: 1,
-        name: "Bolso calidad élite",
-        price: 3000,
-        category: "Bolsos",
-        stock: 8,
-        image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80",
-        description: "Bolso confeccionado con cuero vacuno premium de textura suave y durabilidad excepcional. Herrajes dorados inoxidables y compartimentos interiores reforzados."
-      },
-      {
-        id: 2,
-        name: "Bolsa Cherry Vizantino",
-        price: 3000,
-        category: "Bolsos",
-        stock: 5,
-        image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=80",
-        description: "Diseño exclusivo en tonalidad cereza profunda con pátina satinada. Silueta sofisticada perfecta para ocasiones de gala o uso ejecutivo de distinción."
-      },
-      {
-        id: 3,
-        name: "Tarjetero de piel corte vacuno",
-        price: 280,
-        category: "Carteras",
-        stock: 25,
-        image: "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=800&q=80",
-        description: "Minimalismo absoluto. Capacidad para 6 tarjetas y compartimento central con acabados de corte y pulido a mano por artesanos jaliscienses."
-      },
-      {
-        id: 4,
-        name: "Cartera Slim piel corte vacuno",
-        price: 300,
-        category: "Carteras",
-        stock: 18,
-        image: "https://images.unsplash.com/photo-1606503829007-885ceb5a86a0?auto=format&fit=crop&w=800&q=80",
-        description: "Perfil ultradelgado que no abulta los bolsillos. Piel auténtica curtida al natural que adquiere una textura única y envejecimiento noble con el uso."
-      },
-      {
-        id: 5,
-        name: "Cartera Slim large piel corte vacuno",
-        price: 400,
-        category: "Carteras",
-        stock: 12,
-        image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80",
-        description: "Espacio optimizado de mayor longitud para billetes extendidos, cheques y hasta 10 tarjetas con costura al tono de hilo encerado de alta resistencia."
-      },
-      {
-        id: 6,
-        name: "Tarjetero con apartado para billete",
-        price: 350,
-        category: "Carteras",
-        stock: 20,
-        image: "https://images.unsplash.com/photo-1563903530908-afdd155d057a?auto=format&fit=crop&w=800&q=80",
-        description: "La comodidad de un tarjetero ligero fusionada con ranura de acceso inmediato para billetes doblados. Funcionalidad moderna en piel pura."
-      },
-      {
-        id: 7,
-        name: "Carteras piel corte vacuno",
-        price: 300,
-        category: "Carteras",
-        stock: 15,
-        image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=800&q=80",
-        description: "Billetera tradicional bifold con doble compartimento para divisas y ranuras ergonómicas. Sello de garantía de autenticidad Vizantino grabado al calor."
-      },
-      {
-        id: 8,
-        name: "Cartera en piel exótica",
-        price: 350,
-        category: "Carteras",
-        stock: 10,
-        image: "https://images.unsplash.com/photo-1554412933-514a83d2f3c8?auto=format&fit=crop&w=800&q=80",
-        description: "Grabado en relieve con acabado exótico tipo reptil sobre base de piel genuina de vacuno. Textura distinguida que proyecta lujo contemporáneo."
-      },
-      {
-        id: 9,
-        name: "Tarjetero en pieles exóticas",
-        price: 500,
-        category: "Carteras",
-        stock: 8,
-        image: "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=800&q=80",
-        description: "Edición limitada para coleccionistas. Piel grabada de textura exótica con brillo satinado de alta durabilidad y tacto inigualable."
-      },
-      {
-        id: 10,
-        name: "Crossbody Piel Genuina",
-        price: 1800,
-        category: "Crossbody",
-        stock: 6,
-        image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=800&q=80",
-        description: "Bolso cruzado ergonómico con correa ajustable confeccionada en doble piel. Cierres metálicos de suave deslizamiento y forro interno resistente."
-      },
-      {
-        id: 11,
-        name: "Mochila Piel Corte Vacuno",
-        price: 2200,
-        category: "Mochilas",
-        stock: 4,
-        image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
-        description: "Mochila estructurada en cuero vacuno grueso pero flexible. Compartimento acolchado para dispositivos y tirantes ergonómicos."
-      },
-      {
-        id: 12,
-        name: "Chamarra Clásica Biker Piel Genuina",
-        price: 4800,
-        category: "Ropa",
-        stock: 5,
-        image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80",
-        description: "Chamarra de corte biker en piel genuina de vacuno suave al tacto con forro térmico satinado y cierres metálicos dorados de alta resistencia."
-      },
-      {
-        id: 13,
-        name: "Chaleco Artesanal de Piel Corte Vacuno",
-        price: 2600,
-        category: "Ropa",
-        stock: 4,
-        image: "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=800&q=80",
-        description: "Chaleco tradicional de marroquinería con bolsillos frontales reforzados, ajuste ergonómico y acabados hechos a mano en Tlaquepaque."
-      }
-    ];
+    // Catálogo Inicial Oficial (Vacío, para que administres tus propios productos reales)
+    const INITIAL_PRODUCTS = [];
 
     // Configuración Oficial de Supabase
     const SUPABASE_URL = "https://zujfslxqgllzmxdoioie.supabase.co";
@@ -2014,7 +1889,7 @@
             .select('*')
             .order('id', { ascending: true });
 
-          if (!error && data && data.length > 0) {
+          if (!error && data) {
             products = data.map(p => ({
               ...p,
               price: parseFloat(p.price)
@@ -2029,16 +1904,16 @@
         }
       }
 
-      // 2. Respaldo desde LocalStorage / Catálogo inicial
+      // 2. Respaldo desde LocalStorage
       const stored = localStorage.getItem(STORAGE_KEY_PRODUCTS);
       if (stored) {
         try {
           products = JSON.parse(stored);
         } catch (e) {
-          products = [...INITIAL_PRODUCTS];
+          products = [];
         }
       } else {
-        products = [...INITIAL_PRODUCTS];
+        products = [];
       }
       updateCategoryCounts();
       renderCatalog();
