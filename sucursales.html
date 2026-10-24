@@ -1,0 +1,3210 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vizantino Piel | Marroquinería de Lujo en Tlaquepaque, Jalisco</title>
+  <meta name="description" content="Artículos de piel genuina y corte vacuno hechos a mano en Tlaquepaque, Jalisco. Bolsos, carteras, mochilas y accesorios exclusivos.">
+
+  <!-- Favicon Oficial Multiplataforma -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+
+  <!-- Fuentes de Google: Cormorant Garamond y Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Supabase JS Client Oficial -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            carbon: '#0b0b0b',
+            darkSurface: '#121212',
+            cardBg: '#181818',
+            cardBorder: '#272727',
+            gold: {
+              300: '#f0d28d',
+              400: '#dfb96c',
+              500: '#c5a059',
+              600: '#a7823b',
+              700: '#846427',
+            }
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"Montserrat"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0b0b0b;
+      color: #e5e5e5;
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbar personalizada dorada */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0b0b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #332a19;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #c5a059;
+    }
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fff3d1 0%, #dfb96c 50%, #c5a059 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gold-border-glow {
+      box-shadow: 0 0 15px rgba(197, 160, 89, 0.18);
+    }
+    .gold-border-glow:hover {
+      box-shadow: 0 0 25px rgba(197, 160, 89, 0.35);
+    }
+
+    .hero-pattern {
+      background-image: radial-gradient(circle at 50% 20%, rgba(197, 160, 89, 0.08) 0%, transparent 60%);
+    }
+
+    .modal-backdrop {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .drawer-transition {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-anim {
+      animation: slideInDown 0.3s ease-out forwards;
+    }
+    @keyframes slideInDown {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .wa-float-pulse {
+      animation: pulseWa 2s infinite;
+    }
+    @keyframes pulseWa {
+      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
+      70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+    }
+  </style>
+</head>
+<body class="selection:bg-gold-500 selection:text-black">
+
+  <!-- ========================================== -->
+  <!-- 1. TOP BANNER PROMOCIONAL -->
+  <!-- ========================================== -->
+  <aside class="bg-gradient-to-r from-neutral-950 via-[#1c160b] to-neutral-950 border-b border-gold-500/20 py-2 px-4 text-xs tracking-wider text-center text-zinc-300 flex flex-wrap items-center justify-center gap-x-6 gap-y-1">
+    <div class="flex items-center gap-2 text-gold-400">
+      <i class="fa-solid fa-gem text-[10px]"></i>
+      <span class="font-medium tracking-widest uppercase">Envío nacional gratis a partir de $1,800 o 3 MSI · Personalización gratis</span>
+    </div>
+    <span class="hidden sm:inline text-zinc-600">|</span>
+    <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20deseo%20información%20sobre%20sus%20artículos%20de%20piel" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 transition flex items-center gap-1.5">
+      <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+      <span>3329089920</span>
+    </a>
+    <span class="hidden sm:inline text-zinc-600">|</span>
+    <a href="https://instagram.com/vizantino_piel" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 transition flex items-center gap-1.5">
+      <i class="fa-brands fa-instagram text-pink-400"></i>
+      <span>@vizantino_piel</span>
+    </a>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- 2. HEADER Y NAVEGACIÓN -->
+  <!-- ========================================== -->
+  <header class="sticky top-0 z-40 bg-carbon/95 backdrop-blur-md border-b border-cardBorder transition-all duration-300" id="mainHeader">
+    <div class="max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-10 h-20 flex items-center justify-between gap-6 xl:gap-8">
+      
+      <!-- Menú Hamburguesa Móvil -->
+      <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-zinc-300 hover:text-gold-400 transition focus:outline-none" aria-label="Abrir Menú">
+        <i class="fa-solid fa-bars-staggered text-xl"></i>
+      </button>
+
+      <!-- Logo e Identidad Oficial -->
+      <a href="#" class="flex flex-col items-center group py-1 flex-shrink-0">
+        <img src="logo-gold.png" alt="Vizantino" class="h-8 sm:h-9 md:h-10 w-auto object-contain brightness-105 group-hover:scale-105 transition-transform duration-300">
+        <span class="text-[9px] sm:text-[10px] tracking-[0.38em] uppercase text-gold-400 font-semibold mt-1 text-center whitespace-nowrap">
+          PIEL · HECHO EN MÉXICO
+        </span>
+      </a>
+
+      <!-- Enlaces Centrales (Desktop) - Más espaciados y elegantes -->
+      <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-[11px] xl:text-xs uppercase tracking-[0.22em] font-medium text-zinc-300 flex-shrink-0">
+        <a href="index.html" class="hover:text-gold-400 transition-colors py-1.5 border-b-2 border-transparent hover:border-gold-500">Inicio</a>
+        
+        <!-- Catálogo con Submenú Desplegable Oficial -->
+        <div class="relative group py-2">
+          <a href="catalogo.html" onclick="if(window.location.pathname.endsWith('catalogo.html')){filterCategory('todos');}else{window.location.href='catalogo.html';}" class="hover:text-gold-400 transition-colors flex items-center gap-1.5 py-1.5 border-b-2 border-transparent group-hover:border-gold-500">
+            <span>Catálogo</span>
+            <i class="fa-solid fa-chevron-down text-[9px] text-gold-400/80 transition-transform duration-300 group-hover:rotate-180"></i>
+          </a>
+          
+          <!-- Dropdown Menú con contraste sólido y fondo premium -->
+          <div class="absolute left-0 top-full pt-1 hidden group-hover:block z-50">
+            <div class="flex flex-col bg-[#141414] border-2 border-gold-500/60 rounded-xl shadow-[0_15px_35px_rgba(0,0,0,0.9)] py-2.5 min-w-[220px]">
+              <a href="catalogo.html" onclick="filterCategory('Bolsos')" class="px-4 py-2.5 text-zinc-100 hover:text-gold-400 hover:bg-gold-500/15 transition flex items-center gap-3 font-semibold text-xs tracking-wider">
+                <i class="fa-solid fa-bag-shopping text-sm text-gold-400 w-4 text-center"></i>
+                <span>Bolsos</span>
+              </a>
+              <a href="catalogo.html" onclick="filterCategory('Carteras')" class="px-4 py-2.5 text-zinc-100 hover:text-gold-400 hover:bg-gold-500/15 transition flex items-center gap-3 font-semibold text-xs tracking-wider">
+                <i class="fa-solid fa-wallet text-sm text-gold-400 w-4 text-center"></i>
+                <span>Carteras</span>
+              </a>
+              <a href="catalogo.html" onclick="filterCategory('Crossbody')" class="px-4 py-2.5 text-zinc-100 hover:text-gold-400 hover:bg-gold-500/15 transition flex items-center gap-3 font-semibold text-xs tracking-wider">
+                <i class="fa-solid fa-shield-halved text-sm text-gold-400 w-4 text-center"></i>
+                <span>Crossbody</span>
+              </a>
+              <a href="catalogo.html" onclick="filterCategory('Mochilas')" class="px-4 py-2.5 text-zinc-100 hover:text-gold-400 hover:bg-gold-500/15 transition flex items-center gap-3 font-semibold text-xs tracking-wider">
+                <i class="fa-solid fa-suitcase text-sm text-gold-400 w-4 text-center"></i>
+                <span>Mochilas</span>
+              </a>
+              <a href="catalogo.html" onclick="filterCategory('Accesorios')" class="px-4 py-2.5 text-zinc-100 hover:text-gold-400 hover:bg-gold-500/15 transition flex items-center gap-3 font-semibold text-xs tracking-wider">
+                <i class="fa-solid fa-gem text-sm text-gold-400 w-4 text-center"></i>
+                <span>Accesorios</span>
+              </a>
+              <a href="catalogo.html" onclick="filterCategory('Ropa')" class="px-4 py-2.5 text-zinc-100 hover:text-gold-400 hover:bg-gold-500/15 transition flex items-center gap-3 font-semibold text-xs tracking-wider border-t border-zinc-800 mt-1">
+                <i class="fa-solid fa-vest text-sm text-gold-400 w-4 text-center"></i>
+                <span>Ropa</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <a href="nosotros.html" class="hover:text-gold-400 transition-colors py-1.5 border-b-2 border-transparent hover:border-gold-500">Nosotros</a>
+        <a href="sucursales.html" class="text-gold-400 border-gold-500 hover:text-gold-400 transition-colors py-1.5 border-b-2 border-transparent hover:border-gold-500">Sucursales</a>
+        <a href="contacto.html" class="hover:text-gold-400 transition-colors py-1.5 border-b-2 border-transparent hover:border-gold-500">Contacto</a>
+      </nav>
+
+      <!-- Acciones Derecha: Buscador Desplegable/Compacto, Mi Cuenta, Admin y Carrito -->
+      <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+        
+        <!-- Buscador con ancho refinado -->
+        <div class="relative hidden md:block">
+          <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Buscar bolso, cartera..." 
+                 class="bg-darkSurface/90 border border-cardBorder rounded-full py-2 pl-9 pr-4 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-gold-500 transition-all w-44 lg:w-48 xl:w-56 focus:w-64 focus:bg-cardBg">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-xs text-zinc-500"></i>
+        </div>
+
+        <!-- Botón Perfil / Registro de Cliente -->
+        <button id="userAuthBtn" onclick="handleUserAuthClick()" class="px-3 py-2 text-zinc-300 hover:text-gold-400 hover:bg-cardBg rounded-full border border-cardBorder/80 hover:border-gold-500/40 transition-all flex items-center gap-2 text-xs">
+          <i class="fa-regular fa-user text-sm text-gold-400"></i>
+          <span id="userAuthLabel" class="hidden xl:inline font-medium">Mi Cuenta</span>
+        </button>
+
+        <!-- Botón Admin (Discreto y pulcro) -->
+        <button onclick="openAdminModal()" title="Panel de Administración" class="p-2 sm:px-3 sm:py-2 text-zinc-400 hover:text-gold-400 hover:bg-cardBg rounded-full transition-all border border-cardBorder/60 hover:border-gold-500/40 flex items-center gap-1.5 text-xs">
+          <i class="fa-solid fa-sliders text-sm text-zinc-400 group-hover:text-gold-400"></i>
+          <span class="hidden 2xl:inline font-medium">Admin</span>
+        </button>
+
+        <!-- Botón Carrito con efecto visual premium -->
+        <button onclick="toggleCartDrawer(true)" class="relative p-2.5 sm:px-3 sm:py-2.5 text-zinc-200 bg-darkSurface hover:bg-gold-500 hover:text-black border border-cardBorder hover:border-gold-400 rounded-full transition-all duration-300 flex items-center justify-center gap-2" aria-label="Abrir Carrito">
+          <i class="fa-solid fa-bag-shopping text-base"></i>
+          <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gold-500 text-carbon font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-carbon shadow-md">
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Buscador en móvil desplegable -->
+    <div class="sm:hidden px-4 pb-3">
+      <div class="relative">
+        <input type="text" oninput="handleSearch(this.value)" placeholder="Buscar en Vizantino..." 
+               class="w-full bg-darkSurface border border-cardBorder rounded-full py-2 pl-9 pr-4 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-gold-500 transition">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-xs text-zinc-500"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menú Hamburguesa Móvil -->
+  <div id="mobileMenu" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex-col">
+    <div class="p-6 flex justify-between items-center border-b border-cardBorder">
+      <div class="flex flex-col items-start">
+        <img src="logo-gold.png" alt="Vizantino" class="h-7 w-auto object-contain">
+        <span class="text-[8px] tracking-[0.35em] text-gold-400 uppercase font-semibold mt-1">
+          PIEL · HECHO EN MÉXICO
+        </span>
+      </div>
+      <button onclick="toggleMobileMenu()" class="text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-2xl"></i>
+      </button>
+    </div>
+    <nav class="flex flex-col p-8 gap-4 text-sm tracking-widest uppercase font-medium text-zinc-300">
+      <a href="index.html" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Inicio</a>
+      
+      <!-- Acordeón Móvil Catálogo -->
+      <div class="border-y border-cardBorder py-3 space-y-2">
+        <div class="flex items-center justify-between text-gold-400 font-bold">
+          <span>Catálogo</span>
+          <a href="catalogo.html" onclick="filterCategory('todos'); toggleMobileMenu();" class="text-[11px] text-zinc-400 hover:text-white underline">Ver Todo</a>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs text-zinc-400 pl-2">
+          <a href="catalogo.html" onclick="filterCategory('Bolsos'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Bolsos
+          </a>
+          <a href="catalogo.html" onclick="filterCategory('Carteras'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Carteras
+          </a>
+          <a href="catalogo.html" onclick="filterCategory('Crossbody'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Crossbody
+          </a>
+          <a href="catalogo.html" onclick="filterCategory('Mochilas'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Mochilas
+          </a>
+          <a href="catalogo.html" onclick="filterCategory('Accesorios'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Accesorios
+          </a>
+          <a href="catalogo.html" onclick="filterCategory('Ropa'); toggleMobileMenu();" class="hover:text-gold-400 py-1 flex items-center gap-1.5 col-span-2">
+            <i class="fa-solid fa-angle-right text-[10px] text-gold-500"></i> Ropa (Chamarras y Chalecos)
+          </a>
+        </div>
+      </div>
+
+      <a href="nosotros.html" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Nosotros (Misión & Valores)</a>
+      <a href="sucursales.html" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Nuestras Sucursales</a>
+      <a href="contacto.html" onclick="toggleMobileMenu()" class="hover:text-gold-400 transition">Contacto y Redes</a>
+      <div class="pt-6 border-t border-cardBorder space-y-4">
+        <button onclick="toggleMobileMenu(); handleUserAuthClick();" class="text-gold-400 flex items-center gap-3">
+          <i class="fa-solid fa-user"></i> <span id="mobileUserBtnLabel">Mi Cuenta de Cliente</span>
+        </button>
+        <button onclick="toggleMobileMenu(); openAdminModal();" class="text-zinc-400 hover:text-gold-400 flex items-center gap-3">
+          <i class="fa-solid fa-sliders"></i> Panel de Administración
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <main>
+    <!-- ========================================== -->
+    <!-- 5. SUCURSALES FÍSICAS -->
+    <!-- ========================================== -->
+    <section id="sucursales" class="py-20 bg-darkSurface border-t border-b border-cardBorder px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <span class="text-xs font-semibold tracking-[0.3em] uppercase text-gold-400">Presencia Física</span>
+          <h2 class="font-serif text-3xl sm:text-4xl text-white font-bold mt-2">Visita Nuestras Boutiques</h2>
+          <div class="w-16 h-0.5 bg-gold-500 mx-auto mt-4 mb-4"></div>
+          <p class="text-zinc-400 text-xs sm:text-sm">
+            Siéntete en casa, percibe el aroma del cuero recién curtido y recibe asesoría directa en nuestras boutiques oficiales de Tlaquepaque y Tonalá, Jalisco.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          
+          <!-- Sucursal 1 -->
+          <div class="bg-cardBg border border-cardBorder rounded-lg p-6 flex flex-col justify-between hover:border-gold-500/40 transition duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-3 py-1 bg-gold-500/10 text-gold-400 border border-gold-500/20 text-[10px] tracking-widest uppercase font-bold rounded">
+                  Boutique Matriz
+                </span>
+                <span class="text-xs text-emerald-400 flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Abierto
+                </span>
+              </div>
+              <h3 class="font-serif text-xl text-white font-bold mb-2">Sucursal Independencia</h3>
+              <p class="text-zinc-300 text-xs flex items-start gap-2 mb-3">
+                <i class="fa-solid fa-location-dot text-gold-500 mt-1 flex-shrink-0"></i>
+                <span>Independencia #248, Tlaquepaque Centro, Jal.</span>
+              </p>
+              <p class="text-zinc-400 text-[11px] flex items-center gap-2 mb-4">
+                <i class="fa-regular fa-clock text-zinc-500"></i>
+                <span>Lunes a Domingo: 10:30 AM – 8:30 PM</span>
+              </p>
+              <p class="text-[11px] text-zinc-400 leading-relaxed mb-6">
+                Exhibición de piezas insignia, bolsos de temporada y personalización con nombre o logotipo gratis.
+              </p>
+            </div>
+            
+            <a href="https://maps.google.com/?q=Independencia+248+Tlaquepaque+Centro+Jalisco" target="_blank" rel="noopener noreferrer" 
+               class="w-full py-2.5 bg-carbon border border-gold-500/50 hover:bg-gold-500 hover:text-black text-gold-400 font-semibold text-xs tracking-widest uppercase rounded text-center transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-map-location-dot"></i> Google Maps
+            </a>
+          </div>
+
+          <!-- Sucursal 2 -->
+          <div class="bg-cardBg border border-cardBorder rounded-lg p-6 flex flex-col justify-between hover:border-gold-500/40 transition duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-3 py-1 bg-gold-500/10 text-gold-400 border border-gold-500/20 text-[10px] tracking-widest uppercase font-bold rounded">
+                  Galería & Taller
+                </span>
+                <span class="text-xs text-emerald-400 flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Abierto
+                </span>
+              </div>
+              <h3 class="font-serif text-xl text-white font-bold mb-2">Sucursal Alfareros</h3>
+              <p class="text-zinc-300 text-xs flex items-start gap-2 mb-3">
+                <i class="fa-solid fa-location-dot text-gold-500 mt-1 flex-shrink-0"></i>
+                <span>Alfareros #129A, Tlaquepaque Centro, Jal.</span>
+              </p>
+              <p class="text-zinc-400 text-[11px] flex items-center gap-2 mb-4">
+                <i class="fa-regular fa-clock text-zinc-500"></i>
+                <span>Lunes a Domingo: 10:00 AM – 8:00 PM</span>
+              </p>
+              <p class="text-[11px] text-zinc-400 leading-relaxed mb-6">
+                Especializada en marroquinería fina, carteras slim, tarjeteros exóticos y accesorios con grabado artesanal.
+              </p>
+            </div>
+
+            <a href="https://maps.google.com/?q=Alfareros+129A+Tlaquepaque+Centro+Jalisco" target="_blank" rel="noopener noreferrer" 
+               class="w-full py-2.5 bg-carbon border border-gold-500/50 hover:bg-gold-500 hover:text-black text-gold-400 font-semibold text-xs tracking-widest uppercase rounded text-center transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-map-location-dot"></i> Google Maps
+            </a>
+          </div>
+
+          <!-- Sucursal 3 (Tonalá Centro) -->
+          <div class="bg-cardBg border border-cardBorder rounded-lg p-6 flex flex-col justify-between hover:border-gold-500/40 transition duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-3 py-1 bg-gold-500/10 text-gold-400 border border-gold-500/20 text-[10px] tracking-widest uppercase font-bold rounded">
+                  Boutique Tonalá
+                </span>
+                <span class="text-xs text-emerald-400 flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Abierto
+                </span>
+              </div>
+              <h3 class="font-serif text-xl text-white font-bold mb-2">Sucursal Tonaltecas</h3>
+              <p class="text-zinc-300 text-xs flex items-start gap-2 mb-3">
+                <i class="fa-solid fa-location-dot text-gold-500 mt-1 flex-shrink-0"></i>
+                <span>Av. Tonaltecas #274 Int 14, Tonalá Centro, Jal.</span>
+              </p>
+              <p class="text-zinc-400 text-[11px] flex items-center gap-2 mb-4">
+                <i class="fa-regular fa-clock text-zinc-500"></i>
+                <span>Lunes a Domingo: 10:00 AM – 7:30 PM</span>
+              </p>
+              <p class="text-[11px] text-zinc-400 leading-relaxed mb-6">
+                Catálogo completo de mochilas, bolsos, cinturones y piezas de piel corte vacuno directo de artesanos.
+              </p>
+            </div>
+
+            <a href="https://maps.google.com/?q=Av+Tonaltecas+274+Tonala+Centro+Jalisco" target="_blank" rel="noopener noreferrer" 
+               class="w-full py-2.5 bg-carbon border border-gold-500/50 hover:bg-gold-500 hover:text-black text-gold-400 font-semibold text-xs tracking-widest uppercase rounded text-center transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-map-location-dot"></i> Google Maps
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    </main>
+
+  <!-- ========================================== -->
+  <!-- 6. FOOTER (PIE DE PÁGINA) -->
+  <!-- ========================================== -->
+  <footer id="contacto" class="bg-carbon border-t border-cardBorder text-zinc-400 text-xs py-14 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+      
+      <!-- Marca -->
+      <div class="space-y-4">
+        <a href="#" class="inline-flex flex-col items-start group">
+          <img src="logo-gold.png" alt="Vizantino" class="h-8 w-auto object-contain">
+          <span class="text-[9px] tracking-[0.35em] text-gold-400 uppercase font-semibold mt-1">
+            PIEL · HECHO EN MÉXICO
+          </span>
+        </a>
+        <p class="text-zinc-500 text-xs leading-relaxed">
+          Taller de marroquinería fina y creación de accesorios en piel auténtica en Tlaquepaque, Jalisco, México. Belleza, tradición e identidad.
+        </p>
+        <div class="flex items-center gap-4 text-zinc-400 pt-2">
+          <a href="https://instagram.com/vizantino_piel" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 transition text-base" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 transition text-base" aria-label="Facebook">
+            <i class="fa-brands fa-facebook"></i>
+          </a>
+          <a href="https://wa.me/523329089920" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 transition text-base" aria-label="WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navegación -->
+      <div>
+        <h4 class="font-serif text-white text-base tracking-widest uppercase font-bold mb-4">Exploración</h4>
+        <ul class="space-y-2.5">
+          <li><a href="index.html" class="hover:text-gold-400 transition">Inicio</a></li>
+          <li><a href="catalogo.html" class="hover:text-gold-400 transition">Colección Bolsos</a></li>
+          <li><a href="catalogo.html" class="hover:text-gold-400 transition">Carteras y Billeteras</a></li>
+          <li><a href="catalogo.html" class="hover:text-gold-400 transition">Mochilas & Crossbody</a></li>
+          <li><a href="sucursales.html" class="text-gold-400 border-gold-500 hover:text-gold-400 transition">Nuestras Sucursales</a></li>
+        </ul>
+      </div>
+
+      <!-- Servicio al Cliente y Contacto -->
+      <div>
+        <h4 class="font-serif text-white text-base tracking-widest uppercase font-bold mb-4">Contacto & Atención</h4>
+        <ul class="space-y-2.5">
+          <li>
+            <a href="https://wa.me/523329089920" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 transition flex items-center gap-1.5">
+              <i class="fa-brands fa-whatsapp text-emerald-400"></i> Tel/WA: 3329089920
+            </a>
+          </li>
+          <li>
+            <a href="mailto:vizantinopiel@gmail.com" class="hover:text-gold-400 transition flex items-center gap-1.5">
+              <i class="fa-regular fa-envelope text-gold-400"></i> vizantinopiel@gmail.com
+            </a>
+          </li>
+          <li>
+            <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20solicito%20asistencia%20para%20la%20facturación%20de%20mi%20compra" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-emerald-400 transition flex items-center gap-1.5">
+              <i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i> ¿Deseas Factura? Solicítala por WhatsApp
+            </a>
+          </li>
+          <li class="pt-1 text-[11px] text-zinc-500">
+            <span class="text-gold-400 font-semibold block mb-1">Nuestras Sucursales:</span>
+            • Independencia #248, Tlaquepaque centro<br>
+            • Alfareros #129A, Tlaquepaque centro<br>
+            • Av. Tonaltecas #274 Int 14, Tonalá centro
+          </li>
+          <li class="pt-1"><button onclick="handleUserAuthClick()" class="hover:text-gold-400 transition text-left">Mi Portal de Cliente</button></li>
+          <li><a href="javascript:void(0)" onclick="openWarrantyModal()" class="hover:text-gold-400 transition">Garantías & Devoluciones</a></li>
+        </ul>
+      </div>
+
+      <!-- Métodos de Pago y Accesos -->
+      <div>
+        <h4 class="font-serif text-white text-base tracking-widest uppercase font-bold mb-4">Métodos de Pago</h4>
+        <p class="text-zinc-500 mb-3 text-[11px]">Transacciones seguras cifradas con protocolo TLS 256 bits.</p>
+        <div class="flex flex-wrap gap-2 text-xl text-zinc-400 mb-6">
+          <span title="Visa"><i class="fa-brands fa-cc-visa text-blue-400"></i></span>
+          <span title="Mastercard"><i class="fa-brands fa-cc-mastercard text-red-400"></i></span>
+          <span title="American Express"><i class="fa-brands fa-cc-amex text-cyan-400"></i></span>
+          <span title="PayPal"><i class="fa-brands fa-paypal text-sky-400"></i></span>
+          <span title="Mercado Pago" class="text-xs px-1.5 py-0.5 bg-sky-900/60 text-sky-300 rounded font-bold">MercadoPago</span>
+          <span title="SPEI Bancario" class="text-xs px-1.5 py-0.5 bg-emerald-900/60 text-emerald-300 rounded font-bold">SPEI</span>
+          <span title="OXXO Pay" class="text-xs px-1.5 py-0.5 bg-amber-900/60 text-amber-300 rounded font-bold">OXXO</span>
+        </div>
+
+        <div class="pt-2 border-t border-cardBorder flex items-center gap-4">
+          <button onclick="openAdminModal()" class="text-gold-400/80 hover:text-gold-400 text-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-lock text-[10px]"></i> Panel de Administración
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="max-w-7xl mx-auto mt-12 pt-6 border-t border-cardBorder/60 flex flex-col sm:flex-row items-center justify-between text-zinc-500 text-[11px] gap-3">
+      <p>&copy; 2026 Vizantino Piel. Todos los derechos reservados. Tlaquepaque, Jalisco, México.</p>
+      <p class="flex items-center gap-1">
+        Hecho con pasión marroquinera <i class="fa-solid fa-heart text-gold-500 text-[10px]"></i>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- 7. BOTÓN FLOTANTE DE WHATSAPP -->
+  <!-- ========================================== -->
+  <div class="fixed bottom-6 left-6 z-40 flex items-center gap-3">
+    <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20deseo%20asesoría%20sobre%20un%20producto%20de%20su%20tienda" 
+       target="_blank" rel="noopener noreferrer" 
+       class="w-14 h-14 bg-emerald-500 hover:bg-emerald-400 text-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 wa-float-pulse transform hover:scale-110 group" 
+       title="Atención Directa por WhatsApp">
+      <i class="fa-brands fa-whatsapp text-2xl group-hover:rotate-12 transition-transform"></i>
+    </a>
+    <div class="hidden sm:block bg-darkSurface/90 border border-cardBorder px-3.5 py-2 rounded-full text-xs text-zinc-200 shadow-xl backdrop-blur-sm pointer-events-none">
+      <span class="text-emerald-400 font-semibold">¿Dudas?</span> Escríbenos en WhatsApp
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 8. DRAWER LATERAL DEL CARRITO -->
+  <!-- ========================================== -->
+  <div id="cartBackdrop" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-black/70 modal-backdrop z-50 hidden opacity-0 transition-opacity duration-300"></div>
+  
+  <div id="cartDrawer" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-darkSurface border-l border-cardBorder z-50 transform translate-x-full drawer-transition flex flex-col shadow-2xl">
+    
+    <div class="p-5 border-b border-cardBorder flex items-center justify-between bg-carbon">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-bag-shopping text-gold-400"></i>
+        <h3 class="font-serif text-xl text-white font-bold tracking-wide">Bolsa de Compras</h3>
+      </div>
+      <button onclick="toggleCartDrawer(false)" class="text-zinc-400 hover:text-white p-2 rounded-full hover:bg-cardBg transition">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Barra de Envío Gratis -->
+    <div class="px-5 py-3 bg-cardBg border-b border-cardBorder">
+      <div class="flex justify-between items-center text-xs mb-1.5">
+        <span id="freeShippingText" class="text-zinc-300">Envío nacional gratis a partir de $1,800.0 MXN o 3 MSI</span>
+        <span id="freeShippingStatus" class="font-bold text-gold-400"></span>
+      </div>
+      <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+        <div id="freeShippingBar" class="bg-gradient-to-r from-gold-600 to-gold-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Items del Carrito -->
+    <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-5 space-y-4">
+      <!-- Inyectado por JS -->
+    </div>
+
+    <!-- Footer Carrito -->
+    <div id="cartFooter" class="p-5 border-t border-cardBorder bg-carbon space-y-4">
+      <div class="space-y-1.5 text-xs text-zinc-300">
+        <div class="flex justify-between">
+          <span>Subtotal</span>
+          <span id="cartSubtotal" class="font-mono text-zinc-200">$0.00 MXN</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Envío</span>
+          <span id="cartShippingCost" class="font-mono text-emerald-400">A calcular</span>
+        </div>
+        <div class="flex justify-between pt-2 border-t border-cardBorder text-base font-bold text-white">
+          <span class="font-serif">Total Estimado</span>
+          <span id="cartTotal" class="font-mono text-gold-400">$0.00 MXN</span>
+        </div>
+      </div>
+
+      <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-carbon font-bold text-xs tracking-widest uppercase rounded shadow-lg shadow-gold-500/10 transition">
+        Proceder al Pago
+      </button>
+      <button onclick="toggleCartDrawer(false)" class="w-full py-2 bg-transparent text-zinc-400 hover:text-white text-xs tracking-wider uppercase transition">
+        Continuar Explorando
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 9. MODAL DE VISTA RÁPIDA (QUICK VIEW) -->
+  <!-- ========================================== -->
+  <div id="quickViewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/80 modal-backdrop" onclick="closeQuickView()"></div>
+    <div class="relative bg-cardBg border border-gold-500/30 rounded-lg max-w-2xl w-full p-6 sm:p-8 z-10 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeQuickView()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+        <div class="rounded-lg overflow-hidden bg-black/50 aspect-square">
+          <img id="qvImage" src="" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="space-y-4">
+          <span id="qvCategory" class="text-xs uppercase tracking-widest text-gold-400 font-semibold"></span>
+          <h3 id="qvTitle" class="font-serif text-2xl text-white font-bold leading-tight"></h3>
+          <div class="text-2xl font-serif text-gold-300 font-bold" id="qvPrice"></div>
+          <div id="qvStockBadge"></div>
+          <p id="qvDescription" class="text-xs text-zinc-400 leading-relaxed"></p>
+          
+          <div class="pt-4 border-t border-cardBorder space-y-3">
+            <button id="qvAddBtn" class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-widest uppercase rounded transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-bag-shopping"></i> Añadir a la Bolsa
+            </button>
+            <p class="text-[11px] text-zinc-500 text-center">
+              <i class="fa-solid fa-truck-shield text-gold-500"></i> Envío seguro asegurado desde Tlaquepaque, Jal.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 10. MODAL PASARELA DE PAGO (CHECKOUT) -->
+  <!-- ========================================== -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/80 modal-backdrop" onclick="closeCheckoutModal()"></div>
+    
+    <div class="relative bg-darkSurface border border-cardBorder rounded-lg max-w-3xl w-full p-6 sm:p-8 z-10 max-h-[92vh] overflow-y-auto">
+      <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <div class="border-b border-cardBorder pb-4 mb-6">
+        <span class="text-xs tracking-widest text-gold-400 font-bold uppercase">Proceso de Compra Seguro</span>
+        <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold mt-1">Finalizar Pedido</h3>
+      </div>
+
+      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-6">
+        
+        <!-- Paso 1: Datos de Contacto y Envío -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="text-xs tracking-widest uppercase font-semibold text-zinc-200 flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-gold-500 text-carbon font-bold flex items-center justify-center text-[10px]">1</span>
+              Datos del Destinatario y Domicilio
+            </h4>
+            <span id="checkoutPrefillAlert" class="hidden text-[11px] text-gold-400 font-medium">
+              <i class="fa-solid fa-check-double"></i> Autocompletado desde tu perfil
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block text-zinc-400 mb-1">Nombre Completo *</label>
+              <input type="text" id="custName" required placeholder="Ej. Carlos Mendoza" 
+                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+            <div>
+              <label class="block text-zinc-400 mb-1">Teléfono / WhatsApp *</label>
+              <input type="tel" id="custPhone" required placeholder="Ej. 33 1234 5678" 
+                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+            <div>
+              <label class="block text-zinc-400 mb-1">Correo Electrónico *</label>
+              <input type="email" id="custEmail" required placeholder="carlos@ejemplo.com" 
+                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+            <div>
+              <label class="block text-zinc-400 mb-1">Ciudad y Estado *</label>
+              <input type="text" id="custCity" required placeholder="Ej. Guadalajara, Jalisco" 
+                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-zinc-400 mb-1">Dirección Completa (Calle, Número, Colonia, C.P.) *</label>
+              <input type="text" id="custAddress" required placeholder="Av. Juárez 450, Col. Centro, C.P. 44100" 
+                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 2: Personalización Artesanal Gratis -->
+        <div class="pt-4 border-t border-cardBorder">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs tracking-widest uppercase font-semibold text-zinc-200 flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-gold-500 text-carbon font-bold flex items-center justify-center text-[10px]">2</span>
+              Personalización Artesanal Gratis
+            </h4>
+            <span class="text-[10px] uppercase font-bold tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">
+              Cortesía
+            </span>
+          </div>
+          <p class="text-[11px] text-zinc-400 mb-3">
+            Graba tu nombre, iniciales o logotipo sin costo adicional en tus piezas de piel.
+          </p>
+
+          <div class="bg-cardBg p-4 rounded-lg border border-cardBorder space-y-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-zinc-400 mb-1">Texto a Grabar (Iniciales, Nombre o Frase)</label>
+                <input type="text" id="customText" placeholder="Ej. H.M. / Hugo Morales" oninput="updateCustomPreview()"
+                       class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+
+              <div>
+                <label class="block text-zinc-400 mb-1">Estilo de Tipografía</label>
+                <select id="customFont" onchange="updateCustomPreview()" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500 font-sans">
+                  <option value="serif">Cormorant Garamond (Elegante Clásica Serif)</option>
+                  <option value="sans">Montserrat (Moderna Minimalista Sans)</option>
+                  <option value="cursive">Cursiva Artesanal (Caligráfica Exclusiva)</option>
+                  <option value="mono">Monospace Grabado Técnico (Tipo Máquina)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-zinc-400 mb-1">Ubicación del Grabado en la Pieza</label>
+                <select id="customPlacement" onchange="updateCustomPreview()" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+                  <option value="Frente Inferior Derecho">Frente - Esquina Inferior Derecha</option>
+                  <option value="Frente Centrado Discreto">Frente - Centrado Discreto</option>
+                  <option value="Interior Discreto">Interior - Discreto (Bolsillo interno)</option>
+                  <option value="Llavero o Tarjetero Colgante">Colgante / Llavero de la pieza</option>
+                  <option value="Sin Personalización">No deseo grabado en esta ocasión</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-zinc-400 mb-1">¿Deseas grabar un Logotipo?</label>
+                <input type="text" id="customLogoNote" placeholder="Ej. Sí, compartiré archivo por WhatsApp" 
+                       class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+            </div>
+
+            <!-- Vista previa en vivo del grabado sobre piel -->
+            <div class="p-3 bg-neutral-950 rounded border border-gold-500/30 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] text-zinc-500 uppercase tracking-widest block">Simulación en Piel:</span>
+                <div id="customPreviewOutput" class="text-base text-gold-300 font-serif italic tracking-wider transition-all duration-300">
+                  "Tu grabado aquí"
+                </div>
+              </div>
+              <div class="text-[10px] text-zinc-500 text-right">
+                <span id="customPreviewPlacement" class="block text-zinc-400">Frente - Esquina Inferior Derecha</span>
+                <span class="text-gold-400 font-medium">Grabado a fuego en Tlaquepaque</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 3: Método de Pago Multicanal -->
+        <div class="pt-4 border-t border-cardBorder">
+          <h4 class="text-xs tracking-widest uppercase font-semibold text-zinc-200 mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500 text-carbon font-bold flex items-center justify-center text-[10px]">3</span>
+            Selecciona Método de Pago
+          </h4>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+            <button type="button" onclick="selectPaymentMethod('mp')" id="payTab-mp" class="payment-tab active p-3 bg-cardBg border border-gold-500 rounded text-center text-xs text-white flex flex-col items-center gap-1.5 transition">
+              <i class="fa-solid fa-handshake-angle text-sky-400 text-lg"></i>
+              <span class="font-medium">Mercado Pago</span>
+            </button>
+            <button type="button" onclick="selectPaymentMethod('card')" id="payTab-card" class="payment-tab p-3 bg-cardBg border border-cardBorder rounded text-center text-xs text-zinc-400 flex flex-col items-center gap-1.5 transition">
+              <i class="fa-solid fa-credit-card text-gold-400 text-lg"></i>
+              <span class="font-medium">Tarjeta</span>
+            </button>
+            <button type="button" onclick="selectPaymentMethod('paypal')" id="payTab-paypal" class="payment-tab p-3 bg-cardBg border border-cardBorder rounded text-center text-xs text-zinc-400 flex flex-col items-center gap-1.5 transition">
+              <i class="fa-brands fa-paypal text-sky-500 text-lg"></i>
+              <span class="font-medium">PayPal</span>
+            </button>
+            <button type="button" onclick="selectPaymentMethod('spei')" id="payTab-spei" class="payment-tab p-3 bg-cardBg border border-cardBorder rounded text-center text-xs text-zinc-400 flex flex-col items-center gap-1.5 transition">
+              <i class="fa-solid fa-building-columns text-emerald-400 text-lg"></i>
+              <span class="font-medium">SPEI / OXXO</span>
+            </button>
+          </div>
+
+          <div class="bg-cardBg p-4 rounded-lg border border-cardBorder text-xs">
+            <!-- 1. Mercado Pago (Principal Oficial) -->
+            <div id="payContent-mp" class="space-y-4 py-2">
+              <div class="flex items-center justify-between pb-2 border-b border-cardBorder">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span class="font-bold text-sky-400 tracking-wider uppercase text-[11px]">Pasarela Oficial Mercado Pago México</span>
+                </div>
+                <div class="flex gap-2 text-base text-zinc-300">
+                  <i class="fa-brands fa-cc-visa"></i>
+                  <i class="fa-brands fa-cc-mastercard"></i>
+                  <i class="fa-brands fa-cc-amex"></i>
+                  <span class="text-[10px] bg-sky-950 px-1.5 py-0.5 rounded text-sky-300 font-bold">3 MSI</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+                <div class="p-3 bg-darkSurface rounded border border-cardBorder">
+                  <i class="fa-solid fa-credit-card text-gold-400 text-lg mb-1"></i>
+                  <div class="font-semibold text-white">Tarjetas Crédito/Débito</div>
+                  <div class="text-[10px] text-zinc-400">Hasta 3 MSI en compras calificadas</div>
+                </div>
+                <div class="p-3 bg-darkSurface rounded border border-cardBorder">
+                  <i class="fa-solid fa-wallet text-sky-400 text-lg mb-1"></i>
+                  <div class="font-semibold text-white">Saldo Mercado Pago</div>
+                  <div class="text-[10px] text-zinc-400">Acreditación inmediata</div>
+                </div>
+                <div class="p-3 bg-darkSurface rounded border border-cardBorder">
+                  <i class="fa-solid fa-store text-emerald-400 text-lg mb-1"></i>
+                  <div class="font-semibold text-white">Efectivo en OXXO / SPEI</div>
+                  <div class="text-[10px] text-zinc-400">Convenio directo Mercado Pago</div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-sky-950/40 border border-sky-500/30 rounded text-center text-xs text-sky-200">
+                <i class="fa-solid fa-shield-halved text-sky-400 mr-1.5"></i>
+                Tu pago está protegido de extremo a extremo por el Programa de Protección al Comprador de <strong>Mercado Pago</strong>.
+              </div>
+            </div>
+
+            <!-- Tarjeta Directa -->
+            <div id="payContent-card" class="space-y-3 hidden">
+              <div class="flex items-center justify-between text-zinc-400 pb-2 border-b border-cardBorder">
+                <span>Pasarela Segura TLS</span>
+                <div class="flex gap-2 text-base text-zinc-300">
+                  <i class="fa-brands fa-cc-visa"></i>
+                  <i class="fa-brands fa-cc-mastercard"></i>
+                  <i class="fa-brands fa-cc-amex"></i>
+                </div>
+              </div>
+              <div>
+                <label class="block text-zinc-400 mb-1">Número de Tarjeta</label>
+                <div class="relative">
+                  <input type="text" id="cardNum" placeholder="4000 1234 5678 9010" maxlength="19" 
+                         class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500 font-mono">
+                  <i class="fa-solid fa-lock absolute right-3 top-2.5 text-zinc-500"></i>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-zinc-400 mb-1">Vencimiento (MM/AA)</label>
+                  <input type="text" id="cardExp" placeholder="12/28" maxlength="5" 
+                         class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500 font-mono">
+                </div>
+                <div>
+                  <label class="block text-zinc-400 mb-1">CVC / CVV</label>
+                  <input type="password" id="cardCvc" placeholder="•••" maxlength="4" 
+                         class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500 font-mono">
+                </div>
+              </div>
+            </div>
+
+            <!-- Mercado Pago -->
+            <div id="payContent-mp-old" class="hidden"></div>
+
+            <!-- PayPal -->
+            <div id="payContent-paypal" class="hidden space-y-3 text-center py-3">
+              <i class="fa-brands fa-paypal text-3xl text-sky-500"></i>
+              <h5 class="font-serif text-lg text-white font-bold">PayPal Express Checkout</h5>
+              <p class="text-zinc-400 text-xs max-w-md mx-auto">
+                Protección al Comprador en todas tus adquisiciones de marroquinería fina.
+              </p>
+            </div>
+
+            <!-- SPEI / OXXO -->
+            <div id="payContent-spei" class="hidden space-y-3">
+              <div class="flex items-center gap-2 text-emerald-400 font-semibold mb-1">
+                <i class="fa-solid fa-receipt"></i> Pago por Transferencia SPEI o Tiendas OXXO
+              </div>
+              <p class="text-zinc-400 text-xs">
+                Se generará una referencia única para transferir por tu aplicación de banco o pagar en tiendas OXXO.
+              </p>
+              <div class="p-3 bg-darkSurface rounded border border-cardBorder font-mono text-zinc-300">
+                <div class="flex justify-between">
+                  <span>Banco Receptor:</span>
+                  <span class="text-gold-400 font-bold">STP / BBVA Bancomer</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Beneficiario:</span>
+                  <span class="text-white">Vizantino Piel S.A.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total y Enviar -->
+        <div class="pt-4 border-t border-cardBorder flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="text-center sm:text-left">
+            <span class="text-xs text-zinc-400 block">Total a Liquidar:</span>
+            <span id="checkoutTotalAmount" class="font-serif text-2xl text-gold-400 font-bold">$0.00 MXN</span>
+          </div>
+
+          <button type="submit" id="submitOrderBtn" class="w-full sm:w-auto px-10 py-3.5 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-carbon font-bold text-xs tracking-widest uppercase rounded shadow-lg shadow-gold-500/20 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-check"></i> Confirmar y Generar Orden
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 11. MODAL RECIBO DE CONFIRMACIÓN DE PEDIDO -->
+  <!-- ========================================== -->
+  <div id="orderReceiptModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop"></div>
+    
+    <div class="relative bg-cardBg border border-gold-500/40 rounded-lg max-w-lg w-full p-6 sm:p-8 z-10 max-h-[92vh] overflow-y-auto text-center shadow-2xl">
+      <div class="w-16 h-16 mx-auto rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-2xl mb-4">
+        <i class="fa-solid fa-check"></i>
+      </div>
+
+      <span class="text-[10px] tracking-widest uppercase text-gold-400 font-bold">¡Orden Registrada con Éxito!</span>
+      <h3 class="font-serif text-2xl text-white font-bold mt-1">Gracias por tu Preferencia</h3>
+      
+      <div class="my-4 py-2 px-4 bg-darkSurface rounded border border-cardBorder inline-block">
+        <span class="text-xs text-zinc-400">Folio de Orden: </span>
+        <span id="receiptFolio" class="font-mono text-sm text-gold-400 font-bold">#VZ-000000</span>
+      </div>
+
+      <div class="text-left text-xs bg-darkSurface p-4 rounded border border-cardBorder space-y-2 mb-6">
+        <div class="flex justify-between text-zinc-300">
+          <span>Cliente:</span>
+          <span id="receiptCustomerName" class="font-semibold text-white"></span>
+        </div>
+        <div class="flex justify-between text-zinc-300">
+          <span>WhatsApp:</span>
+          <span id="receiptCustomerPhone" class="font-mono"></span>
+        </div>
+        <div class="flex justify-between text-zinc-300">
+          <span>Personalización:</span>
+          <span id="receiptCustomization" class="text-gold-400 font-medium"></span>
+        </div>
+        <div class="flex justify-between text-zinc-300">
+          <span>Método de Pago:</span>
+          <span id="receiptPaymentMethod" class="text-gold-400 font-medium"></span>
+        </div>
+        <div class="flex justify-between text-zinc-300">
+          <span>Entrega en:</span>
+          <span id="receiptAddress" class="text-right max-w-[200px] truncate"></span>
+        </div>
+        <div class="pt-2 border-t border-cardBorder flex justify-between font-bold text-sm text-white">
+          <span>Total Pagado:</span>
+          <span id="receiptTotalAmount" class="font-mono text-gold-400"></span>
+        </div>
+      </div>
+
+      <div class="my-3 p-3 bg-darkSurface rounded border border-cardBorder text-[11px] text-zinc-400">
+        <i class="fa-solid fa-file-invoice-dollar text-emerald-400 mr-1"></i>
+        <span>¿Requieres factura fiscal CFDI? Puedes solicitarla directamente con tu folio de compra al WhatsApp oficial o correo <strong>vizantinopiel@gmail.com</strong></span>
+      </div>
+
+      <div class="space-y-3">
+        <a id="receiptWhatsAppBtn" href="#" target="_blank" rel="noopener noreferrer" 
+           class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-widest uppercase rounded transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20">
+          <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Confirmación por WhatsApp
+        </a>
+
+        <button onclick="closeReceiptModal()" class="w-full py-2.5 bg-darkSurface border border-cardBorder hover:border-gold-500/40 text-zinc-300 text-xs tracking-widest uppercase rounded transition">
+          Cerrar y Volver a la Tienda
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 12. MODAL DE ACCESO / REGISTRO DE CLIENTE -->
+  <!-- ========================================== -->
+  <div id="customerAuthModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeCustomerAuthModal()"></div>
+    
+    <div class="relative bg-cardBg border border-gold-500/40 rounded-xl max-w-md w-full p-6 sm:p-8 z-10 shadow-2xl">
+      <button onclick="closeCustomerAuthModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <!-- Tabs Login vs Registro -->
+      <div class="flex border-b border-cardBorder mb-6">
+        <button id="authTabLogin" onclick="switchCustomerAuthTab('login')" class="flex-1 pb-3 text-center text-xs tracking-widest uppercase font-bold text-gold-400 border-b-2 border-gold-500 transition">
+          Iniciar Sesión
+        </button>
+        <button id="authTabRegister" onclick="switchCustomerAuthTab('register')" class="flex-1 pb-3 text-center text-xs tracking-widest uppercase font-bold text-zinc-400 border-b-2 border-transparent hover:text-zinc-200 transition">
+          Registrarme
+        </button>
+      </div>
+
+      <!-- Formulario Login Cliente -->
+      <form id="customerLoginForm" onsubmit="handleCustomerLogin(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block text-zinc-400 mb-1">Correo Electrónico *</label>
+          <input type="email" id="loginCustEmail" required placeholder="tu@correo.com" 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2.5 text-zinc-200 focus:outline-none focus:border-gold-500">
+        </div>
+        <div>
+          <label class="block text-zinc-400 mb-1">Contraseña *</label>
+          <input type="password" id="loginCustPassword" required placeholder="••••••••" 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2.5 text-zinc-200 focus:outline-none focus:border-gold-500">
+        </div>
+        <button type="submit" class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-widest uppercase rounded transition shadow">
+          Entrar a Mi Cuenta
+        </button>
+        <p class="text-[11px] text-zinc-500 text-center">
+          ¿No tienes cuenta? <a href="javascript:void(0)" onclick="switchCustomerAuthTab('register')" class="text-gold-400 hover:underline">Regístrate en 30 segundos</a>
+        </p>
+      </form>
+
+      <!-- Formulario Registro Cliente -->
+      <form id="customerRegisterForm" onsubmit="handleCustomerRegister(event)" class="space-y-3.5 text-xs hidden">
+        <div>
+          <label class="block text-zinc-400 mb-1">Nombre Completo *</label>
+          <input type="text" id="regCustName" required placeholder="Ej. Sofía Hernández" 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-zinc-400 mb-1">WhatsApp / Teléfono *</label>
+            <input type="tel" id="regCustPhone" required placeholder="33 1234 5678" 
+                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-zinc-400 mb-1">Ciudad *</label>
+            <input type="text" id="regCustCity" required placeholder="Guadalajara" 
+                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+          </div>
+        </div>
+        <div>
+          <label class="block text-zinc-400 mb-1">Dirección de Entrega</label>
+          <input type="text" id="regCustAddress" placeholder="Calle, Número, Colonia, C.P." 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+        </div>
+        <div>
+          <label class="block text-zinc-400 mb-1">Correo Electrónico *</label>
+          <input type="email" id="regCustEmail" required placeholder="sofia@ejemplo.com" 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+        </div>
+        <div>
+          <label class="block text-zinc-400 mb-1">Crear Contraseña *</label>
+          <input type="password" id="regCustPassword" required minlength="4" placeholder="Mínimo 4 caracteres" 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+        </div>
+        <button type="submit" class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-widest uppercase rounded transition shadow">
+          Crear Cuenta Exclusiva
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 13. PANEL DEL CLIENTE (PORTAL EXCLUSIVO) -->
+  <!-- ========================================== -->
+  <div id="customerPortalModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-6">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeCustomerPortalModal()"></div>
+
+    <div class="relative bg-darkSurface border border-gold-500/40 rounded-xl max-w-4xl w-full p-4 sm:p-8 z-10 max-h-[94vh] overflow-y-auto shadow-2xl">
+      <button onclick="closeCustomerPortalModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <!-- Encabezado del Perfil -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-cardBorder">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-full bg-gold-500/20 border border-gold-500/40 flex items-center justify-center text-gold-400 text-2xl font-serif font-bold">
+            <span id="cpAvatarInitial">C</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-serif text-2xl text-white font-bold" id="cpUserName">Bienvenido</h3>
+              <span class="px-2 py-0.5 rounded bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[10px] uppercase font-bold tracking-wider">Cliente Vizantino</span>
+            </div>
+            <p class="text-xs text-zinc-400" id="cpUserEmail">cliente@correo.com</p>
+          </div>
+        </div>
+
+        <button onclick="logoutCustomer()" class="px-4 py-2 bg-cardBg hover:bg-red-950/60 border border-cardBorder hover:border-red-500/40 text-zinc-300 hover:text-red-300 text-xs rounded transition flex items-center gap-2">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión
+        </button>
+      </div>
+
+      <!-- Pestañas del Panel de Cliente -->
+      <div class="flex gap-4 border-b border-cardBorder my-6 text-xs font-semibold tracking-wider uppercase">
+        <button onclick="switchCustomerPanelTab('orders')" id="cpTabBtn-orders" class="pb-3 text-gold-400 border-b-2 border-gold-500 transition">
+          <i class="fa-solid fa-box-open mr-1.5"></i> Mis Pedidos & Seguimiento (<span id="cpOrderCount">0</span>)
+        </button>
+        <button onclick="switchCustomerPanelTab('profile')" id="cpTabBtn-profile" class="pb-3 text-zinc-400 border-b-2 border-transparent hover:text-zinc-200 transition">
+          <i class="fa-regular fa-id-card mr-1.5"></i> Datos de Mi Perfil
+        </button>
+      </div>
+
+      <!-- Pestaña 1: Mis Pedidos y Seguimiento -->
+      <div id="cpTabContent-orders" class="space-y-4">
+        <div id="cpOrdersList" class="space-y-4">
+          <!-- Inyectado por JS -->
+        </div>
+      </div>
+
+      <!-- Pestaña 2: Perfil y Datos de Envío -->
+      <div id="cpTabContent-profile" class="hidden">
+        <form onsubmit="handleCustomerProfileUpdate(event)" class="bg-cardBg p-6 rounded-lg border border-cardBorder space-y-4 text-xs">
+          <h4 class="font-serif text-lg text-white font-bold mb-3">Información Personal & Domicilio de Envío</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-zinc-400 mb-1">Nombre Completo</label>
+              <input type="text" id="cpProfName" required class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+            <div>
+              <label class="block text-zinc-400 mb-1">Teléfono / WhatsApp</label>
+              <input type="tel" id="cpProfPhone" required class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+            <div>
+              <label class="block text-zinc-400 mb-1">Ciudad y Estado</label>
+              <input type="text" id="cpProfCity" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+            <div>
+              <label class="block text-zinc-400 mb-1">Correo Electrónico (No modificable)</label>
+              <input type="email" id="cpProfEmail" disabled class="w-full bg-zinc-800/60 border border-cardBorder rounded px-3 py-2 text-zinc-500 cursor-not-allowed">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-zinc-400 mb-1">Dirección de Entrega Predeterminada</label>
+              <input type="text" id="cpProfAddress" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+          </div>
+          <div class="pt-3 flex justify-end">
+            <button type="submit" class="px-6 py-2.5 bg-gold-500 hover:bg-gold-400 text-carbon font-bold uppercase tracking-wider rounded transition shadow">
+              Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 14. PANEL DE ADMINISTRADOR GENERAL -->
+  <!-- ========================================== -->
+  <div id="adminModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-6">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeAdminModal()"></div>
+
+    <div class="relative bg-darkSurface border border-gold-500/40 rounded-xl max-w-6xl w-full p-4 sm:p-8 z-10 max-h-[94vh] overflow-y-auto shadow-2xl">
+      <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <!-- Vista Login Administrador -->
+      <div id="adminLoginForm" class="max-w-md mx-auto py-10 text-center">
+        <div class="w-16 h-16 mx-auto rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-2xl mb-4">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 class="font-serif text-3xl text-white font-bold mb-2">Panel Administrativo</h3>
+        <p class="text-zinc-400 text-xs mb-6">Acceso exclusivo para gestión de catálogo, inventario, clientes y órdenes.</p>
+        
+        <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left text-xs">
+          <div>
+            <label class="block text-zinc-400 mb-1">Correo de Administrador</label>
+            <div class="relative">
+              <input type="email" id="adminEmailInput" placeholder="admin@vizantino.com" required
+                     class="w-full bg-cardBg border border-cardBorder rounded-lg px-3.5 py-2.5 pl-9 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-gold-500">
+              <i class="fa-regular fa-envelope absolute left-3 top-3 text-zinc-500 text-xs"></i>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-zinc-400 mb-1">Contraseña Maestra</label>
+            <div class="relative">
+              <input type="password" id="adminPasswordInput" placeholder="••••••••••••" required
+                     class="w-full bg-cardBg border border-cardBorder rounded-lg px-3.5 py-2.5 pl-9 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-gold-500">
+              <i class="fa-solid fa-lock absolute left-3 top-3 text-zinc-500 text-xs"></i>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-widest uppercase rounded shadow transition mt-2">
+            Iniciar Sesión como Administrador
+          </button>
+        </form>
+      </div>
+
+      <!-- Dashboard del Administrador -->
+      <div id="adminDashboardContent" class="hidden space-y-6">
+        
+        <!-- Header Admin -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cardBorder pb-5">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="text-xs uppercase tracking-widest text-gold-400 font-bold">Modo Administrador Maestro</span>
+            </div>
+            <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold mt-1">Control General Vizantino Piel</h3>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="resetToFactoryCatalogue()" class="px-3 py-2 bg-cardBg hover:bg-red-950/60 border border-cardBorder hover:border-red-500/50 text-zinc-300 hover:text-red-300 font-medium text-xs rounded transition" title="Restablecer catálogo a inicial">
+              <i class="fa-solid fa-rotate-left"></i> Restablecer Catálogo
+            </button>
+            <button onclick="adminLogout()" class="px-3 py-2 bg-zinc-800 text-zinc-300 hover:text-white rounded text-xs transition" title="Cerrar sesión">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Tarjetas de Métricas -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-cardBg p-4 rounded-lg border border-cardBorder">
+            <span class="text-[11px] text-zinc-400 tracking-wider uppercase block">Total Productos</span>
+            <div class="text-2xl font-serif text-white font-bold mt-1" id="metricTotalProducts">0</div>
+          </div>
+          <div class="bg-cardBg p-4 rounded-lg border border-cardBorder">
+            <span class="text-[11px] text-emerald-400 tracking-wider uppercase block">Pedidos Totales</span>
+            <div class="text-2xl font-serif text-emerald-400 font-bold mt-1" id="metricTotalOrders">0</div>
+          </div>
+          <div class="bg-cardBg p-4 rounded-lg border border-cardBorder">
+            <span class="text-[11px] text-sky-400 tracking-wider uppercase block">Clientes Registrados</span>
+            <div class="text-2xl font-serif text-sky-400 font-bold mt-1" id="metricTotalCustomers">0</div>
+          </div>
+          <div class="bg-cardBg p-4 rounded-lg border border-cardBorder">
+            <span class="text-[11px] text-gold-400 tracking-wider uppercase block">Valor Inventario</span>
+            <div class="text-xl font-mono text-gold-300 font-bold mt-1" id="metricInventoryValue">$0.00</div>
+          </div>
+        </div>
+
+        <!-- Pestañas de Gestión Administrativa -->
+        <div class="flex flex-wrap gap-2 border-b border-cardBorder pb-2 text-xs font-semibold tracking-wider uppercase">
+          <button onclick="switchAdminSubTab('inventory')" id="admTab-inventory" class="px-4 py-2 bg-gold-500 text-carbon rounded font-bold transition">
+            <i class="fa-solid fa-boxes-stacked mr-1.5"></i> Inventario de Productos
+          </button>
+          <button onclick="switchAdminSubTab('orders')" id="admTab-orders" class="px-4 py-2 bg-cardBg text-zinc-400 hover:text-white rounded border border-cardBorder transition">
+            <i class="fa-solid fa-truck-ramp-box mr-1.5"></i> Seguimiento de Pedidos (<span id="admBadgeOrders">0</span>)
+          </button>
+          <button onclick="switchAdminSubTab('users')" id="admTab-users" class="px-4 py-2 bg-cardBg text-zinc-400 hover:text-white rounded border border-cardBorder transition">
+            <i class="fa-solid fa-users mr-1.5"></i> Clientes & Usuarios (<span id="admBadgeUsers">0</span>)
+          </button>
+        </div>
+
+        <!-- SUB-PESTAÑA 1: INVENTARIO DE PRODUCTOS -->
+        <div id="admSection-inventory" class="space-y-4">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-cardBg p-3 rounded-lg border border-cardBorder">
+            <div class="relative w-full sm:w-72">
+              <input type="text" id="adminSearchInput" oninput="renderAdminTable()" placeholder="Buscar producto..." 
+                     class="w-full bg-darkSurface border border-cardBorder rounded py-1.5 pl-8 pr-3 text-xs text-zinc-200 focus:outline-none focus:border-gold-500">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-xs text-zinc-500"></i>
+            </div>
+
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <select id="adminCategorySelect" onchange="renderAdminTable()" class="bg-darkSurface border border-cardBorder text-xs text-zinc-200 rounded px-2.5 py-1.5 focus:outline-none focus:border-gold-500 w-full sm:w-auto">
+                <option value="all">Todas las Categorías</option>
+                <option value="Bolsos">Bolsos</option>
+                <option value="Carteras">Carteras</option>
+                <option value="Crossbody">Crossbody</option>
+                <option value="Mochilas">Mochilas</option>
+                <option value="Ropa">Ropa</option>
+              </select>
+
+              <button onclick="openNewProductModal()" class="px-4 py-1.5 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs uppercase tracking-wider rounded transition flex items-center gap-1.5 whitespace-nowrap">
+                <i class="fa-solid fa-plus"></i> Nuevo Producto
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto rounded-lg border border-cardBorder bg-cardBg">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-carbon text-zinc-400 text-[11px] uppercase tracking-wider border-b border-cardBorder">
+                <tr>
+                  <th class="p-3">Producto</th>
+                  <th class="p-3">Categoría</th>
+                  <th class="p-3">Precio (MXN)</th>
+                  <th class="p-3 text-center">Stock Actual</th>
+                  <th class="p-3 text-center">Estado</th>
+                  <th class="p-3 text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody" class="divide-y divide-cardBorder">
+                <!-- Inyectado por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUB-PESTAÑA 2: SEGUIMIENTO DE PEDIDOS -->
+        <div id="admSection-orders" class="space-y-4 hidden">
+          <div class="flex justify-between items-center bg-cardBg p-3 rounded-lg border border-cardBorder">
+            <span class="text-xs text-zinc-400">Total de pedidos generados en tienda: <strong id="admOrdersTotalCountText" class="text-gold-400">0</strong></span>
+            <span class="text-[11px] text-zinc-500">Actualización en tiempo real</span>
+          </div>
+
+          <div class="overflow-x-auto rounded-lg border border-cardBorder bg-cardBg">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-carbon text-zinc-400 text-[11px] uppercase tracking-wider border-b border-cardBorder">
+                <tr>
+                  <th class="p-3">Folio & Fecha</th>
+                  <th class="p-3">Cliente</th>
+                  <th class="p-3">Artículos</th>
+                  <th class="p-3">Total</th>
+                  <th class="p-3">Método</th>
+                  <th class="p-3 text-center">Estado de Envío</th>
+                  <th class="p-3 text-right">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="adminOrdersTableBody" class="divide-y divide-cardBorder">
+                <!-- Inyectado por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUB-PESTAÑA 3: CLIENTES & USUARIOS REGISTRADOS -->
+        <div id="admSection-users" class="space-y-4 hidden">
+          <div class="flex justify-between items-center bg-cardBg p-3 rounded-lg border border-cardBorder">
+            <span class="text-xs text-zinc-400">Clientes registrados en la plataforma: <strong id="admUsersTotalCountText" class="text-sky-400">0</strong></span>
+            <span class="text-[11px] text-zinc-500">Base de datos cifrada local</span>
+          </div>
+
+          <div class="overflow-x-auto rounded-lg border border-cardBorder bg-cardBg">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-carbon text-zinc-400 text-[11px] uppercase tracking-wider border-b border-cardBorder">
+                <tr>
+                  <th class="p-3">Cliente</th>
+                  <th class="p-3">Contacto WhatsApp</th>
+                  <th class="p-3">Correo</th>
+                  <th class="p-3">Ciudad / Dirección</th>
+                  <th class="p-3 text-center">Fecha Registro</th>
+                  <th class="p-3 text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTableBody" class="divide-y divide-cardBorder">
+                <!-- Inyectado por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Secundario: Formulario Crear / Editar Producto -->
+  <div id="productFormModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeProductFormModal()"></div>
+    <div class="relative bg-cardBg border border-gold-500/40 rounded-lg max-w-lg w-full p-6 z-10 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeProductFormModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <h3 class="font-serif text-2xl text-white font-bold mb-4" id="productFormTitle">Nuevo Producto Artesanal</h3>
+      
+      <form id="productForm" onsubmit="handleProductFormSubmit(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="pfId">
+        
+        <div>
+          <label class="block text-zinc-400 mb-1">Nombre del Producto *</label>
+          <input type="text" id="pfName" required placeholder="Ej. Bolso Tote Corte Vacuno" 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-zinc-400 mb-1">Precio ($ MXN) *</label>
+            <input type="number" id="pfPrice" required min="1" step="1" placeholder="1500" 
+                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500 font-mono">
+          </div>
+          <div>
+            <label class="block text-zinc-400 mb-1">Stock Inicial *</label>
+            <input type="number" id="pfStock" required min="0" step="1" placeholder="10" 
+                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500 font-mono">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-zinc-400 mb-1">Categoría *</label>
+          <select id="pfCategory" required class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            <option value="Bolsos">Bolsos</option>
+            <option value="Carteras">Carteras</option>
+            <option value="Crossbody">Crossbody</option>
+            <option value="Mochilas">Mochilas</option>
+            <option value="Ropa">Ropa</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-zinc-400 mb-1">URL de la Imagen (Opcional)</label>
+          <input type="url" id="pfImage" placeholder="https://images.unsplash.com/..." 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+          <p class="text-[10px] text-zinc-500 mt-1">Si se deja en blanco se asignará una fotografía de cuero vacuno de alta calidad.</p>
+        </div>
+
+        <div>
+          <label class="block text-zinc-400 mb-1">Descripción</label>
+          <textarea id="pfDescription" rows="3" placeholder="Detalles de piel, curtido, compartimentos y acabados..." 
+                    class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500"></textarea>
+        </div>
+
+        <div class="pt-3 flex justify-end gap-2">
+          <button type="button" onclick="closeProductFormModal()" class="px-4 py-2 bg-darkSurface border border-cardBorder rounded text-zinc-400 hover:text-white transition">
+            Cancelar
+          </button>
+          <button type="submit" class="px-6 py-2 bg-gold-500 hover:bg-gold-400 text-carbon font-bold uppercase tracking-wider rounded transition">
+            Guardar Producto
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL DE POLÍTICAS, GARANTÍAS Y DEVOLUCIONES -->
+  <!-- ========================================== -->
+  <div id="warrantyModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-6">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeWarrantyModal()"></div>
+    
+    <div class="relative bg-cardBg border border-gold-500/40 rounded-xl max-w-2xl w-full p-6 sm:p-8 z-10 max-h-[90vh] overflow-y-auto shadow-2xl space-y-6">
+      
+      <!-- Botón Cerrar -->
+      <button onclick="closeWarrantyModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <!-- Cabecera -->
+      <div class="border-b border-cardBorder pb-4 text-center sm:text-left">
+        <div class="flex items-center gap-2 justify-center sm:justify-start text-gold-400 text-xs font-semibold tracking-[0.25em] uppercase mb-1">
+          <i class="fa-solid fa-shield-halved"></i> Respaldo & Compromiso Artesanal
+        </div>
+        <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold leading-tight">
+          Políticas de Cambios, Devoluciones y Garantía
+        </h3>
+        <div class="flex items-center gap-2 mt-2">
+          <img src="logo-gold.png" alt="Vizantino" class="h-5 w-auto object-contain">
+          <span class="text-[11px] tracking-[0.3em] text-zinc-400 uppercase font-light">
+            PIEL · CADA PIEZA ES ÚNICA
+          </span>
+        </div>
+      </div>
+
+      <!-- Contenido de las 7 Políticas Oficiales -->
+      <div class="space-y-5 text-xs text-zinc-300 leading-relaxed">
+        
+        <!-- 1 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">1</span>
+            Características de la Piel Genuina
+          </h4>
+          <p class="text-zinc-400">
+            Al ser un material natural, cada pieza puede presentar variaciones de color, textura, vetas y marcas propias de la piel. Estas características no constituyen defectos por sí mismas, siempre que no afecten la calidad o funcionalidad del producto.
+          </p>
+        </div>
+
+        <!-- 2 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">2</span>
+            Garantía
+          </h4>
+          <p class="text-zinc-400">
+            Todos nuestros productos cuentan con una garantía mínima de <strong>90 días contra defectos de fabricación</strong>, conforme a la legislación aplicable. Los <strong>cierres y broches cuentan con 6 meses de garantía</strong> por fallas de fabricación. La garantía no cubre daños por mal uso, accidentes o desgaste normal.
+          </p>
+        </div>
+
+        <!-- 3 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">3</span>
+            Cambios y Devoluciones
+          </h4>
+          <p class="text-zinc-400">
+            Aceptamos solicitudes por inconformidad dentro de los primeros <strong>7 días naturales posteriores a la recepción</strong>, sujetas a revisión y a las condiciones aplicables. Los productos deberán estar sin uso y en condiciones adecuadas. Este plazo comercial no limita los derechos legales de cancelación, garantía o devolución del consumidor.
+          </p>
+        </div>
+
+        <!-- 4 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">4</span>
+            Productos Personalizados
+          </h4>
+          <p class="text-zinc-400">
+            Los artículos personalizados con nombres, iniciales o logotipos pueden tener restricciones para devoluciones por cambio de opinión. Esto no limita los derechos del consumidor cuando existan defectos, incumplimientos u otras causas previstas por la ley.
+          </p>
+        </div>
+
+        <!-- 5 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">5</span>
+            Envíos
+          </h4>
+          <p class="text-zinc-400">
+            <strong>VIZANTINO</strong> cubre gastos de envío por cambios, devoluciones o garantías autorizados conforme a estas políticas.
+          </p>
+        </div>
+
+        <!-- 6 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">6</span>
+            Cancelaciones y Reembolsos
+          </h4>
+          <p class="text-zinc-400">
+            En compras por internet, el consumidor podrá ejercer el derecho de revocación dentro del plazo legal aplicable, conforme al artículo 56 de la Ley Federal de Protección al Consumidor y sus excepciones. Cuando corresponda un reembolso, se realizará conforme a la legislación aplicable y al medio de pago utilizado.
+          </p>
+        </div>
+
+        <!-- 7 -->
+        <div class="bg-darkSurface/60 p-4 rounded-lg border border-cardBorder">
+          <h4 class="font-serif text-base text-gold-400 font-bold mb-1.5 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[11px] flex items-center justify-center font-mono">7</span>
+            Cómo Solicitar una Devolución o Garantía
+          </h4>
+          <p class="text-zinc-400 mb-3">
+            Contacta a nuestro servicio de atención al cliente con tu número de pedido, una descripción del motivo y fotografías o videos cuando corresponda. Te indicaremos los pasos para resolver tu solicitud.
+          </p>
+          <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20deseo%20hacer%20válida%20una%20solicitud%20de%20garantía%20o%20devolución" 
+             target="_blank" rel="noopener noreferrer" 
+             class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded font-semibold text-[11px] hover:bg-emerald-600 hover:text-white transition">
+            <i class="fa-brands fa-whatsapp"></i> Contactar Atención a Clientes WhatsApp
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Pie del Modal -->
+      <div class="pt-4 border-t border-cardBorder flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
+        <span class="italic text-gold-400/80 font-serif text-sm">
+          VIZANTINO piel — Cada pieza es única.
+        </span>
+        <button onclick="closeWarrantyModal()" class="w-full sm:w-auto px-6 py-2.5 bg-darkSurface border border-cardBorder hover:border-gold-500 text-zinc-300 rounded uppercase tracking-wider text-[11px] font-semibold transition">
+          Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SISTEMA DE NOTIFICACIONES TOAST -->
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT NATIVO MODULAR Y COMPLETO -->
+  <!-- ========================================== -->
+  <script>
+    /**
+     * VIZANTINO PIEL - SPA CON MÓDULOS DE CLIENTE Y ADMINISTRADOR
+     */
+
+    // Catálogo Inicial Oficial (Vacío, para que administres tus propios productos reales)
+    const INITIAL_PRODUCTS = [];
+
+    // Configuración Oficial de Supabase
+    const SUPABASE_URL = "https://zujfslxqgllzmxdoioie.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_wtDtY_vgZboOjEsob9Y4QQ_GpvMr3D8";
+    let supabaseClient = null;
+
+    try {
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch (err) {
+      console.warn("Supabase client init fallback:", err);
+    }
+
+    // Claves en LocalStorage (Caché local offline)
+    const STORAGE_KEY_PRODUCTS = "vizantino_products_v1";
+    const STORAGE_KEY_CART = "vizantino_cart_v1";
+    const STORAGE_KEY_ADMIN = "vizantino_admin_logged";
+    const STORAGE_KEY_USERS = "vizantino_customers_v1";
+    const STORAGE_KEY_CURRENT_USER = "vizantino_current_user_v1";
+    const STORAGE_KEY_ORDERS = "vizantino_orders_v1";
+
+    // Variables de Estado
+    let products = [];
+    let cart = [];
+    let users = [];
+    let orders = [];
+    let currentUser = null;
+    let currentCategoryFilter = "todos";
+    let currentSearchQuery = "";
+    let selectedPayment = "mp";
+    const SHIPPING_COST_STANDARD = 250; // Envío paquetes menores a 3kg
+    const FREE_SHIPPING_THRESHOLD = 1800; // Gratis desde $1,800.0 MXN
+
+    // Inicialización al cargar el DOM
+    document.addEventListener("DOMContentLoaded", async () => {
+      await loadProducts();
+      await loadUsers();
+      await loadOrders();
+      loadCartFromStorage();
+      checkCustomerSession();
+      renderCatalog();
+      updateCartUI();
+      checkAdminSession();
+    });
+
+    /* ==========================================
+       GESTIÓN DE PRODUCTOS (SUPABASE + CACHÉ LOCAL)
+    ========================================== */
+    async function loadProducts() {
+      // 1. Intentar cargar desde Supabase en la nube
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('products')
+            .select('*')
+            .order('id', { ascending: true });
+
+          if (!error && data) {
+            products = data.map(p => ({
+              ...p,
+              price: parseFloat(p.price)
+            }));
+            localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+            updateCategoryCounts();
+            renderCatalog();
+            return;
+          }
+        } catch (e) {
+          console.warn("Fallo temporal Supabase, cargando caché local:", e);
+        }
+      }
+
+      // 2. Respaldo desde LocalStorage
+      const stored = localStorage.getItem(STORAGE_KEY_PRODUCTS);
+      if (stored) {
+        try {
+          products = JSON.parse(stored);
+        } catch (e) {
+          products = [];
+        }
+      } else {
+        products = [];
+      }
+      updateCategoryCounts();
+      renderCatalog();
+    }
+
+    async function syncProductToCloud(product) {
+      if (!supabaseClient) return;
+      try {
+        await supabaseClient
+          .from('products')
+          .upsert({
+            id: product.id,
+            sku: product.sku || `VZ-PROD-${product.id}`,
+            name: product.name,
+            category: product.category,
+            price: product.price,
+            stock: product.stock,
+            image: product.image,
+            description: product.description,
+            active: product.stock > 0
+          });
+      } catch (e) {
+        console.error("Error sincronizando producto a Supabase:", e);
+      }
+    }
+
+    async function saveProductsToStorage() {
+      localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+      updateCategoryCounts();
+      renderCatalog();
+      if (isAdminLoggedIn()) {
+        renderAdminDashboard();
+      }
+    }
+
+    function resetToFactoryCatalogue() {
+      if (confirm("¿Estás seguro de restablecer el catálogo a los 11 productos originales de Vizantino Piel?")) {
+        products = JSON.parse(JSON.stringify(INITIAL_PRODUCTS));
+        saveProductsToStorage();
+        showToast("Catálogo restablecido con éxito", "success");
+      }
+    }
+
+    /* ==========================================
+       GESTIÓN DE CLIENTES / USUARIOS (SUPABASE)
+    ========================================== */
+    async function loadUsers() {
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('customers')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && data && data.length > 0) {
+            users = data.map(u => ({
+              id: u.id,
+              name: u.name,
+              email: u.email,
+              phone: u.phone,
+              city: u.city,
+              address: u.address,
+              password: u.password_hash,
+              registeredAt: u.created_at ? u.created_at.split('T')[0] : '2026'
+            }));
+            localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+            return;
+          }
+        } catch (e) {
+          console.warn("Fallo temporal cargando clientes de Supabase:", e);
+        }
+      }
+
+      const stored = localStorage.getItem(STORAGE_KEY_USERS);
+      if (stored) {
+        try { users = JSON.parse(stored); } catch (e) { users = []; }
+      } else {
+        users = [
+          {
+            id: 101,
+            name: "Sofía Hernández",
+            email: "cliente@vizantinopiel.com",
+            password: "123",
+            phone: "33 2198 4400",
+            city: "Guadalajara, Jal.",
+            address: "Av. Chapultepec #290, Col. Americana",
+            registeredAt: "2026-10-15"
+          }
+        ];
+        saveUsersToStorage();
+      }
+    }
+
+    async function syncCustomerToCloud(customer) {
+      if (!supabaseClient) return;
+      try {
+        await supabaseClient
+          .from('customers')
+          .upsert({
+            name: customer.name,
+            email: customer.email,
+            phone: customer.phone,
+            city: customer.city,
+            address: customer.address,
+            password_hash: customer.password
+          }, { onConflict: 'email' });
+      } catch (e) {
+        console.error("Error sincronizando cliente a Supabase:", e);
+      }
+    }
+
+    function saveUsersToStorage() {
+      localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+    }
+
+    function checkCustomerSession() {
+      const storedUser = localStorage.getItem(STORAGE_KEY_CURRENT_USER);
+      const userBtnLabel = document.getElementById('userAuthLabel');
+      const mobileBtnLabel = document.getElementById('mobileUserBtnLabel');
+
+      if (storedUser) {
+        try {
+          currentUser = JSON.parse(storedUser);
+          if (userBtnLabel) userBtnLabel.textContent = currentUser.name.split(" ")[0];
+          if (mobileBtnLabel) mobileBtnLabel.textContent = `Mi Perfil (${currentUser.name.split(" ")[0]})`;
+        } catch (e) {
+          currentUser = null;
+        }
+      } else {
+        currentUser = null;
+        if (userBtnLabel) userBtnLabel.textContent = "Mi Cuenta";
+        if (mobileBtnLabel) mobileBtnLabel.textContent = "Mi Cuenta de Cliente";
+      }
+    }
+
+    function handleUserAuthClick() {
+      if (currentUser) {
+        openCustomerPortalModal();
+      } else {
+        openCustomerAuthModal();
+      }
+    }
+
+    function openCustomerAuthModal() {
+      document.getElementById('customerAuthModal').classList.remove('hidden');
+    }
+
+    function closeCustomerAuthModal() {
+      document.getElementById('customerAuthModal').classList.add('hidden');
+    }
+
+    function switchCustomerAuthTab(tab) {
+      const loginTab = document.getElementById('authTabLogin');
+      const regTab = document.getElementById('authTabRegister');
+      const loginForm = document.getElementById('customerLoginForm');
+      const regForm = document.getElementById('customerRegisterForm');
+
+      if (tab === 'login') {
+        loginTab.className = "flex-1 pb-3 text-center text-xs tracking-widest uppercase font-bold text-gold-400 border-b-2 border-gold-500 transition";
+        regTab.className = "flex-1 pb-3 text-center text-xs tracking-widest uppercase font-bold text-zinc-400 border-b-2 border-transparent hover:text-zinc-200 transition";
+        loginForm.classList.remove('hidden');
+        regForm.classList.add('hidden');
+      } else {
+        regTab.className = "flex-1 pb-3 text-center text-xs tracking-widest uppercase font-bold text-gold-400 border-b-2 border-gold-500 transition";
+        loginTab.className = "flex-1 pb-3 text-center text-xs tracking-widest uppercase font-bold text-zinc-400 border-b-2 border-transparent hover:text-zinc-200 transition";
+        regForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+      }
+    }
+
+    function handleCustomerRegister(event) {
+      event.preventDefault();
+      const name = document.getElementById('regCustName').value.trim();
+      const email = document.getElementById('regCustEmail').value.trim().toLowerCase();
+      const phone = document.getElementById('regCustPhone').value.trim();
+      const city = document.getElementById('regCustCity').value.trim();
+      const address = document.getElementById('regCustAddress').value.trim();
+      const password = document.getElementById('regCustPassword').value;
+
+      const existing = users.find(u => u.email === email);
+      if (existing) {
+        showToast("Este correo ya está registrado. Por favor inicia sesión.", "warning");
+        return;
+      }
+
+      const newUser = {
+        id: Date.now(),
+        name,
+        email,
+        password,
+        phone,
+        city,
+        address,
+        registeredAt: new Date().toISOString().split("T")[0]
+      };
+
+      users.push(newUser);
+      saveUsersToStorage();
+      syncCustomerToCloud(newUser); // Sincronización en la nube Supabase
+
+      currentUser = newUser;
+      localStorage.setItem(STORAGE_KEY_CURRENT_USER, JSON.stringify(currentUser));
+      checkCustomerSession();
+
+      closeCustomerAuthModal();
+      showToast(`¡Bienvenido(a) a Vizantino Piel, ${name.split(" ")[0]}!`, "success");
+      openCustomerPortalModal();
+    }
+
+    function handleCustomerLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('loginCustEmail').value.trim().toLowerCase();
+      const password = document.getElementById('loginCustPassword').value;
+
+      const user = users.find(u => u.email === email && u.password === password);
+      if (user) {
+        currentUser = user;
+        localStorage.setItem(STORAGE_KEY_CURRENT_USER, JSON.stringify(currentUser));
+        checkCustomerSession();
+        closeCustomerAuthModal();
+        showToast(`¡Hola de nuevo, ${user.name}!`, "success");
+        openCustomerPortalModal();
+      } else {
+        showToast("Correo o contraseña incorrectos", "error");
+      }
+    }
+
+    function logoutCustomer() {
+      currentUser = null;
+      localStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+      checkCustomerSession();
+      closeCustomerPortalModal();
+      showToast("Has cerrado sesión como cliente", "info");
+    }
+
+    /* ==========================================
+       PANEL DEL CLIENTE (PORTAL EXCLUSIVO)
+    ========================================== */
+    function openCustomerPortalModal() {
+      if (!currentUser) {
+        openCustomerAuthModal();
+        return;
+      }
+
+      document.getElementById('cpUserName').textContent = currentUser.name;
+      document.getElementById('cpUserEmail').textContent = currentUser.email;
+      document.getElementById('cpAvatarInitial').textContent = currentUser.name.charAt(0).toUpperCase();
+
+      // Rellenar formulario de perfil
+      document.getElementById('cpProfName').value = currentUser.name;
+      document.getElementById('cpProfPhone').value = currentUser.phone || "";
+      document.getElementById('cpProfCity').value = currentUser.city || "";
+      document.getElementById('cpProfEmail').value = currentUser.email;
+      document.getElementById('cpProfAddress').value = currentUser.address || "";
+
+      renderCustomerOrders();
+      switchCustomerPanelTab('orders');
+      document.getElementById('customerPortalModal').classList.remove('hidden');
+    }
+
+    function closeCustomerPortalModal() {
+      document.getElementById('customerPortalModal').classList.add('hidden');
+    }
+
+    function switchCustomerPanelTab(tab) {
+      const btnOrders = document.getElementById('cpTabBtn-orders');
+      const btnProfile = document.getElementById('cpTabBtn-profile');
+      const secOrders = document.getElementById('cpTabContent-orders');
+      const secProfile = document.getElementById('cpTabContent-profile');
+
+      if (tab === 'orders') {
+        btnOrders.className = "pb-3 text-gold-400 border-b-2 border-gold-500 transition";
+        btnProfile.className = "pb-3 text-zinc-400 border-b-2 border-transparent hover:text-zinc-200 transition";
+        secOrders.classList.remove('hidden');
+        secProfile.classList.add('hidden');
+      } else {
+        btnProfile.className = "pb-3 text-gold-400 border-b-2 border-gold-500 transition";
+        btnOrders.className = "pb-3 text-zinc-400 border-b-2 border-transparent hover:text-zinc-200 transition";
+        secProfile.classList.remove('hidden');
+        secOrders.classList.add('hidden');
+      }
+    }
+
+    function handleCustomerProfileUpdate(event) {
+      event.preventDefault();
+      if (!currentUser) return;
+
+      currentUser.name = document.getElementById('cpProfName').value.trim();
+      currentUser.phone = document.getElementById('cpProfPhone').value.trim();
+      currentUser.city = document.getElementById('cpProfCity').value.trim();
+      currentUser.address = document.getElementById('cpProfAddress').value.trim();
+
+      // Guardar en array de usuarios
+      const idx = users.findIndex(u => u.email === currentUser.email);
+      if (idx !== -1) {
+        users[idx] = { ...currentUser };
+        saveUsersToStorage();
+      }
+
+      localStorage.setItem(STORAGE_KEY_CURRENT_USER, JSON.stringify(currentUser));
+      checkCustomerSession();
+      document.getElementById('cpUserName').textContent = currentUser.name;
+      showToast("Datos de perfil actualizados con éxito", "success");
+    }
+
+    function renderCustomerOrders() {
+      const container = document.getElementById('cpOrdersList');
+      const countEl = document.getElementById('cpOrderCount');
+
+      if (!currentUser) return;
+
+      // Filtrar pedidos por correo o teléfono del usuario activo
+      const myOrders = orders.filter(o => 
+        (o.customerEmail && o.customerEmail.toLowerCase() === currentUser.email.toLowerCase()) ||
+        (o.customerPhone && o.customerPhone === currentUser.phone)
+      );
+
+      countEl.textContent = myOrders.length;
+
+      if (myOrders.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 bg-cardBg border border-cardBorder rounded-lg">
+            <i class="fa-solid fa-box-open text-4xl text-zinc-600 mb-3"></i>
+            <h5 class="font-serif text-lg text-zinc-300">Aún no tienes pedidos registrados</h5>
+            <p class="text-zinc-500 text-xs mt-1">Explora nuestro catálogo y adquiere tu primera pieza artesanal de Tlaquepaque.</p>
+            <button onclick="closeCustomerPortalModal(); location.href='#catalogo';" class="mt-4 px-5 py-2 bg-gold-500/20 text-gold-400 border border-gold-500/30 rounded text-xs uppercase tracking-widest hover:bg-gold-500 hover:text-black transition">
+              Ir a la Colección
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = myOrders.map(ord => {
+        // Estado visual del envío
+        let statusBadge = '';
+        let step1Active = true;
+        let step2Active = ord.status === 'En Preparación' || ord.status === 'En Camino' || ord.status === 'Entregado';
+        let step3Active = ord.status === 'En Camino' || ord.status === 'Entregado';
+        let step4Active = ord.status === 'Entregado';
+
+        if (ord.status === 'Entregado') {
+          statusBadge = `<span class="px-2.5 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase"><i class="fa-solid fa-circle-check mr-1"></i> Entregado</span>`;
+        } else if (ord.status === 'En Camino') {
+          statusBadge = `<span class="px-2.5 py-1 rounded bg-sky-950 text-sky-300 border border-sky-500/40 text-[10px] font-bold uppercase"><i class="fa-solid fa-truck-fast mr-1"></i> En Camino</span>`;
+        } else if (ord.status === 'En Preparación') {
+          statusBadge = `<span class="px-2.5 py-1 rounded bg-amber-950 text-amber-300 border border-amber-500/40 text-[10px] font-bold uppercase"><i class="fa-solid fa-box mr-1"></i> En Preparación en Taller</span>`;
+        } else {
+          statusBadge = `<span class="px-2.5 py-1 rounded bg-zinc-800 text-zinc-300 border border-zinc-600 text-[10px] font-bold uppercase"><i class="fa-solid fa-clock mr-1"></i> Pedido Registrado</span>`;
+        }
+
+        return `
+          <div class="bg-cardBg p-5 rounded-lg border border-cardBorder space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-cardBorder pb-3">
+              <div>
+                <span class="text-xs text-zinc-400">Folio: </span>
+                <span class="font-mono text-sm text-gold-400 font-bold">${ord.folio}</span>
+                <span class="text-[11px] text-zinc-500 ml-3">${ord.date}</span>
+              </div>
+              <div>${statusBadge}</div>
+            </div>
+
+            <!-- Barra de Seguimiento Visual (Timeline) -->
+            <div class="py-2">
+              <div class="flex items-center justify-between text-[11px] font-medium text-zinc-400 mb-2">
+                <span class="${step1Active ? 'text-gold-400 font-bold' : ''}">1. Registrado</span>
+                <span class="${step2Active ? 'text-gold-400 font-bold' : ''}">2. Taller Tlaquepaque</span>
+                <span class="${step3Active ? 'text-gold-400 font-bold' : ''}">3. En Paquetería</span>
+                <span class="${step4Active ? 'text-emerald-400 font-bold' : ''}">4. Entregado</span>
+              </div>
+              <div class="w-full bg-zinc-800 rounded-full h-2 overflow-hidden flex">
+                <div class="h-2 ${step1Active ? 'bg-gold-500' : 'bg-zinc-800'}" style="width: 25%"></div>
+                <div class="h-2 ${step2Active ? 'bg-gold-500' : 'bg-zinc-800'}" style="width: 25%"></div>
+                <div class="h-2 ${step3Active ? 'bg-gold-500' : 'bg-zinc-800'}" style="width: 25%"></div>
+                <div class="h-2 ${step4Active ? 'bg-emerald-500' : 'bg-zinc-800'}" style="width: 25%"></div>
+              </div>
+            </div>
+
+            <!-- Desglose de Productos -->
+            <div class="space-y-2 text-xs">
+              ${ord.items.map(it => `
+                <div class="flex items-center justify-between text-zinc-300">
+                  <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-full bg-darkSurface border border-cardBorder flex items-center justify-center text-[10px] font-mono text-gold-400">${it.qty}</span>
+                    <span>${it.name}</span>
+                  </div>
+                  <span class="font-mono text-zinc-400">$${(it.price * it.qty).toLocaleString('es-MX')} MXN</span>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="pt-3 border-t border-cardBorder flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs gap-3">
+              <div>
+                <span class="text-zinc-500">Destino: </span>
+                <span class="text-zinc-300">${ord.customerAddress}, ${ord.customerCity}</span>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="font-serif text-base text-gold-300 font-bold">Total: $${ord.total.toLocaleString('es-MX')} MXN</span>
+                <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20deseo%20saber%20el%20estatus%20de%20mi%20orden%20${ord.folio}" 
+                   target="_blank" rel="noopener noreferrer" 
+                   class="px-3 py-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded text-[11px] font-medium hover:bg-emerald-600 hover:text-white transition flex items-center gap-1">
+                  <i class="fa-brands fa-whatsapp"></i> Rastrear
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ==========================================
+       GESTIÓN DE PEDIDOS Y ALMACENAMIENTO (SUPABASE)
+    ========================================== */
+    async function loadOrders() {
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('orders')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && data && data.length > 0) {
+            orders = data.map(o => ({
+              folio: o.folio,
+              date: o.created_at ? o.created_at.split('T')[0] : '2026',
+              customerName: o.customer_name,
+              customerEmail: o.customer_email,
+              customerPhone: o.customer_phone,
+              customerCity: o.customer_city,
+              customerAddress: o.customer_address,
+              paymentMethod: o.payment_method,
+              customization: o.customization,
+              status: o.status,
+              items: o.items || [],
+              shipping: parseFloat(o.shipping_cost || 0),
+              total: parseFloat(o.total || 0)
+            }));
+            localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(orders));
+            return;
+          }
+        } catch (e) {
+          console.warn("Fallo temporal cargando órdenes de Supabase:", e);
+        }
+      }
+
+      const stored = localStorage.getItem(STORAGE_KEY_ORDERS);
+      if (stored) {
+        try { orders = JSON.parse(stored); } catch (e) { orders = []; }
+      } else {
+        orders = [
+          {
+            folio: "#VZ-982341",
+            date: "2026-10-18",
+            customerName: "Sofía Hernández",
+            customerEmail: "cliente@vizantinopiel.com",
+            customerPhone: "33 2198 4400",
+            customerCity: "Guadalajara, Jal.",
+            customerAddress: "Av. Chapultepec #290, Col. Americana",
+            paymentMethod: "Tarjeta de Crédito / Débito (Stripe)",
+            status: "En Camino",
+            items: [
+              { id: 1, name: "Bolso calidad élite", price: 3000, qty: 1 }
+            ],
+            shipping: 0,
+            total: 3000
+          }
+        ];
+        saveOrdersToStorage();
+      }
+    }
+
+    async function syncOrderToCloud(order) {
+      if (!supabaseClient) return;
+      try {
+        await supabaseClient
+          .from('orders')
+          .insert({
+            folio: order.folio,
+            customer_name: order.customerName,
+            customer_email: order.customerEmail,
+            customer_phone: order.customerPhone,
+            customer_city: order.customerCity,
+            customer_address: order.customerAddress,
+            payment_method: order.paymentMethod,
+            customization: order.customization,
+            items: order.items,
+            subtotal: order.total - order.shipping,
+            shipping_cost: order.shipping,
+            total: order.total,
+            status: order.status || 'En Preparación',
+            channel: 'ONLINE'
+          });
+      } catch (e) {
+        console.error("Error sincronizando orden a Supabase:", e);
+      }
+    }
+
+    function saveOrdersToStorage() {
+      localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(orders));
+    }
+
+    /* ==========================================
+       RENDERIZADO DEL CATÁLOGO
+    ========================================== */
+    function updateCategoryCounts() {
+      const counts = {
+        todos: products.length,
+        Bolsos: products.filter(p => p.category === 'Bolsos').length,
+        Carteras: products.filter(p => p.category === 'Carteras').length,
+        Crossbody: products.filter(p => p.category === 'Crossbody').length,
+        Mochilas: products.filter(p => p.category === 'Mochilas').length,
+        Ropa: products.filter(p => p.category === 'Ropa').length
+      };
+
+      if (document.getElementById('count-todos')) document.getElementById('count-todos').textContent = counts.todos;
+      if (document.getElementById('count-Bolsos')) document.getElementById('count-Bolsos').textContent = counts.Bolsos;
+      if (document.getElementById('count-Carteras')) document.getElementById('count-Carteras').textContent = counts.Carteras;
+      if (document.getElementById('count-Crossbody')) document.getElementById('count-Crossbody').textContent = counts.Crossbody;
+      if (document.getElementById('count-Mochilas')) document.getElementById('count-Mochilas').textContent = counts.Mochilas;
+      if (document.getElementById('count-Ropa')) document.getElementById('count-Ropa').textContent = counts.Ropa;
+    }
+
+    function filterCategory(cat) {
+      currentCategoryFilter = cat;
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('active', 'bg-gold-500', 'text-carbon', 'border-gold-500');
+        btn.classList.add('bg-darkSurface', 'text-zinc-300', 'border-cardBorder');
+      });
+
+      const activeBtn = document.querySelector(`.filter-btn[onclick*="${cat}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-gold-500', 'text-carbon', 'border-gold-500');
+        activeBtn.classList.remove('bg-darkSurface', 'text-zinc-300', 'border-cardBorder');
+      }
+
+      renderCatalog();
+    }
+
+    function handleSearch(query) {
+      currentSearchQuery = query.trim().toLowerCase();
+      renderCatalog();
+    }
+
+    function renderCatalog() {
+      const container = document.getElementById('productGrid');
+      const emptyState = document.getElementById('noProductsFound');
+      if (!container) return;
+
+      let filtered = products.filter(item => {
+        let matchCat = false;
+        if (currentCategoryFilter === 'todos') {
+          matchCat = true;
+        } else {
+          matchCat = (item.category === currentCategoryFilter);
+        }
+
+        let matchSearch = true;
+        if (currentSearchQuery) {
+          matchSearch = item.name.toLowerCase().includes(currentSearchQuery) || 
+                        item.category.toLowerCase().includes(currentSearchQuery) ||
+                        item.description.toLowerCase().includes(currentSearchQuery);
+        }
+
+        return matchCat && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = "";
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      container.innerHTML = filtered.map(product => {
+        const isOutOfStock = product.stock <= 0;
+        const isLowStock = product.stock > 0 && product.stock <= 5;
+
+        let badgeStock = '';
+        if (isOutOfStock) {
+          badgeStock = `<span class="bg-red-900/80 text-red-200 border border-red-500/50 text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded font-bold">Agotado</span>`;
+        } else if (isLowStock) {
+          badgeStock = `<span class="bg-amber-900/80 text-amber-200 border border-amber-500/50 text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded font-bold">¡Últimas ${product.stock} pzas!</span>`;
+        } else {
+          badgeStock = `<span class="bg-emerald-900/80 text-emerald-200 border border-emerald-500/50 text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded font-bold">Disponible</span>`;
+        }
+
+        return `
+          <div class="group bg-cardBg rounded-lg border border-cardBorder hover:border-gold-500/50 transition-all duration-300 flex flex-col justify-between overflow-hidden relative">
+            <div class="relative aspect-square overflow-hidden bg-black/40 cursor-pointer" onclick="openQuickView(${product.id})">
+              <img src="${product.image}" alt="${product.name}" 
+                   class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors duration-300"></div>
+              
+              <div class="absolute top-3 left-3 right-3 flex justify-between items-start pointer-events-none">
+                <span class="bg-carbon/80 backdrop-blur-sm text-gold-400 border border-gold-500/30 text-[10px] tracking-wider uppercase px-2 py-0.5 rounded font-semibold">
+                  ${product.category}
+                </span>
+                ${badgeStock}
+              </div>
+
+              <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40">
+                <span class="px-4 py-2 bg-darkSurface/90 border border-gold-500/50 text-gold-400 text-xs tracking-wider uppercase font-semibold rounded shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all">
+                  <i class="fa-regular fa-eye mr-1.5"></i> Vista Rápida
+                </span>
+              </div>
+            </div>
+
+            <div class="p-5 flex flex-col flex-1 justify-between space-y-4">
+              <div>
+                <h3 class="font-serif text-lg text-white font-bold leading-snug group-hover:text-gold-300 transition line-clamp-1 cursor-pointer" onclick="openQuickView(${product.id})">
+                  ${product.name}
+                </h3>
+                <p class="text-zinc-400 text-xs mt-1 line-clamp-2 leading-relaxed">
+                  ${product.description}
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-cardBorder flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Precio</span>
+                  <span class="font-serif text-xl font-bold text-gold-300">
+                    $${product.price.toLocaleString('es-MX')} <span class="text-[10px] text-zinc-400 font-sans">MXN</span>
+                  </span>
+                </div>
+
+                <button onclick="addToCart(${product.id})" 
+                        ${isOutOfStock ? 'disabled' : ''} 
+                        class="px-4 py-2.5 ${isOutOfStock ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' : 'bg-gold-500 hover:bg-gold-400 text-carbon shadow-md shadow-gold-500/10'} font-bold text-xs tracking-wider uppercase rounded transition flex items-center gap-1.5">
+                  <i class="fa-solid fa-plus text-[11px]"></i>
+                  <span>${isOutOfStock ? 'Sin Stock' : 'Añadir'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ==========================================
+       MODAL DE VISTA RÁPIDA (QUICK VIEW)
+    ========================================== */
+    function openQuickView(id) {
+      const prod = products.find(p => p.id === id);
+      if (!prod) return;
+
+      document.getElementById('qvImage').src = prod.image;
+      document.getElementById('qvCategory').textContent = prod.category + " · Tlaquepaque, Jal.";
+      document.getElementById('qvTitle').textContent = prod.name;
+      document.getElementById('qvPrice').innerHTML = `$${prod.price.toLocaleString('es-MX')} <span class="text-xs text-zinc-400 font-sans">MXN</span>`;
+      document.getElementById('qvDescription').textContent = prod.description;
+
+      const stockBadge = document.getElementById('qvStockBadge');
+      if (prod.stock <= 0) {
+        stockBadge.innerHTML = `<span class="inline-block px-3 py-1 bg-red-950 border border-red-500/50 text-red-300 text-xs font-semibold rounded">Agotado temporalmente</span>`;
+      } else {
+        stockBadge.innerHTML = `<span class="inline-block px-3 py-1 bg-emerald-950 border border-emerald-500/50 text-emerald-300 text-xs font-semibold rounded"><i class="fa-solid fa-check mr-1"></i> ${prod.stock} piezas disponibles</span>`;
+      }
+
+      const addBtn = document.getElementById('qvAddBtn');
+      if (prod.stock <= 0) {
+        addBtn.disabled = true;
+        addBtn.className = "w-full py-3 bg-zinc-800 text-zinc-500 font-bold text-xs tracking-widest uppercase rounded cursor-not-allowed";
+        addBtn.textContent = "Producto Agotado";
+      } else {
+        addBtn.disabled = false;
+        addBtn.className = "w-full py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-widest uppercase rounded transition flex items-center justify-center gap-2";
+        addBtn.innerHTML = `<i class="fa-solid fa-bag-shopping"></i> Añadir a la Bolsa`;
+        addBtn.onclick = () => {
+          addToCart(prod.id);
+          closeQuickView();
+        };
+      }
+
+      document.getElementById('quickViewModal').classList.remove('hidden');
+    }
+
+    function closeQuickView() {
+      document.getElementById('quickViewModal').classList.add('hidden');
+    }
+
+    /* ==========================================
+       MODAL DE GARANTÍAS Y DEVOLUCIONES
+    ========================================== */
+    function openWarrantyModal() {
+      document.getElementById('warrantyModal').classList.remove('hidden');
+    }
+
+    function closeWarrantyModal() {
+      document.getElementById('warrantyModal').classList.add('hidden');
+    }
+
+    /* ==========================================
+       GESTIÓN DEL CARRITO
+    ========================================== */
+    function loadCartFromStorage() {
+      const stored = localStorage.getItem(STORAGE_KEY_CART);
+      if (stored) {
+        try {
+          cart = JSON.parse(stored);
+        } catch (e) {
+          cart = [];
+        }
+      }
+    }
+
+    function saveCartToStorage() {
+      localStorage.setItem(STORAGE_KEY_CART, JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function toggleCartDrawer(open) {
+      const drawer = document.getElementById('cartDrawer');
+      const backdrop = document.getElementById('cartBackdrop');
+
+      if (open) {
+        backdrop.classList.remove('hidden');
+        setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+        drawer.classList.remove('translate-x-full');
+      } else {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('opacity-0');
+        setTimeout(() => backdrop.classList.add('hidden'), 300);
+      }
+    }
+
+    function addToCart(productId) {
+      const prod = products.find(p => p.id === productId);
+      if (!prod) return;
+
+      if (prod.stock <= 0) {
+        showToast("Este producto se encuentra agotado", "error");
+        return;
+      }
+
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        if (existing.qty + 1 > prod.stock) {
+          showToast(`Solo disponemos de ${prod.stock} unidades en stock`, "warning");
+          return;
+        }
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id: prod.id,
+          name: prod.name,
+          price: prod.price,
+          image: prod.image,
+          qty: 1
+        });
+      }
+
+      saveCartToStorage();
+      showToast(`"${prod.name}" añadido a la bolsa`, "success");
+      toggleCartDrawer(true);
+    }
+
+    function updateCartItemQty(id, change) {
+      const item = cart.find(i => i.id === id);
+      const prod = products.find(p => p.id === id);
+      if (!item) return;
+
+      const newQty = item.qty + change;
+      if (newQty <= 0) {
+        removeFromCart(id);
+        return;
+      }
+
+      if (prod && newQty > prod.stock) {
+        showToast(`Stock máximo disponible: ${prod.stock} unidades`, "warning");
+        return;
+      }
+
+      item.qty = newQty;
+      saveCartToStorage();
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(i => i.id !== id);
+      saveCartToStorage();
+      showToast("Producto removido de la bolsa", "info");
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cartBadge');
+      const container = document.getElementById('cartItemsContainer');
+      const subtotalEl = document.getElementById('cartSubtotal');
+      const shippingEl = document.getElementById('cartShippingCost');
+      const totalEl = document.getElementById('cartTotal');
+      const freeShippingText = document.getElementById('freeShippingText');
+      const freeShippingStatus = document.getElementById('freeShippingStatus');
+      const freeShippingBar = document.getElementById('freeShippingBar');
+
+      const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+      badge.textContent = totalItems;
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-center py-16 text-zinc-500">
+            <i class="fa-solid fa-bag-shopping text-5xl mb-4 text-zinc-700"></i>
+            <h4 class="font-serif text-xl text-zinc-400">Tu bolsa está vacía</h4>
+            <p class="text-xs text-zinc-600 mt-1 max-w-xs">Descubre la colección de piezas genuinas de Tlaquepaque.</p>
+            <button onclick="toggleCartDrawer(false)" class="mt-6 px-6 py-2.5 bg-gold-500/20 text-gold-400 border border-gold-500/30 rounded text-xs uppercase tracking-widest hover:bg-gold-500 hover:text-black transition">
+              Comenzar a Comprar
+            </button>
+          </div>
+        `;
+        subtotalEl.textContent = "$0.00 MXN";
+        shippingEl.textContent = "$0.00 MXN";
+        totalEl.textContent = "$0.00 MXN";
+        freeShippingBar.style.width = "0%";
+        freeShippingText.textContent = "¡Añade productos para envío gratis!";
+        freeShippingStatus.textContent = "";
+        return;
+      }
+
+      container.innerHTML = cart.map(item => `
+        <div class="flex items-center gap-4 bg-cardBg p-3 rounded-lg border border-cardBorder">
+          <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded bg-black">
+          <div class="flex-1 min-w-0">
+            <h4 class="font-serif text-sm text-white font-bold truncate">${item.name}</h4>
+            <div class="text-gold-400 font-mono text-xs font-semibold mt-0.5">$${item.price.toLocaleString('es-MX')} MXN</div>
+            
+            <div class="flex items-center gap-3 mt-2">
+              <div class="flex items-center border border-cardBorder rounded bg-darkSurface">
+                <button onclick="updateCartItemQty(${item.id}, -1)" class="px-2 py-0.5 text-zinc-400 hover:text-white text-xs">-</button>
+                <span class="px-2 py-0.5 text-xs font-mono text-zinc-200">${item.qty}</span>
+                <button onclick="updateCartItemQty(${item.id}, 1)" class="px-2 py-0.5 text-zinc-400 hover:text-white text-xs">+</button>
+              </div>
+              <button onclick="removeFromCart(${item.id})" class="text-zinc-500 hover:text-red-400 text-xs transition" title="Eliminar">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+          <div class="text-right font-mono text-xs text-zinc-200 font-semibold">
+            $${(item.price * item.qty).toLocaleString('es-MX')}
+          </div>
+        </div>
+      `).join('');
+
+      const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+      const shippingCost = isFreeShipping ? 0 : SHIPPING_COST_STANDARD;
+      const total = subtotal + shippingCost;
+
+      subtotalEl.textContent = `$${subtotal.toLocaleString('es-MX')} MXN`;
+      shippingEl.textContent = isFreeShipping ? "GRATIS" : `$${shippingCost.toLocaleString('es-MX')} MXN (< 3kg)`;
+      if (isFreeShipping) {
+        shippingEl.className = "font-mono text-emerald-400 font-bold";
+      } else {
+        shippingEl.className = "font-mono text-zinc-300";
+      }
+      totalEl.textContent = `$${total.toLocaleString('es-MX')} MXN`;
+
+      if (isFreeShipping) {
+        freeShippingBar.style.width = "100%";
+        freeShippingText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check"></i> ¡Tienes Envío Gratis asegurado!</span>`;
+        freeShippingStatus.textContent = "";
+      } else {
+        const remaining = FREE_SHIPPING_THRESHOLD - subtotal;
+        const percent = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
+        freeShippingBar.style.width = `${percent}%`;
+        freeShippingText.textContent = `Añade $${remaining.toLocaleString('es-MX')} MXN para Envío Gratis (o 3 MSI)`;
+        freeShippingStatus.textContent = `${percent}%`;
+      }
+    }
+
+    /* ==========================================
+       CHECKOUT & PASARELA DE PAGOS
+    ========================================== */
+    function openCheckoutModal() {
+      if (cart.length === 0) {
+        showToast("Tu bolsa de compras está vacía", "warning");
+        return;
+      }
+      toggleCartDrawer(false);
+
+      const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+      const total = subtotal + (isFreeShipping ? 0 : SHIPPING_COST_STANDARD);
+
+      document.getElementById('checkoutTotalAmount').textContent = `$${total.toLocaleString('es-MX')} MXN`;
+
+      // Si el cliente está logueado, autocompletar formulario
+      const prefillAlert = document.getElementById('checkoutPrefillAlert');
+      if (currentUser) {
+        document.getElementById('custName').value = currentUser.name || "";
+        document.getElementById('custPhone').value = currentUser.phone || "";
+        document.getElementById('custEmail').value = currentUser.email || "";
+        document.getElementById('custCity').value = currentUser.city || "";
+        document.getElementById('custAddress').value = currentUser.address || "";
+        prefillAlert.classList.remove('hidden');
+      } else {
+        prefillAlert.classList.add('hidden');
+      }
+
+      document.getElementById('checkoutModal').classList.remove('hidden');
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').classList.add('hidden');
+    }
+
+    /* Simulador de Personalización en vivo */
+    function updateCustomPreview() {
+      const text = document.getElementById('customText').value.trim();
+      const font = document.getElementById('customFont').value;
+      const placement = document.getElementById('customPlacement').value;
+      const previewText = document.getElementById('customPreviewOutput');
+      const previewPlacement = document.getElementById('customPreviewPlacement');
+
+      if (previewText) {
+        previewText.textContent = text ? `"${text}"` : `"Tu grabado aquí"`;
+
+        // Ajustar familia tipográfica
+        if (font === 'serif') {
+          previewText.style.fontFamily = "'Cormorant Garamond', serif";
+          previewText.style.letterSpacing = "0.15em";
+          previewText.style.fontWeight = "600";
+        } else if (font === 'sans') {
+          previewText.style.fontFamily = "'Montserrat', sans-serif";
+          previewText.style.letterSpacing = "0.2em";
+          previewText.style.fontWeight = "500";
+        } else if (font === 'cursive') {
+          previewText.style.fontFamily = "cursive, 'Brush Script MT', italic";
+          previewText.style.letterSpacing = "0.08em";
+          previewText.style.fontWeight = "400";
+        } else if (font === 'mono') {
+          previewText.style.fontFamily = "monospace";
+          previewText.style.letterSpacing = "0.25em";
+          previewText.style.fontWeight = "700";
+        }
+      }
+
+      if (previewPlacement) {
+        previewPlacement.textContent = placement;
+      }
+    }
+
+    function selectPaymentMethod(method) {
+      selectedPayment = method;
+      const tabs = ['card', 'mp', 'paypal', 'spei'];
+      tabs.forEach(t => {
+        const tabEl = document.getElementById(`payTab-${t}`);
+        const contentEl = document.getElementById(`payContent-${t}`);
+        if (t === method) {
+          tabEl.classList.add('border-gold-500', 'text-white');
+          tabEl.classList.remove('border-cardBorder', 'text-zinc-400');
+          contentEl.classList.remove('hidden');
+        } else {
+          tabEl.classList.remove('border-gold-500', 'text-white');
+          tabEl.classList.add('border-cardBorder', 'text-zinc-400');
+          contentEl.classList.add('hidden');
+        }
+      });
+    }
+
+    function handleCheckoutSubmit(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const email = document.getElementById('custEmail').value.trim();
+      const city = document.getElementById('custCity').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+
+      // Verificar stock
+      let stockIssue = false;
+      cart.forEach(item => {
+        const prod = products.find(p => p.id === item.id);
+        if (prod && prod.stock < item.qty) {
+          stockIssue = true;
+          showToast(`Lo sentimos, "${prod.name}" no cuenta con suficiente stock`, "error");
+        }
+      });
+
+      if (stockIssue) return;
+
+      // Descontar inventario
+      cart.forEach(item => {
+        const prod = products.find(p => p.id === item.id);
+        if (prod) {
+          prod.stock = Math.max(0, prod.stock - item.qty);
+        }
+      });
+      saveProductsToStorage();
+
+      // Captura de datos de personalización artesanal
+      const customText = document.getElementById('customText').value.trim();
+      const customFont = document.getElementById('customFont').value;
+      const customPlacement = document.getElementById('customPlacement').value;
+      const customLogoNote = document.getElementById('customLogoNote').value.trim();
+
+      const fontLabels = {
+        serif: "Cormorant Garamond (Serif Clásica)",
+        sans: "Montserrat (Sans Moderna)",
+        cursive: "Cursiva Artesanal",
+        mono: "Monospace Grabado Técnico"
+      };
+
+      let customizationSummary = "Sin personalización";
+      if (customPlacement !== "Sin Personalización" && (customText || customLogoNote)) {
+        customizationSummary = `${customText ? `Texto: "${customText}"` : ''} | Tipografía: ${fontLabels[customFont]} | Ubicación: ${customPlacement}${customLogoNote ? ` | Nota Logo: ${customLogoNote}` : ''}`;
+      } else if (customPlacement === "Sin Personalización") {
+        customizationSummary = "No solicita grabado";
+      }
+
+      // Generar orden
+      const randomFolio = "#VZ-" + Math.floor(100000 + Math.random() * 900000);
+      const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const shipping = (subtotal >= FREE_SHIPPING_THRESHOLD) ? 0 : SHIPPING_COST_STANDARD;
+      const total = subtotal + shipping;
+
+      const methodLabels = {
+        card: "Tarjeta de Crédito / Débito (Stripe)",
+        mp: "Mercado Pago México (Tarjetas / OXXO / Saldo MP)",
+        paypal: "PayPal Express",
+        spei: "SPEI Bancario / OXXO Pay"
+      };
+
+      const newOrder = {
+        folio: randomFolio,
+        date: new Date().toISOString().split("T")[0],
+        customerName: name,
+        customerEmail: email,
+        customerPhone: phone,
+        customerCity: city,
+        customerAddress: address,
+        customization: customizationSummary,
+        paymentMethod: methodLabels[selectedPayment],
+        status: "En Preparación",
+        items: [...cart],
+        shipping,
+        total
+      };
+
+      orders.unshift(newOrder);
+      saveOrdersToStorage();
+      syncOrderToCloud(newOrder); // Sincronización instantánea de orden en Supabase
+
+      // Enviar notificación automática por correo electrónico a administración y agencia
+      sendOrderEmailNotification(newOrder);
+
+      // Descontar inventario en la nube para cada producto vendido
+      cart.forEach(item => {
+        const prod = products.find(p => p.id === item.id);
+        if (prod) syncProductToCloud(prod);
+      });
+
+      // Mensaje WhatsApp
+      let orderSummaryLines = cart.map(i => `• ${i.name} (x${i.qty}) - $${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('%0A');
+      const waMessage = `*NUEVA ORDEN EN VIZANTINO PIEL*%0A` +
+        `*Folio:* ${randomFolio}%0A` +
+        `*Cliente:* ${name}%0A` +
+        `*Teléfono:* ${phone}%0A` +
+        `*Email:* ${email}%0A` +
+        `*Destino:* ${address}, ${city}%0A%0A` +
+        `*Artículos Solicitados:*%0A${orderSummaryLines}%0A%0A` +
+        `*Personalización de Pieza:*%0A${customizationSummary}%0A%0A` +
+        `*Envío:* ${shipping === 0 ? 'GRATIS' : `$${SHIPPING_COST_STANDARD} MXN (< 3kg)`}%0A` +
+        `*Total a Liquidar:* $${total.toLocaleString('es-MX')} MXN%0A` +
+        `*Método Elegido:* ${methodLabels[selectedPayment]}%0A%0A` +
+        `_Agradezco confirmar la disponibilidad y dar seguimiento a mi pedido._`;
+
+      const waLink = `https://wa.me/523329089920?text=${waMessage}`;
+
+      // Configurar Modal de Recibo
+      document.getElementById('receiptFolio').textContent = randomFolio;
+      document.getElementById('receiptCustomerName').textContent = name;
+      document.getElementById('receiptCustomerPhone').textContent = phone;
+      document.getElementById('receiptCustomization').textContent = customizationSummary;
+      document.getElementById('receiptPaymentMethod').textContent = methodLabels[selectedPayment];
+      document.getElementById('receiptAddress').textContent = `${address}, ${city}`;
+      document.getElementById('receiptTotalAmount').textContent = `$${total.toLocaleString('es-MX')} MXN`;
+      document.getElementById('receiptWhatsAppBtn').href = waLink;
+
+      // Vaciar Carrito
+      cart = [];
+      saveCartToStorage();
+
+      closeCheckoutModal();
+      document.getElementById('orderReceiptModal').classList.remove('hidden');
+    }
+
+    /* Envío Automático de Notificaciones por Correo */
+    async function sendOrderEmailNotification(order) {
+      const recipientEmails = ["vizantinopiel@gmail.com", "altusmarketingdigital@gmail.com"];
+      const itemsList = order.items.map(i => `• ${i.name} (Cantidad: ${i.qty}) - $${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('\n');
+
+      const emailPayload = {
+        _subject: `🛍️ NUEVA VENTA VIZANTINO PIEL: Orden ${order.folio} ($${order.total.toLocaleString('es-MX')} MXN)`,
+        folio: order.folio,
+        fecha: order.date,
+        cliente: order.customerName,
+        telefono_whatsapp: order.customerPhone,
+        correo_cliente: order.customerEmail,
+        direccion_entrega: `${order.customerAddress}, ${order.customerCity}`,
+        articulos_comprados: itemsList,
+        personalizacion_artesanal: order.customization || 'Sin grabado',
+        metodo_de_pago: order.paymentMethod,
+        envio: order.shipping === 0 ? 'GRATIS' : `$${order.shipping} MXN`,
+        total_pagado: `$${order.total.toLocaleString('es-MX')} MXN`,
+        notificar_a: recipientEmails.join(', ')
+      };
+
+      // Envío asíncrono vía servicio de notificación transaccional
+      try {
+        await Promise.all(recipientEmails.map(targetEmail => {
+          return fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+            method: "POST",
+            headers: { 
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify({
+              ...emailPayload,
+              _template: "table",
+              _captcha: "false"
+            })
+          });
+        }));
+        console.log("Notificaciones por correo enviadas exitosamente a:", recipientEmails);
+      } catch (err) {
+        console.warn("Aviso de envío por correo en proceso de fondo:", err);
+      }
+    }
+
+    function closeReceiptModal() {
+      document.getElementById('orderReceiptModal').classList.add('hidden');
+    }
+
+    /* ==========================================
+       PANEL DE ADMINISTRADOR COMPLETO
+    ========================================== */
+    function isAdminLoggedIn() {
+      return localStorage.getItem(STORAGE_KEY_ADMIN) === "true";
+    }
+
+    function checkAdminSession() {
+      const loginForm = document.getElementById('adminLoginForm');
+      const dashboard = document.getElementById('adminDashboardContent');
+
+      if (isAdminLoggedIn()) {
+        loginForm.classList.add('hidden');
+        dashboard.classList.remove('hidden');
+        renderAdminDashboard();
+      } else {
+        loginForm.classList.remove('hidden');
+        dashboard.classList.add('hidden');
+      }
+    }
+
+    function openAdminModal() {
+      checkAdminSession();
+      document.getElementById('adminModal').classList.remove('hidden');
+    }
+
+    function closeAdminModal() {
+      // Cerrar sesión automáticamente al hacer clic en la X o fuera del modal
+      if (isAdminLoggedIn()) {
+        localStorage.removeItem(STORAGE_KEY_ADMIN);
+        checkAdminSession();
+        showToast("Sesión de administrador cerrada", "info");
+      }
+      document.getElementById('adminModal').classList.add('hidden');
+    }
+
+    function handleAdminLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('adminEmailInput').value.trim().toLowerCase();
+      const pwd = document.getElementById('adminPasswordInput').value;
+
+      // Credenciales Oficiales de Administrador
+      if (email === "admin@vizantino.com" && pwd === "VizantinoAdmin2026") {
+        localStorage.setItem(STORAGE_KEY_ADMIN, "true");
+        document.getElementById('adminEmailInput').value = "";
+        document.getElementById('adminPasswordInput').value = "";
+        checkAdminSession();
+        showToast("Sesión de administrador iniciada con éxito", "success");
+      } else {
+        showToast("Correo o contraseña de administrador incorrectos", "error");
+      }
+    }
+
+    function adminLogout() {
+      localStorage.removeItem(STORAGE_KEY_ADMIN);
+      checkAdminSession();
+      showToast("Sesión de administrador cerrada", "info");
+    }
+
+    function switchAdminSubTab(tab) {
+      const tabs = ['inventory', 'orders', 'users'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`admTab-${t}`);
+        const sec = document.getElementById(`admSection-${t}`);
+        if (t === tab) {
+          btn.className = "px-4 py-2 bg-gold-500 text-carbon rounded font-bold transition";
+          sec.classList.remove('hidden');
+        } else {
+          btn.className = "px-4 py-2 bg-cardBg text-zinc-400 hover:text-white rounded border border-cardBorder transition";
+          sec.classList.add('hidden');
+        }
+      });
+
+      if (tab === 'orders') renderAdminOrdersTable();
+      if (tab === 'users') renderAdminUsersTable();
+      if (tab === 'inventory') renderAdminTable();
+    }
+
+    function renderAdminDashboard() {
+      // Métricas Principales
+      const totalProducts = products.length;
+      const totalOrders = orders.length;
+      const totalCustomers = users.length;
+      const inventoryValue = products.reduce((acc, p) => acc + (p.price * p.stock), 0);
+
+      document.getElementById('metricTotalProducts').textContent = totalProducts;
+      document.getElementById('metricTotalOrders').textContent = totalOrders;
+      document.getElementById('metricTotalCustomers').textContent = totalCustomers;
+      document.getElementById('metricInventoryValue').textContent = `$${inventoryValue.toLocaleString('es-MX')} MXN`;
+
+      document.getElementById('admBadgeOrders').textContent = totalOrders;
+      document.getElementById('admBadgeUsers').textContent = totalCustomers;
+
+      renderAdminTable();
+      renderAdminOrdersTable();
+      renderAdminUsersTable();
+    }
+
+    /* Tabla de Inventario Admin */
+    function renderAdminTable() {
+      const tbody = document.getElementById('adminTableBody');
+      const search = (document.getElementById('adminSearchInput').value || "").toLowerCase().trim();
+      const cat = document.getElementById('adminCategorySelect').value;
+
+      let filtered = products.filter(p => {
+        const matchSearch = p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search);
+        const matchCat = (cat === 'all') || (p.category === cat);
+        return matchSearch && matchCat;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-zinc-500">No se encontraron productos.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        let statusBadge = '';
+        if (p.stock <= 0) {
+          statusBadge = `<span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-500/40 text-[10px] font-bold">Agotado</span>`;
+        } else if (p.stock < 5) {
+          statusBadge = `<span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/40 text-[10px] font-bold">Bajo Stock</span>`;
+        } else {
+          statusBadge = `<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">Activo</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-darkSurface/60 transition">
+            <td class="p-3">
+              <div class="flex items-center gap-3">
+                <img src="${p.image}" alt="${p.name}" class="w-10 h-10 object-cover rounded bg-black">
+                <div>
+                  <div class="font-bold text-white">${p.name}</div>
+                  <div class="text-[10px] text-zinc-500">ID: #${p.id}</div>
+                </div>
+              </div>
+            </td>
+            <td class="p-3 text-zinc-400 font-medium">${p.category}</td>
+            <td class="p-3">
+              <div class="flex items-center gap-1">
+                <span class="text-zinc-500">$</span>
+                <input type="number" value="${p.price}" min="1" step="1" 
+                       onchange="updateProductPrice(${p.id}, this.value)" 
+                       class="w-20 bg-darkSurface border border-cardBorder rounded px-2 py-1 text-zinc-100 font-mono text-xs focus:border-gold-500 focus:outline-none">
+              </div>
+            </td>
+            <td class="p-3 text-center">
+              <div class="inline-flex items-center border border-cardBorder rounded bg-darkSurface">
+                <button onclick="updateProductStock(${p.id}, -1)" class="px-2 py-1 text-zinc-400 hover:text-white">-</button>
+                <input type="number" value="${p.stock}" min="0" step="1" 
+                       onchange="setProductStockDirect(${p.id}, this.value)" 
+                       class="w-12 text-center bg-transparent text-white font-mono text-xs focus:outline-none">
+                <button onclick="updateProductStock(${p.id}, 1)" class="px-2 py-1 text-zinc-400 hover:text-white">+</button>
+              </div>
+            </td>
+            <td class="p-3 text-center">${statusBadge}</td>
+            <td class="p-3 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="openEditProductModal(${p.id})" class="p-1.5 text-zinc-400 hover:text-gold-400 rounded transition" title="Editar">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+                <button onclick="deleteProduct(${p.id})" class="p-1.5 text-zinc-500 hover:text-red-400 rounded transition" title="Eliminar">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    /* Tabla de Seguimiento de Pedidos Admin */
+    function renderAdminOrdersTable() {
+      const tbody = document.getElementById('adminOrdersTableBody');
+      const countText = document.getElementById('admOrdersTotalCountText');
+      if (!tbody) return;
+
+      countText.textContent = orders.length;
+
+      if (orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-zinc-500">No hay órdenes registradas todavía.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = orders.map((ord, idx) => {
+        return `
+          <tr class="hover:bg-darkSurface/60 transition">
+            <td class="p-3">
+              <div class="font-mono text-gold-400 font-bold">${ord.folio}</div>
+              <div class="text-[10px] text-zinc-500">${ord.date}</div>
+            </td>
+            <td class="p-3">
+              <div class="font-bold text-white">${ord.customerName}</div>
+              <div class="text-[10px] text-zinc-400">${ord.customerPhone}</div>
+              <div class="text-[10px] text-zinc-500 truncate max-w-[150px]">${ord.customerAddress}</div>
+            </td>
+            <td class="p-3">
+              <div class="text-xs text-zinc-300">
+                ${ord.items.map(i => `${i.name} (${i.qty})`).join(', ')}
+              </div>
+            </td>
+            <td class="p-3 font-mono text-gold-300 font-bold">
+              $${ord.total.toLocaleString('es-MX')} MXN
+            </td>
+            <td class="p-3 text-zinc-400 text-[11px]">${ord.paymentMethod}</td>
+            <td class="p-3 text-center">
+              <select onchange="updateOrderStatus(${idx}, this.value)" class="bg-darkSurface border border-cardBorder text-zinc-200 text-xs rounded px-2 py-1 focus:border-gold-500 focus:outline-none">
+                <option value="Registrado" ${ord.status === 'Registrado' ? 'selected' : ''}>Registrado</option>
+                <option value="En Preparación" ${ord.status === 'En Preparación' ? 'selected' : ''}>En Preparación</option>
+                <option value="En Camino" ${ord.status === 'En Camino' ? 'selected' : ''}>En Camino</option>
+                <option value="Entregado" ${ord.status === 'Entregado' ? 'selected' : ''}>Entregado</option>
+              </select>
+            </td>
+            <td class="p-3 text-right">
+              <a href="https://wa.me/52${ord.customerPhone.replace(/\\D/g,'')}?text=Hola%20${encodeURIComponent(ord.customerName)},%20te%20contactamos%20de%20Vizantino%20Piel%20sobre%20tu%20orden%20${ord.folio}" 
+                 target="_blank" rel="noopener noreferrer" 
+                 class="p-1.5 text-emerald-400 hover:text-emerald-300 rounded transition inline-block" title="Enviar WhatsApp al cliente">
+                <i class="fa-brands fa-whatsapp text-base"></i>
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateOrderStatus(orderIndex, newStatus) {
+      if (orders[orderIndex]) {
+        orders[orderIndex].status = newStatus;
+        saveOrdersToStorage();
+        if (supabaseClient) {
+          supabaseClient
+            .from('orders')
+            .update({ status: newStatus })
+            .eq('folio', orders[orderIndex].folio)
+            .then(() => console.log('Orden actualizada en Supabase'));
+        }
+        showToast(`Orden ${orders[orderIndex].folio} actualizada a "${newStatus}"`, "success");
+        if (currentUser) renderCustomerOrders();
+      }
+    }
+
+    /* Tabla de Usuarios / Clientes Admin */
+    function renderAdminUsersTable() {
+      const tbody = document.getElementById('adminUsersTableBody');
+      const countText = document.getElementById('admUsersTotalCountText');
+      if (!tbody) return;
+
+      countText.textContent = users.length;
+
+      if (users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-zinc-500">No hay clientes registrados aún.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = users.map(u => `
+        <tr class="hover:bg-darkSurface/60 transition">
+          <td class="p-3 font-bold text-white flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center text-xs font-serif">${u.name.charAt(0)}</span>
+            <span>${u.name}</span>
+          </td>
+          <td class="p-3 font-mono text-zinc-300">${u.phone || 'N/A'}</td>
+          <td class="p-3 text-zinc-400">${u.email}</td>
+          <td class="p-3 text-zinc-400 text-xs">${u.address ? `${u.address}, ` : ''}${u.city || ''}</td>
+          <td class="p-3 text-center text-zinc-500 text-[11px]">${u.registeredAt || '2026'}</td>
+          <td class="p-3 text-right">
+            <a href="https://wa.me/52${(u.phone || '').replace(/\\D/g,'')}" target="_blank" rel="noopener noreferrer" class="p-1.5 text-emerald-400 hover:text-emerald-300 transition" title="Contactar">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateProductStock(id, delta) {
+      const prod = products.find(p => p.id === id);
+      if (prod) {
+        prod.stock = Math.max(0, prod.stock + delta);
+        saveProductsToStorage();
+        syncProductToCloud(prod);
+        showToast(`Stock de "${prod.name}" actualizado a ${prod.stock}`, "info");
+      }
+    }
+
+    function setProductStockDirect(id, val) {
+      const prod = products.find(p => p.id === id);
+      if (prod) {
+        const parsed = parseInt(val, 10);
+        prod.stock = isNaN(parsed) ? 0 : Math.max(0, parsed);
+        saveProductsToStorage();
+        syncProductToCloud(prod);
+        showToast(`Stock actualizado a ${prod.stock}`, "info");
+      }
+    }
+
+    function updateProductPrice(id, val) {
+      const prod = products.find(p => p.id === id);
+      if (prod) {
+        const parsed = parseFloat(val);
+        if (!isNaN(parsed) && parsed > 0) {
+          prod.price = parsed;
+          saveProductsToStorage();
+          syncProductToCloud(prod);
+          showToast(`Precio actualizado a $${prod.price.toLocaleString('es-MX')} MXN`, "success");
+        }
+      }
+    }
+
+    function deleteProduct(id) {
+      const prod = products.find(p => p.id === id);
+      if (!prod) return;
+
+      if (confirm(`¿Seguro que deseas eliminar el producto "${prod.name}" del catálogo?`)) {
+        products = products.filter(p => p.id !== id);
+        saveProductsToStorage();
+        showToast("Producto eliminado del catálogo", "info");
+      }
+    }
+
+    function openNewProductModal() {
+      document.getElementById('productFormTitle').textContent = "Nuevo Producto Artesanal";
+      document.getElementById('pfId').value = "";
+      document.getElementById('pfName').value = "";
+      document.getElementById('pfPrice').value = "";
+      document.getElementById('pfStock').value = "";
+      document.getElementById('pfCategory').value = "Bolsos";
+      document.getElementById('pfImage').value = "";
+      document.getElementById('pfDescription').value = "";
+      document.getElementById('productFormModal').classList.remove('hidden');
+    }
+
+    function openEditProductModal(id) {
+      const prod = products.find(p => p.id === id);
+      if (!prod) return;
+
+      document.getElementById('productFormTitle').textContent = "Editar Producto";
+      document.getElementById('pfId').value = prod.id;
+      document.getElementById('pfName').value = prod.name;
+      document.getElementById('pfPrice').value = prod.price;
+      document.getElementById('pfStock').value = prod.stock;
+      document.getElementById('pfCategory').value = prod.category;
+      document.getElementById('pfImage').value = prod.image;
+      document.getElementById('pfDescription').value = prod.description;
+      document.getElementById('productFormModal').classList.remove('hidden');
+    }
+
+    function closeProductFormModal() {
+      document.getElementById('productFormModal').classList.add('hidden');
+    }
+
+    function handleProductFormSubmit(event) {
+      event.preventDefault();
+      const id = document.getElementById('pfId').value;
+      const name = document.getElementById('pfName').value.trim();
+      const price = parseFloat(document.getElementById('pfPrice').value);
+      const stock = parseInt(document.getElementById('pfStock').value, 10);
+      const category = document.getElementById('pfCategory').value;
+      let image = document.getElementById('pfImage').value.trim();
+      const description = document.getElementById('pfDescription').value.trim() || "Pieza elaborada artesanalmente en piel genuina vacuno de Tlaquepaque, Jalisco.";
+
+      if (!image) {
+        image = "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80";
+      }
+
+      if (id) {
+        const prod = products.find(p => p.id === parseInt(id, 10));
+        if (prod) {
+          prod.name = name;
+          prod.price = price;
+          prod.stock = stock;
+          prod.category = category;
+          prod.image = image;
+          prod.description = description;
+          showToast(`Producto "${name}" actualizado`, "success");
+        }
+      } else {
+        const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+        products.push({
+          id: newId,
+          name,
+          price,
+          stock,
+          category,
+          image,
+          description
+        });
+        showToast(`Nuevo producto "${name}" agregado al catálogo`, "success");
+      }
+
+      saveProductsToStorage();
+      closeProductFormModal();
+    }
+
+    /* ==========================================
+       NOTIFICACIONES TOAST & MENÚ MÓVIL
+    ========================================== */
+    function showToast(message, type = "info") {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+
+      const colors = {
+        success: "bg-emerald-950/95 border-emerald-500 text-emerald-200",
+        error: "bg-red-950/95 border-red-500 text-red-200",
+        warning: "bg-amber-950/95 border-amber-500 text-amber-200",
+        info: "bg-carbon/95 border-gold-500 text-gold-300"
+      };
+
+      const icons = {
+        success: "fa-solid fa-circle-check",
+        error: "fa-solid fa-circle-exclamation",
+        warning: "fa-solid fa-triangle-exclamation",
+        info: "fa-solid fa-circle-info"
+      };
+
+      toast.className = `toast-anim flex items-center gap-3 px-4 py-3 rounded-lg border shadow-xl text-xs backdrop-blur-md ${colors[type] || colors.info}`;
+      toast.innerHTML = `
+        <i class="${icons[type] || icons.info} text-base"></i>
+        <span class="font-medium">${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        menu.classList.add('flex');
+      } else {
+        menu.classList.add('hidden');
+        menu.classList.remove('flex');
+      }
+    }
+  </script>
+</body>
+</html>
