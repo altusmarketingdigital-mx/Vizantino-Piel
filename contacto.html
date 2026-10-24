@@ -153,6 +153,89 @@
       box-shadow: 0 16px 35px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(197, 160, 89, 0.25);
     }
 
+  
+    /* ===================================================
+       ESTILOS DE MOVIMIENTO, GLOW Y DISEÑO DE ALTO IMPACTO
+    =================================================== */
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+      50% { transform: translateY(-12px) rotate(0.8deg) scale(1.01); }
+    }
+    @keyframes orbGlow {
+      0%, 100% { transform: scale(1) translate(0px, 0px); opacity: 0.25; }
+      33% { transform: scale(1.2) translate(30px, -20px); opacity: 0.45; }
+      66% { transform: scale(0.9) translate(-25px, 25px); opacity: 0.3; }
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes goldShimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes borderPulse {
+      0%, 100% { border-color: rgba(197, 160, 89, 0.3); box-shadow: 0 0 15px rgba(197, 160, 89, 0.1); }
+      50% { border-color: rgba(197, 160, 89, 0.8); box-shadow: 0 0 25px rgba(197, 160, 89, 0.35); }
+    }
+    @keyframes badgeGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4); }
+      50% { box-shadow: 0 0 12px 3px rgba(197, 160, 89, 0.7); }
+    }
+
+    .animate-hero-float {
+      animation: heroFloat 6s ease-in-out infinite;
+    }
+    .animate-orb-1 {
+      animation: orbGlow 12s ease-in-out infinite;
+    }
+    .animate-orb-2 {
+      animation: orbGlow 16s ease-in-out infinite reverse;
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 35s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+    .animate-gold-border {
+      animation: borderPulse 4s ease-in-out infinite;
+    }
+    .badge-glow {
+      animation: badgeGlow 2.5s infinite;
+    }
+
+    .shimmer-text {
+      background: linear-gradient(90deg, #dfb96c 0%, #fff6dd 25%, #dfb96c 50%, #c5a059 75%, #dfb96c 100%);
+      background-size: 200% auto;
+      color: transparent;
+      -webkit-background-clip: text;
+      animation: goldShimmer 5s linear infinite;
+    }
+
+    /* Glassmorphism Luxury */
+    .glass-luxury {
+      background: rgba(18, 18, 18, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(197, 160, 89, 0.25);
+    }
+    .glass-luxury:hover {
+      border-color: rgba(197, 160, 89, 0.55);
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.8), 0 0 25px rgba(197, 160, 89, 0.2);
+    }
+
+    .interactive-card {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, box-shadow;
+    }
+    .interactive-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 22px 45px -10px rgba(0, 0, 0, 0.85), 0 0 30px rgba(197, 160, 89, 0.28);
+    }
+
   </style>
 </head>
 <body class="selection:bg-gold-500 selection:text-black">
