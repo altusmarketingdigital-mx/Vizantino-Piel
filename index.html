@@ -119,6 +119,40 @@
       70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
       100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
     }
+  
+    /* Animaciones de movimiento interactivo y scroll reveal */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(0.4deg); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.35; filter: drop-shadow(0 0 15px rgba(197, 160, 89, 0.2)); }
+      50% { opacity: 0.75; filter: drop-shadow(0 0 30px rgba(197, 160, 89, 0.45)); }
+    }
+    .animate-float {
+      animation: floatSlow 5s ease-in-out infinite;
+    }
+    .animate-glow {
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .hover-lift {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
+    }
+    .hover-lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 35px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(197, 160, 89, 0.25);
+    }
+
   </style>
 </head>
 <body class="selection:bg-gold-500 selection:text-black">
@@ -383,6 +417,39 @@
     </section>
 
     <!-- ========================================== -->
+    
+    <!-- ========================================== -->
+    <!-- NUEVA SECCIÓN: PIEZAS MAESTRAS DESTACADAS (ADMIN SELECCIONABLES) -->
+    <!-- ========================================== -->
+    <section id="destacados" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-cardBorder">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 reveal-on-scroll">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs tracking-[0.25em] uppercase font-semibold mb-3">
+            <i class="fa-solid fa-star text-[10px]"></i> Selección Exclusiva
+          </div>
+          <h2 class="font-serif text-3xl sm:text-4xl text-white font-bold leading-tight">
+            Piezas Maestras Destacadas
+          </h2>
+          <div class="w-20 h-0.5 bg-gradient-to-r from-gold-500 to-transparent mt-3 mb-2"></div>
+          <p class="text-zinc-400 text-xs sm:text-sm max-w-xl">
+            Modelos insignias en piel genuina corte vacuno seleccionados directamente por el taller para entrega inmediata.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="catalogo.html" class="px-5 py-2.5 bg-cardBg hover:bg-gold-500 hover:text-black border border-gold-500/40 text-gold-400 text-xs font-semibold uppercase tracking-wider rounded-lg transition duration-300 flex items-center gap-2 shadow-md">
+            <span>Ver Catálogo Completo</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Grid de Destacados -->
+      <div id="featuredProductsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+        <!-- Renderizado dinámicamente por renderFeaturedProducts() -->
+      </div>
+    </section>
+
     <!-- Compromiso Artesanal y Beneficios -->
     <section class="py-16 px-4 max-w-7xl mx-auto border-b border-cardBorder">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
@@ -1272,6 +1339,7 @@
                   <th class="p-3">Categoría</th>
                   <th class="p-3">Precio (MXN)</th>
                   <th class="p-3 text-center">Stock Actual</th>
+                  <th class="p-3 text-center">Destacado (Inicio)</th>
                   <th class="p-3 text-center">Estado</th>
                   <th class="p-3 text-right">Acciones</th>
                 </tr>
@@ -1615,6 +1683,7 @@
             }));
             localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
             updateCategoryCounts();
+            renderFeaturedProducts();
             renderCatalog();
             return;
           }
@@ -2175,6 +2244,93 @@
     function handleSearch(query) {
       currentSearchQuery = query.trim().toLowerCase();
       renderCatalog();
+    }
+
+    
+    /* Renderizado de Productos Destacados en Página de Inicio */
+    function renderFeaturedProducts() {
+      const container = document.getElementById('featuredProductsGrid');
+      if (!container) return;
+
+      // Filter products marked with barcode === 'FEATURED'
+      let featured = products.filter(p => p.barcode === 'FEATURED' && p.active !== false);
+
+      // Fallback: if none marked, pick the first 4 products
+      if (featured.length === 0 && products.length > 0) {
+        featured = products.slice(0, 4);
+      }
+
+      container.innerHTML = featured.map((product, idx) => {
+        const isOutOfStock = product.stock <= 0;
+        const isLowStock = product.stock > 0 && product.stock <= 5;
+
+        let badgeStock = '';
+        if (isOutOfStock) {
+          badgeStock = `<span class="bg-red-900/80 text-red-200 border border-red-500/50 text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded font-bold">Agotado</span>`;
+        } else if (isLowStock) {
+          badgeStock = `<span class="bg-amber-900/80 text-amber-200 border border-amber-500/50 text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded font-bold">¡Últimas ${product.stock} pzas!</span>`;
+        } else {
+          badgeStock = `<span class="bg-emerald-900/80 text-emerald-200 border border-emerald-500/50 text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded font-bold">Disponible</span>`;
+        }
+
+        return `
+          <div class="group bg-cardBg rounded-xl border border-cardBorder hover:border-gold-500/60 transition-all duration-300 flex flex-col justify-between overflow-hidden relative shadow-lg hover-lift reveal-on-scroll">
+            
+            <!-- Etiqueta de Destacado Oficial -->
+            <div class="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 bg-neutral-950/90 border border-gold-500/60 rounded-full text-[10px] font-bold text-gold-400 shadow-md backdrop-blur-sm">
+              <i class="fa-solid fa-star text-[9px] text-amber-400"></i>
+              <span>Destacado</span>
+            </div>
+
+            <!-- Imagen Interactiva con Zoom Suave -->
+            <div class="relative aspect-square overflow-hidden bg-black/40 cursor-pointer" onclick="openQuickView(${product.id})">
+              <img src="${product.image}" alt="${product.name}" 
+                   class="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-700">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-300"></div>
+              
+              <button onclick="event.stopPropagation(); openQuickView(${product.id})" 
+                      class="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-carbon/90 border border-gold-500/50 text-gold-400 hover:bg-gold-500 hover:text-black transition flex items-center justify-center opacity-0 group-hover:opacity-100 shadow-lg">
+                <i class="fa-solid fa-eye text-xs"></i>
+              </button>
+            </div>
+
+            <!-- Detalles del Producto -->
+            <div class="p-5 flex flex-col justify-between flex-grow space-y-4">
+              <div>
+                <div class="flex items-center justify-between text-[11px] text-zinc-400 mb-1.5">
+                  <span class="uppercase tracking-widest text-gold-500 font-semibold">${product.category}</span>
+                  ${badgeStock}
+                </div>
+                <h3 class="font-serif text-lg text-white font-bold leading-snug group-hover:text-gold-300 transition line-clamp-1 cursor-pointer" onclick="openQuickView(${product.id})">
+                  ${product.name}
+                </h3>
+                <p class="text-zinc-400 text-xs mt-1.5 line-clamp-2 leading-relaxed">
+                  ${product.description || 'Elaborado artesanalmente en piel corte vacuno de alta calidad.'}
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-cardBorder flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] text-zinc-500 uppercase tracking-widest block">Precio Taller</span>
+                  <span class="font-serif text-xl text-gold-400 font-bold">${product.price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
+                </div>
+                <button onclick="addToCart(${product.id})" 
+                        ${isOutOfStock ? 'disabled' : ''}
+                        class="px-4 py-2 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-carbon font-bold text-xs uppercase tracking-wider rounded-lg transition duration-300 shadow flex items-center gap-1.5 ${isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'active:scale-95'}">
+                  <i class="fa-solid fa-bag-shopping text-xs"></i>
+                  <span>${isOutOfStock ? 'Agotado' : 'Bolsa'}</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      // Refresh scroll reveal observer for the newly rendered cards
+      if (typeof initScrollAnimations === 'function') {
+        initScrollAnimations();
+      }
     }
 
     function renderCatalog() {
@@ -2864,6 +3020,39 @@
     }
 
     /* Tabla de Inventario Admin */
+    
+    async function toggleProductFeatured(id) {
+      const prod = products.find(p => p.id === id);
+      if (!prod) return;
+      
+      const newStatus = prod.barcode === 'FEATURED' ? null : 'FEATURED';
+      prod.barcode = newStatus;
+
+      // Update local storage
+      localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+      renderAdminTable();
+      if (typeof renderFeaturedProducts === 'function') {
+        renderFeaturedProducts();
+      }
+
+      showToast(newStatus === 'FEATURED' ? `"${prod.name}" marcado como destacado en Inicio` : `"${prod.name}" retirado de destacados`, 'success');
+
+      // Sync with Supabase
+      if (supabaseClient) {
+        try {
+          const { error } = await supabaseClient
+            .from('products')
+            .update({ barcode: newStatus })
+            .eq('id', id);
+          if (error) {
+            console.error('Error updating featured status in Supabase:', error);
+          }
+        } catch (e) {
+          console.error('Supabase update failed:', e);
+        }
+      }
+    }
+  
     function renderAdminTable() {
       const tbody = document.getElementById('adminTableBody');
       const search = (document.getElementById('adminSearchInput').value || "").toLowerCase().trim();
@@ -2918,6 +3107,14 @@
                        class="w-12 text-center bg-transparent text-white font-mono text-xs focus:outline-none">
                 <button onclick="updateProductStock(${p.id}, 1)" class="px-2 py-1 text-zinc-400 hover:text-white">+</button>
               </div>
+            </td>
+            
+            <td class="p-3 text-center">
+              <button onclick="toggleProductFeatured(${p.id})" 
+                      class="px-2.5 py-1 rounded-full text-[11px] font-bold transition flex items-center gap-1.5 mx-auto ${p.barcode === 'FEATURED' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/60 shadow-sm' : 'bg-darkSurface text-zinc-500 border border-cardBorder hover:text-zinc-300'}">
+                <i class="fa-${p.barcode === 'FEATURED' ? 'solid text-amber-400' : 'regular'} fa-star"></i>
+                <span>${p.barcode === 'FEATURED' ? 'Destacado' : 'No'}</span>
+              </button>
             </td>
             <td class="p-3 text-center">${statusBadge}</td>
             <td class="p-3 text-right">
@@ -3203,5 +3400,20 @@
       }
     }
   </script>
+<script>
+  // Inicialización de Animaciones Scroll Reveal
+  function initScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+  }
+  document.addEventListener('DOMContentLoaded', initScrollAnimations);
+</script>
 </body>
 </html>
