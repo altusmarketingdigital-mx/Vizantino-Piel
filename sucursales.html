@@ -734,7 +734,7 @@
             </div>
             <div>
               <label class="block text-zinc-400 mb-1">Correo Electrónico *</label>
-              <input type="email" id="custEmail" required placeholder="carlos@ejemplo.com" 
+              <input type="email" id="custEmail" onblur="trackCartState(this.value, document.getElementById('custName').value, document.getElementById('custPhone').value)" required placeholder="carlos@ejemplo.com" 
                      class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
             </div>
             <div>
@@ -1327,6 +1327,9 @@
           <button onclick="switchAdminSubTab('users')" id="admTab-users" class="px-4 py-2 bg-cardBg text-zinc-400 hover:text-white rounded border border-cardBorder transition">
             <i class="fa-solid fa-users mr-1.5"></i> Clientes & Usuarios (<span id="admBadgeUsers">0</span>)
           </button>
+          <button onclick="switchAdminSubTab('abandoned')" id="admTab-abandoned" class="px-4 py-2 bg-cardBg text-zinc-400 hover:text-white rounded border border-cardBorder transition">
+            <i class="fa-solid fa-cart-arrow-down mr-1.5 text-amber-400"></i> Carritos Abandonados (<span id="admBadgeAbandoned">0</span>)
+          </button>
         </div>
 
         <!-- SUB-PESTAÑA 1: INVENTARIO DE PRODUCTOS -->
@@ -1395,6 +1398,38 @@
                 </tr>
               </thead>
               <tbody id="adminOrdersTableBody" class="divide-y divide-cardBorder">
+                <!-- Inyectado por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUB-PESTAÑA 4: RECUPERACIÓN DE CARRITOS ABANDONADOS -->
+        <div id="admSection-abandoned" class="space-y-4 hidden">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-cardBg p-4 rounded-lg border border-amber-500/30">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+                <span class="font-bold text-amber-400 text-xs uppercase tracking-wider">Sistema de Recuperación de Ventas</span>
+              </div>
+              <p class="text-zinc-400 text-xs mt-1">Carritos con intención de compra no finalizada. Envía recordatorios de recuperación por correo o WhatsApp con 1 clic.</p>
+            </div>
+            <span class="text-xs text-zinc-400 whitespace-nowrap">Carritos detectados: <strong id="admAbandonedTotalCountText" class="text-amber-400 font-mono text-sm">0</strong></span>
+          </div>
+
+          <div class="overflow-x-auto rounded-lg border border-cardBorder bg-cardBg">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-carbon text-zinc-400 text-[11px] uppercase tracking-wider border-b border-cardBorder">
+                <tr>
+                  <th class="p-3">Cliente / Correo</th>
+                  <th class="p-3">Productos en Carrito</th>
+                  <th class="p-3">Total Estimado</th>
+                  <th class="p-3 text-center">Última Actividad</th>
+                  <th class="p-3 text-center">Estado Notificación</th>
+                  <th class="p-3 text-right">Recuperar</th>
+                </tr>
+              </thead>
+              <tbody id="adminAbandonedTableBody" class="divide-y divide-cardBorder">
                 <!-- Inyectado por JS -->
               </tbody>
             </table>
@@ -2628,6 +2663,9 @@
       }
 
       document.getElementById('checkoutModal').classList.remove('hidden');
+      if (currentUser) {
+        trackCartState(currentUser.email, currentUser.name, currentUser.phone);
+      }
     }
 
     function closeCheckoutModal() {
@@ -2810,6 +2848,11 @@
       // Vaciar Carrito
       cart = [];
       saveCartToStorage();
+      const currentEmailVal = document.getElementById('custEmail') ? document.getElementById('custEmail').value.trim().toLowerCase() : '';
+      if (currentEmailVal) {
+        let carts = getAbandonedCarts().filter(c => c.email.toLowerCase() !== currentEmailVal);
+        saveAbandonedCarts(carts);
+      }
 
       closeCheckoutModal();
       document.getElementById('orderReceiptModal').classList.remove('hidden');
@@ -2922,7 +2965,7 @@
     }
 
     function switchAdminSubTab(tab) {
-      const tabs = ['inventory', 'orders', 'users'];
+      const tabs = ['inventory', 'orders', 'users', 'abandoned'];
       tabs.forEach(t => {
         const btn = document.getElementById(`admTab-${t}`);
         const sec = document.getElementById(`admSection-${t}`);
@@ -2938,8 +2981,207 @@
       if (tab === 'orders') renderAdminOrdersTable();
       if (tab === 'users') renderAdminUsersTable();
       if (tab === 'inventory') renderAdminTable();
+      if (tab === 'abandoned') renderAdminAbandonedTable();
     }
 
+    
+    /* ==========================================
+       SEGUIMIENTO Y RECUPERACIÓN DE CARRITOS ABANDONADOS
+    ========================================== */
+    const STORAGE_KEY_ABANDONED = "vizantino_abandoned_carts_v1";
+
+    function getAbandonedCarts() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY_ABANDONED) || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveAbandonedCarts(carts) {
+      localStorage.setItem(STORAGE_KEY_ABANDONED, JSON.stringify(carts));
+      updateAbandonedBadge();
+    }
+
+    function updateAbandonedBadge() {
+      const carts = getAbandonedCarts();
+      const badge = document.getElementById('admBadgeAbandoned');
+      const countEl = document.getElementById('admAbandonedTotalCountText');
+      if (badge) badge.textContent = carts.length;
+      if (countEl) countEl.textContent = carts.length;
+    }
+
+    // Registrar o actualizar carrito cuando el usuario ingresa sus datos en checkout o si está logueado
+    function trackCartState(email, name, phone) {
+      if (cart.length === 0) return;
+      const targetEmail = email || (currentUser ? currentUser.email : null);
+      if (!targetEmail) return;
+
+      const targetName = name || (currentUser ? currentUser.name : "Cliente Distinguido");
+      const targetPhone = phone || (currentUser ? currentUser.phone : "");
+      const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const isFree = subtotal >= FREE_SHIPPING_THRESHOLD;
+      const total = subtotal + (isFree ? 0 : SHIPPING_COST_STANDARD);
+
+      let carts = getAbandonedCarts();
+      const existingIdx = carts.findIndex(c => c.email.toLowerCase() === targetEmail.toLowerCase());
+
+      const cartData = {
+        id: existingIdx >= 0 ? carts[existingIdx].id : 'AB-' + Date.now().toString(36).toUpperCase(),
+        email: targetEmail,
+        name: targetName,
+        phone: targetPhone,
+        items: [...cart],
+        total: total,
+        timestamp: new Date().toISOString(),
+        notified: existingIdx >= 0 ? carts[existingIdx].notified : false,
+        lastNotifiedAt: existingIdx >= 0 ? carts[existingIdx].lastNotifiedAt : null
+      };
+
+      if (existingIdx >= 0) {
+        carts[existingIdx] = cartData;
+      } else {
+        carts.unshift(cartData);
+      }
+
+      saveAbandonedCarts(carts);
+    }
+
+    // Enviar correo de recuperación al cliente con FormSubmit
+    async function sendAbandonedCartEmail(cartId) {
+      let carts = getAbandonedCarts();
+      const item = carts.find(c => c.id === cartId);
+      if (!item) return;
+
+      const itemsDesc = item.items.map(i => `• ${i.name} (${i.qty} pza${i.qty > 1 ? 's' : ''}) - ${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('\n');
+
+      const payload = {
+        _subject: `👜 ¡Olvidaste algo especial en tu carrito de Vizantino Piel!`,
+        destinatario_cliente: item.name,
+        mensaje_especial: "Notamos que dejaste piezas artesanales exclusivas de piel genuina en tu bolsa de compras. Como son de producción limitada en nuestro taller de Tlaquepaque, hemos apartado tus productos para ti.",
+        productos_apartados: itemsDesc,
+        total_a_pagar: `${item.total.toLocaleString('es-MX')} MXN`,
+        beneficio: "Envío seguro garantizado + Grabado de personalización gratis",
+        enlace_para_finalizar: window.location.origin + window.location.pathname,
+        atencion_whatsapp: "https://wa.me/523329089920?text=" + encodeURIComponent(`Hola Vizantino Piel, deseo finalizar mi carrito de compras pendiente (${item.id})`),
+        notificar_copia: "vizantinopiel@gmail.com, altusmarketingdigital@gmail.com"
+      };
+
+      showToast(`Enviando correo de recuperación a ${item.email}...`, 'info');
+
+      try {
+        const res = await fetch(`https://formsubmit.co/ajax/${item.email}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify({ ...payload, _template: "table", _captcha: "false" })
+        });
+
+        // Enviar copia a la tienda también
+        fetch(`https://formsubmit.co/ajax/vizantinopiel@gmail.com`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...payload, _subject: `[COPIA RECUPERACIÓN] Correo enviado a ${item.email}` })
+        }).catch(() => {});
+
+        item.notified = true;
+        item.lastNotifiedAt = new Date().toLocaleString('es-MX');
+        saveAbandonedCarts(carts);
+        renderAdminAbandonedTable();
+        showToast(`¡Correo de recuperación enviado a ${item.email}!`, 'success');
+      } catch (err) {
+        console.error("Error enviando recuperación:", err);
+        showToast("No se pudo enviar el correo en este momento", "warning");
+      }
+    }
+
+    // Abrir WhatsApp con mensaje de recuperación personalizado
+    function sendAbandonedCartWhatsApp(cartId) {
+      const carts = getAbandonedCarts();
+      const item = carts.find(c => c.id === cartId);
+      if (!item) return;
+
+      const itemsDesc = item.items.map(i => `• ${i.name} ($ ${i.price})`).join('\n');
+      const waText = encodeURIComponent(`*HOLA ${item.name.toUpperCase()}*, te saludamos de *VIZANTINO PIEL* 👜\n\nNotamos que dejaste estas piezas artesanales en tu bolsa de compras:\n${itemsDesc}\n\n*Total:* ${item.total.toLocaleString('es-MX')} MXN\n\n¿Deseas que te apoyemos a finalizar tu compra con *Envío Gratis y Grabado de Cortesía*?`);
+      
+      const phone = (item.phone || "").replace(/[^0-9]/g, '');
+      const waUrl = phone ? `https://wa.me/52${phone}?text=${waText}` : `https://wa.me/523329089920?text=${waText}`;
+      window.open(waUrl, '_blank');
+    }
+
+    // Eliminar registro de carrito abandonado
+    function deleteAbandonedCart(cartId) {
+      let carts = getAbandonedCarts().filter(c => c.id !== cartId);
+      saveAbandonedCarts(carts);
+      renderAdminAbandonedTable();
+      showToast("Registro de carrito eliminado", "info");
+    }
+
+    // Renderizar tabla de Carritos Abandonados en Admin
+    function renderAdminAbandonedTable() {
+      const tbody = document.getElementById('adminAbandonedTableBody');
+      if (!tbody) return;
+      const carts = getAbandonedCarts();
+      updateAbandonedBadge();
+
+      if (carts.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-zinc-500">
+          <div class="w-12 h-12 mx-auto rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xl mb-2">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+          No hay carritos abandonados pendientes en este momento.
+        </td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = carts.map(c => {
+        const dateStr = new Date(c.timestamp).toLocaleString('es-MX', { dateStyle: 'short', timeStyle: 'short' });
+        const itemsPreview = c.items.map(i => `<div class="text-[11px] text-zinc-300">• ${i.name} <span class="text-gold-400 font-mono">(x${i.qty})</span></div>`).join('');
+
+        const statusTag = c.notified ? 
+          `<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold flex items-center justify-center gap-1"><i class="fa-solid fa-check"></i> Enviado</span><span class="text-[9px] text-zinc-500 block mt-0.5">${c.lastNotifiedAt || ''}</span>` : 
+          `<span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/40 text-[10px] font-bold">Sin Notificar</span>`;
+
+        return `
+          <tr class="hover:bg-darkSurface/60 transition">
+            <td class="p-3">
+              <div class="font-bold text-white">${c.name}</div>
+              <div class="text-[11px] text-gold-400 font-mono">${c.email}</div>
+              ${c.phone ? `<div class="text-[10px] text-zinc-500 flex items-center gap-1"><i class="fa-brands fa-whatsapp text-emerald-400"></i> ${c.phone}</div>` : ''}
+            </td>
+            <td class="p-3 max-w-xs">
+              ${itemsPreview}
+            </td>
+            <td class="p-3 font-mono font-bold text-gold-400">
+              ${c.total.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+            </td>
+            <td class="p-3 text-center text-zinc-400 font-mono text-[11px]">
+              ${dateStr}
+            </td>
+            <td class="p-3 text-center">
+              ${statusTag}
+            </td>
+            <td class="p-3 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="sendAbandonedCartEmail('${c.id}')" title="Enviar correo de recuperación al cliente"
+                        class="px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-carbon rounded font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5 shadow transition">
+                  <i class="fa-regular fa-envelope"></i>
+                  <span>Enviar Correo</span>
+                </button>
+                <button onclick="sendAbandonedCartWhatsApp('${c.id}')" title="Contactar por WhatsApp"
+                        class="p-1.5 bg-emerald-950/60 hover:bg-emerald-600 text-emerald-400 hover:text-white rounded border border-emerald-500/40 transition">
+                  <i class="fa-brands fa-whatsapp text-xs"></i>
+                </button>
+                <button onclick="deleteAbandonedCart('${c.id}')" title="Eliminar registro"
+                        class="p-1.5 text-zinc-500 hover:text-red-400 rounded transition">
+                  <i class="fa-regular fa-trash-can text-xs"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  
     function renderAdminDashboard() {
       // Métricas Principales
       const totalProducts = products.length;
