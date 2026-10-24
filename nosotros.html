@@ -867,32 +867,108 @@
             </span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <div>
-              <label class="block text-zinc-400 mb-1">Nombre Completo *</label>
-              <input type="text" id="custName" required placeholder="Ej. Carlos Mendoza" 
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+            <!-- Contacto Principal -->
+            <div class="sm:col-span-2 lg:col-span-2">
+              <label class="block text-zinc-300 font-medium mb-1">Nombre y Apellidos del Destinatario *</label>
+              <input type="text" id="custName" required placeholder="Nombre de quien recibe el paquete" 
                      class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
             </div>
             <div>
-              <label class="block text-zinc-400 mb-1">Teléfono / WhatsApp *</label>
-              <input type="tel" id="custPhone" required placeholder="Ej. 33 1234 5678" 
+              <label class="block text-zinc-300 font-medium mb-1">Teléfono Móvil / WhatsApp *</label>
+              <input type="tel" id="custPhone" required placeholder="10 dígitos para paquetería" 
+                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+
+            <div class="sm:col-span-2 lg:col-span-3">
+              <label class="block text-zinc-300 font-medium mb-1">Correo Electrónico (Para envío de guía y confirmación) *</label>
+              <input type="email" id="custEmail" onblur="trackCartState(this.value, document.getElementById('custName').value, document.getElementById('custPhone').value)" required placeholder="ejemplo@correo.com" 
+                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+
+            <!-- Domicilio Detallado -->
+            <div class="sm:col-span-2 lg:col-span-2">
+              <label class="block text-zinc-300 font-medium mb-1">Calle y Avenida *</label>
+              <input type="text" id="custStreet" required placeholder="Ej. Av. Independencia" 
+                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-zinc-300 font-medium mb-1">No. Exterior *</label>
+                <input type="text" id="custNumExt" required placeholder="Ej. 248" 
+                       class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+              <div>
+                <label class="block text-zinc-300 font-medium mb-1">No. Int. (Opcional)</label>
+                <input type="text" id="custNumInt" placeholder="Ej. Depto 4B" 
+                       class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-zinc-300 font-medium mb-1">Colonia / Fraccionamiento *</label>
+              <input type="text" id="custColonia" required placeholder="Ej. Centro / Americana" 
                      class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
             </div>
             <div>
-              <label class="block text-zinc-400 mb-1">Correo Electrónico *</label>
-              <input type="email" id="custEmail" onblur="trackCartState(this.value, document.getElementById('custName').value, document.getElementById('custPhone').value)" required placeholder="carlos@ejemplo.com" 
-                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              <label class="block text-zinc-300 font-medium mb-1">Código Postal (C.P.) *</label>
+              <input type="text" id="custZip" required maxlength="5" placeholder="Ej. 45500" 
+                     class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500 font-mono">
             </div>
             <div>
-              <label class="block text-zinc-400 mb-1">Ciudad y Estado *</label>
-              <input type="text" id="custCity" required placeholder="Ej. Guadalajara, Jalisco" 
+              <label class="block text-zinc-300 font-medium mb-1">Municipio / Alcaldía *</label>
+              <input type="text" id="custMunicipio" required placeholder="Ej. Tlaquepaque / Zapopan" 
                      class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
             </div>
-            <div class="sm:col-span-2">
-              <label class="block text-zinc-400 mb-1">Dirección Completa (Calle, Número, Colonia, C.P.) *</label>
-              <input type="text" id="custAddress" required placeholder="Av. Juárez 450, Col. Centro, C.P. 44100" 
+
+            <div>
+              <label class="block text-zinc-300 font-medium mb-1">Estado / Entidad Federativa *</label>
+              <select id="custState" required class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+                <option value="">Selecciona tu Estado</option>
+                <option value="Jalisco" selected>Jalisco</option>
+                <option value="Aguascalientes">Aguascalientes</option>
+                <option value="Baja California">Baja California</option>
+                <option value="Baja California Sur">Baja California Sur</option>
+                <option value="Campeche">Campeche</option>
+                <option value="Chiapas">Chiapas</option>
+                <option value="Chihuahua">Chihuahua</option>
+                <option value="Ciudad de México">Ciudad de México (CDMX)</option>
+                <option value="Coahuila">Coahuila</option>
+                <option value="Colima">Colima</option>
+                <option value="Durango">Durango</option>
+                <option value="Estado de México">Estado de México</option>
+                <option value="Guanajuato">Guanajuato</option>
+                <option value="Guerrero">Guerrero</option>
+                <option value="Hidalgo">Hidalgo</option>
+                <option value="Michoacán">Michoacán</option>
+                <option value="Morelos">Morelos</option>
+                <option value="Nayarit">Nayarit</option>
+                <option value="Nuevo León">Nuevo León</option>
+                <option value="Oaxaca">Oaxaca</option>
+                <option value="Puebla">Puebla</option>
+                <option value="Querétaro">Querétaro</option>
+                <option value="Quintana Roo">Quintana Roo</option>
+                <option value="San Luis Potosí">San Luis Potosí</option>
+                <option value="Sinaloa">Sinaloa</option>
+                <option value="Sonora">Sonora</option>
+                <option value="Tabasco">Tabasco</option>
+                <option value="Tamaulipas">Tamaulipas</option>
+                <option value="Tlaxcala">Tlaxcala</option>
+                <option value="Veracruz">Veracruz</option>
+                <option value="Yucatán">Yucatán</option>
+                <option value="Zacatecas">Zacatecas</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-2 lg:col-span-2">
+              <label class="block text-zinc-300 font-medium mb-1">Referencias de Entrega / Entre Calles</label>
+              <input type="text" id="custReferences" placeholder="Ej. Entre Morelos y Juárez, portón negro, timbre blanco" 
                      class="w-full bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
             </div>
+
+            <!-- Campo oculto retrocompatible custCity y custAddress -->
+            <input type="hidden" id="custCity">
+            <input type="hidden" id="custAddress">
           </div>
         </div>
 
@@ -1351,9 +1427,38 @@
               <label class="block text-zinc-400 mb-1">Correo Electrónico (No modificable)</label>
               <input type="email" id="cpProfEmail" disabled class="w-full bg-zinc-800/60 border border-cardBorder rounded px-3 py-2 text-zinc-500 cursor-not-allowed">
             </div>
-            <div class="sm:col-span-2">
-              <label class="block text-zinc-400 mb-1">Dirección de Entrega Predeterminada</label>
-              <input type="text" id="cpProfAddress" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+            <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2 border-t border-cardBorder">
+              <div class="sm:col-span-2">
+                <label class="block text-zinc-400 mb-1">Calle y Avenida</label>
+                <input type="text" id="cpProfStreet" placeholder="Calle principal" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-zinc-400 mb-1">No. Exterior</label>
+                  <input type="text" id="cpProfNumExt" placeholder="Ext." class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+                </div>
+                <div>
+                  <label class="block text-zinc-400 mb-1">No. Int.</label>
+                  <input type="text" id="cpProfNumInt" placeholder="Int." class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+                </div>
+              </div>
+              <div>
+                <label class="block text-zinc-400 mb-1">Colonia</label>
+                <input type="text" id="cpProfColonia" placeholder="Colonia" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+              <div>
+                <label class="block text-zinc-400 mb-1">Código Postal</label>
+                <input type="text" id="cpProfZip" placeholder="C.P." maxlength="5" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500 font-mono">
+              </div>
+              <div>
+                <label class="block text-zinc-400 mb-1">Municipio / Ciudad</label>
+                <input type="text" id="cpProfMunicipio" placeholder="Municipio" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+              <div class="sm:col-span-2 lg:col-span-3">
+                <label class="block text-zinc-400 mb-1">Referencias de Entrega</label>
+                <input type="text" id="cpProfReferences" placeholder="Entre calles, fachada o detalles para paquetería" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
+              </div>
+              <input type="hidden" id="cpProfAddress">
             </div>
           </div>
           <div class="pt-3 flex justify-end">
@@ -2795,6 +2900,14 @@
         document.getElementById('custEmail').value = currentUser.email || "";
         document.getElementById('custCity').value = currentUser.city || "";
         document.getElementById('custAddress').value = currentUser.address || "";
+        if (currentUser.street && document.getElementById('custStreet')) document.getElementById('custStreet').value = currentUser.street;
+        if (currentUser.numExt && document.getElementById('custNumExt')) document.getElementById('custNumExt').value = currentUser.numExt;
+        if (currentUser.numInt && document.getElementById('custNumInt')) document.getElementById('custNumInt').value = currentUser.numInt;
+        if (currentUser.colonia && document.getElementById('custColonia')) document.getElementById('custColonia').value = currentUser.colonia;
+        if (currentUser.zip && document.getElementById('custZip')) document.getElementById('custZip').value = currentUser.zip;
+        if (currentUser.municipio && document.getElementById('custMunicipio')) document.getElementById('custMunicipio').value = currentUser.municipio;
+        if (currentUser.state && document.getElementById('custState')) document.getElementById('custState').value = currentUser.state;
+        if (currentUser.references && document.getElementById('custReferences')) document.getElementById('custReferences').value = currentUser.references;
         prefillAlert.classList.remove('hidden');
       } else {
         prefillAlert.classList.add('hidden');
@@ -2870,8 +2983,20 @@
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const email = document.getElementById('custEmail').value.trim();
-      const city = document.getElementById('custCity').value.trim();
-      const address = document.getElementById('custAddress').value.trim();
+      const street = document.getElementById('custStreet') ? document.getElementById('custStreet').value.trim() : '';
+      const numExt = document.getElementById('custNumExt') ? document.getElementById('custNumExt').value.trim() : '';
+      const numInt = document.getElementById('custNumInt') ? document.getElementById('custNumInt').value.trim() : '';
+      const colonia = document.getElementById('custColonia') ? document.getElementById('custColonia').value.trim() : '';
+      const zip = document.getElementById('custZip') ? document.getElementById('custZip').value.trim() : '';
+      const municipio = document.getElementById('custMunicipio') ? document.getElementById('custMunicipio').value.trim() : '';
+      const state = document.getElementById('custState') ? document.getElementById('custState').value : 'Jalisco';
+      const references = document.getElementById('custReferences') ? document.getElementById('custReferences').value.trim() : '';
+
+      const city = `${municipio}, ${state}`;
+      const fullAddress = `${street} #${numExt}${numInt ? ' Int. ' + numInt : ''}, Col. ${colonia}, C.P. ${zip}, ${municipio}, ${state}${references ? ' (Ref: ' + references + ')' : ''}`;
+      const address = fullAddress;
+      if (document.getElementById('custCity')) document.getElementById('custCity').value = city;
+      if (document.getElementById('custAddress')) document.getElementById('custAddress').value = address;
 
       // Verificar stock
       let stockIssue = false;
