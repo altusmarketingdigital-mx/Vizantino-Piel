@@ -637,14 +637,15 @@
       <div>
         <h4 class="font-serif text-white text-base tracking-widest uppercase font-bold mb-4">Métodos de Pago</h4>
         <p class="text-zinc-500 mb-3 text-[11px]">Transacciones seguras cifradas con protocolo TLS 256 bits.</p>
-        <div class="flex flex-wrap gap-2 text-xl text-zinc-400 mb-6">
-          <span title="Visa"><i class="fa-brands fa-cc-visa text-blue-400"></i></span>
-          <span title="Mastercard"><i class="fa-brands fa-cc-mastercard text-red-400"></i></span>
-          <span title="American Express"><i class="fa-brands fa-cc-amex text-cyan-400"></i></span>
-          <span title="PayPal"><i class="fa-brands fa-paypal text-sky-400"></i></span>
-          <span title="Mercado Pago" class="text-xs px-1.5 py-0.5 bg-sky-900/60 text-sky-300 rounded font-bold">MercadoPago</span>
-          <span title="SPEI Bancario" class="text-xs px-1.5 py-0.5 bg-emerald-900/60 text-emerald-300 rounded font-bold">SPEI</span>
-          <span title="OXXO Pay" class="text-xs px-1.5 py-0.5 bg-amber-900/60 text-amber-300 rounded font-bold">OXXO</span>
+        <div class="mb-6 space-y-2.5">
+          <div class="inline-flex items-center gap-2.5 px-3.5 py-2 bg-gradient-to-r from-sky-950/80 to-neutral-900 border border-sky-500/40 rounded-lg shadow-md">
+            <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.5/mercadopago/favicon.svg" alt="Mercado Pago" class="w-5 h-5">
+            <span class="text-xs font-bold text-sky-300 tracking-wider">Mercado Pago Oficial</span>
+            <span class="text-[10px] px-2 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-500/40 rounded font-bold">3 MSI</span>
+          </div>
+          <p class="text-[11px] text-zinc-400 leading-relaxed">
+            Aceptamos tarjetas de crédito, débito, transferencias y efectivo procesado 100% a través de <strong>Mercado Pago México</strong>.
+          </p>
         </div>
 
         <div class="pt-2 border-t border-cardBorder flex items-center gap-4">
@@ -928,23 +929,15 @@
             Selecciona Método de Pago
           </h4>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-            <button type="button" onclick="selectPaymentMethod('mp')" id="payTab-mp" class="payment-tab active p-3 bg-cardBg border border-gold-500 rounded text-center text-xs text-white flex flex-col items-center gap-1.5 transition">
-              <i class="fa-solid fa-handshake-angle text-sky-400 text-lg"></i>
-              <span class="font-medium">Mercado Pago</span>
-            </button>
-            <button type="button" onclick="selectPaymentMethod('card')" id="payTab-card" class="payment-tab p-3 bg-cardBg border border-cardBorder rounded text-center text-xs text-zinc-400 flex flex-col items-center gap-1.5 transition">
-              <i class="fa-solid fa-credit-card text-gold-400 text-lg"></i>
-              <span class="font-medium">Tarjeta</span>
-            </button>
-            <button type="button" onclick="selectPaymentMethod('paypal')" id="payTab-paypal" class="payment-tab p-3 bg-cardBg border border-cardBorder rounded text-center text-xs text-zinc-400 flex flex-col items-center gap-1.5 transition">
-              <i class="fa-brands fa-paypal text-sky-500 text-lg"></i>
-              <span class="font-medium">PayPal</span>
-            </button>
-            <button type="button" onclick="selectPaymentMethod('spei')" id="payTab-spei" class="payment-tab p-3 bg-cardBg border border-cardBorder rounded text-center text-xs text-zinc-400 flex flex-col items-center gap-1.5 transition">
-              <i class="fa-solid fa-building-columns text-emerald-400 text-lg"></i>
-              <span class="font-medium">SPEI / OXXO</span>
-            </button>
+          <div class="p-3 bg-sky-950/40 border border-sky-500/40 rounded-lg mb-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.5/mercadopago/favicon.svg" alt="Mercado Pago" class="w-7 h-7">
+              <div>
+                <span class="text-xs font-bold text-white block">Pasarela Exclusiva: Mercado Pago México</span>
+                <span class="text-[10px] text-sky-300">Todas las compras son procesadas de forma 100% segura por Mercado Pago</span>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 bg-emerald-950 text-emerald-300 border border-emerald-500/40 rounded text-[10px] font-bold">Activo</span>
           </div>
 
           <div class="bg-cardBg p-4 rounded-lg border border-cardBorder text-xs">
@@ -1020,7 +1013,7 @@
             </div>
 
             <!-- Tarjeta Directa -->
-            <div id="payContent-card" class="space-y-3 hidden">
+            <div id="payContent-card" class="space-y-3 hidden" style="display:none !important;">
               <div class="flex items-center justify-between text-zinc-400 pb-2 border-b border-cardBorder">
                 <span>Pasarela Segura TLS</span>
                 <div class="flex gap-2 text-base text-zinc-300">
@@ -1055,7 +1048,7 @@
             <div id="payContent-mp-old" class="hidden"></div>
 
             <!-- PayPal -->
-            <div id="payContent-paypal" class="hidden space-y-3 text-center py-3">
+            <div id="payContent-paypal" class="hidden space-y-3 text-center py-3" style="display:none !important;">
               <i class="fa-brands fa-paypal text-3xl text-sky-500"></i>
               <h5 class="font-serif text-lg text-white font-bold">PayPal Express Checkout</h5>
               <p class="text-zinc-400 text-xs max-w-md mx-auto">
@@ -1064,7 +1057,7 @@
             </div>
 
             <!-- SPEI / OXXO -->
-            <div id="payContent-spei" class="hidden space-y-3">
+            <div id="payContent-spei" class="hidden space-y-3" style="display:none !important;">
               <div class="flex items-center gap-2 text-emerald-400 font-semibold mb-1">
                 <i class="fa-solid fa-receipt"></i> Pago por Transferencia SPEI o Tiendas OXXO
               </div>
