@@ -523,59 +523,84 @@
 
         <!-- Tarjeta Insignia (Estado en espera de nuevos productos) -->
         <div class="lg:col-span-5 flex justify-center">
-          <!-- Tarjeta Flotante Interactiva de Alto Impacto -->
+          <!-- COMPONENTE: PRODUCTO ANCLA PROTAGONISTA CON JERARQUÍA FOTOGRÁFICA -->
           <div class="relative w-full max-w-md animate-hero-float">
-            <!-- Resplandor exterior decorativo -->
-            <div class="absolute -inset-1 bg-gradient-to-r from-gold-600 via-amber-400 to-gold-600 rounded-2xl blur-lg opacity-35 group-hover:opacity-75 transition duration-1000 animate-pulse"></div>
+            <!-- Resplandor sutil de fondo tono madera ámbar -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-gold-600/30 via-amber-500/20 to-gold-600/30 rounded-2xl blur-lg opacity-40 group-hover:opacity-60 transition duration-700"></div>
             
-            <div class="relative glass-luxury rounded-2xl p-6 sm:p-7 border border-gold-500/40 shadow-2xl">
-              <!-- Header Tarjeta -->
-              <div class="flex items-center justify-between pb-4 border-b border-cardBorder/80 mb-4">
-                <div class="flex items-center gap-2.5">
-                  <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
-                  <span class="text-[11px] font-bold text-gold-400 tracking-[0.25em] uppercase">Obra Insignia del Taller</span>
+            <div class="relative bg-cardBg/95 backdrop-blur-md rounded-2xl p-6 sm:p-7 border border-cardBorder shadow-2xl">
+              <!-- Encabezado de Jerarquía Visual -->
+              <div class="flex items-center justify-between pb-3.5 border-b border-cardBorder/80 mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-gold-400 animate-pulse"></span>
+                  <span class="text-[10.5px] font-bold text-gold-400 tracking-[0.25em] uppercase">Pieza Insignia de Taller</span>
                 </div>
-                <span class="px-2.5 py-0.5 bg-gold-500/20 text-gold-300 border border-gold-500/40 rounded-full text-[10px] font-bold">100% Vacuno</span>
+                <span class="px-2.5 py-0.5 bg-wood-dark/70 text-amber-200 border border-gold-500/30 rounded-full text-[9.5px] font-bold tracking-wider uppercase">
+                  100% Corte Vacuno
+                </span>
               </div>
 
-              <!-- Imagen con halo de iluminación -->
-              <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-black/60 mb-5 group cursor-pointer border border-gold-500/20" onclick="window.location.href='catalogo.html?cat=Bolsos'">
-                <img src="https://vizantinopiel.com/products/elite/elite-1.jpg" alt="Bolso Calidad Élite" 
-                     class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+              <!-- 1. FOTOGRAFÍA PRINCIPAL: PRODUCTO ANCLA EN PRIMER PLANO LIMPIO -->
+              <div class="relative aspect-square sm:aspect-[4/3] rounded-xl overflow-hidden bg-neutral-950/90 mb-4 group cursor-pointer border border-cardBorder shadow-inner" 
+                   onclick="window.location.href='catalogo.html?cat=Bolsos'" title="Click para ver en catálogo">
+                <!-- Imagen en estudio con máxima nitidez de producto sobre fondo no invasivo -->
+                <img id="heroAnchorProductImg" 
+                     src="https://vizantinopiel.com/products/elite/elite-1.jpg" 
+                     alt="Producto Ancla - Bolso Calidad Élite" 
+                     class="w-full h-full object-contain p-3 object-center group-hover:scale-105 transition-transform duration-500">
                 
-                <div class="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                <!-- Gradiente suave inferior para lectura del producto -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none"></div>
+
+                <!-- 2. ELEMENTO TERCIARIO/LIFESTYLE: Miniatura contextual de uso que NO oculta el producto principal -->
+                <div class="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/75 border border-gold-500/30 backdrop-blur-sm shadow-md" title="Acabado artesanal">
+                  <i class="fa-solid fa-magnifying-glass-plus text-gold-400 text-[10px]"></i>
+                  <span class="text-[9px] text-zinc-300 font-medium">Textura Genuina</span>
+                </div>
+
+                <!-- Datos de la Pieza Ancla -->
+                <div class="absolute bottom-3 left-3 right-3 flex items-end justify-between pointer-events-none">
                   <div>
-                    <span class="text-[10px] tracking-widest uppercase text-gold-400 font-bold block">Modelo Destacado</span>
-                    <h4 class="font-serif text-xl font-bold text-white leading-tight">Bolso Calidad Élite</h4>
+                    <span class="text-[9.5px] tracking-widest uppercase text-gold-400 font-bold block mb-0.5">Edición Artesanal</span>
+                    <h3 id="heroAnchorProductTitle" class="font-serif text-xl sm:text-2xl font-bold text-beige-100 leading-tight">
+                      Bolso Calidad Élite
+                    </h3>
                   </div>
                   <div class="text-right">
-                    <span class="text-[10px] text-zinc-400 block">Precio Taller</span>
-                    <span class="font-serif text-lg text-gold-300 font-bold">$3,000 MXN</span>
+                    <span class="text-[9.5px] text-zinc-400 block uppercase tracking-wider">Taller Tlaquepaque</span>
+                    <span id="heroAnchorProductPrice" class="font-serif text-lg sm:text-xl text-gold-300 font-bold">$3,000 MXN</span>
                   </div>
                 </div>
               </div>
 
-              <!-- Badges de valor artesanal -->
-              <div class="grid grid-cols-2 gap-2 text-[11px] text-zinc-300 mb-5">
-                <div class="p-2.5 bg-darkSurface/80 rounded-lg border border-cardBorder flex items-center gap-2">
-                  <i class="fa-solid fa-sparkles text-gold-400"></i>
-                  <span>Gamuza & Herrajes Oro</span>
+              <!-- 3. FOTOGRAFÍA SECUNDARIA & DETALLES DE MATERIAL (CARROUSEL/MINIATURAS) -->
+              <div class="grid grid-cols-3 gap-2 mb-4">
+                <div class="p-2 rounded-lg bg-darkSurface border border-cardBorder flex flex-col items-center text-center">
+                  <i class="fa-solid fa-gem text-gold-400 text-xs mb-1"></i>
+                  <span class="text-[10px] text-zinc-300 font-medium leading-tight">Gamuza & Oro</span>
+                  <span class="text-[8.5px] text-zinc-500">Herrajes Finos</span>
                 </div>
-                <div class="p-2.5 bg-darkSurface/80 rounded-lg border border-cardBorder flex items-center gap-2">
-                  <i class="fa-solid fa-fingerprint text-gold-400"></i>
-                  <span>Grabado Gratis con Nombre</span>
+                <div class="p-2 rounded-lg bg-darkSurface border border-cardBorder flex flex-col items-center text-center">
+                  <i class="fa-solid fa-fingerprint text-gold-400 text-xs mb-1"></i>
+                  <span class="text-[10px] text-zinc-300 font-medium leading-tight">Personalizado</span>
+                  <span class="text-[8.5px] text-zinc-500">Grabado Gratis</span>
+                </div>
+                <div class="p-2 rounded-lg bg-darkSurface border border-cardBorder flex flex-col items-center text-center">
+                  <i class="fa-solid fa-shield-halved text-gold-400 text-xs mb-1"></i>
+                  <span class="text-[10px] text-zinc-300 font-medium leading-tight">5 Años</span>
+                  <span class="text-[8.5px] text-zinc-500">Garantía Taller</span>
                 </div>
               </div>
 
-              <!-- Botones de Acción -->
+              <!-- Botones de Acción Preparados para Sustitución Inmediata -->
               <div class="flex items-center gap-3">
-                <a href="catalogo.html?cat=Bolsos" class="flex-1 py-3 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-carbon font-bold text-xs uppercase tracking-widest rounded-lg transition text-center shadow-lg shadow-gold-500/20 active:scale-95">
-                  Ver en Catálogo
+                <a href="catalogo.html?cat=Bolsos" class="flex-1 py-2.5 sm:py-3 bg-gradient-to-r from-gold-500 to-amber-500 hover:from-gold-400 hover:to-amber-400 text-carbon font-bold text-xs uppercase tracking-widest rounded-lg transition text-center shadow-md active:scale-95">
+                  Ver Colección
                 </a>
-                <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20me%20interesa%20el%20Bolso%20Calidad%20Élite" target="_blank" rel="noopener noreferrer" 
-                   class="px-4 py-3 bg-darkSurface hover:bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 rounded-lg text-xs font-bold transition flex items-center gap-1.5 active:scale-95" title="Pedir por WhatsApp">
-                  <i class="fa-brands fa-whatsapp text-base"></i>
+                <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20me%20interesa%20información%20sobre%20el%20Bolso%20Calidad%20Élite" target="_blank" rel="noopener noreferrer" 
+                   class="px-4 py-2.5 sm:py-3 bg-darkSurface hover:bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 rounded-lg text-xs font-bold transition flex items-center gap-1.5 active:scale-95" title="Pedir asesoría por WhatsApp">
+                  <i class="fa-brands fa-whatsapp text-sm"></i>
+                  <span class="hidden sm:inline text-[11px]">Asesoría</span>
                 </a>
               </div>
             </div>
