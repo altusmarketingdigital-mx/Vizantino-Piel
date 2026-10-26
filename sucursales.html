@@ -768,6 +768,31 @@
             </div>
           </div>
           <div id="qvStockBadge"></div>
+          
+          <!-- Selector de Variantes de Color de Piel -->
+          <div id="qvColorSelectorContainer" class="space-y-1.5 pt-2 border-t border-cardBorder">
+            <span class="text-[11px] font-semibold text-zinc-300 block uppercase tracking-wider">
+              Tono de Piel: <strong id="qvSelectedColorName" class="text-gold-400 font-medium">Negro Ónix</strong>
+            </span>
+            <div class="flex items-center gap-2.5" id="qvColorSwatches">
+              <button type="button" onclick="selectQuickViewColor('Negro Ónix', '#1a1a1a')" class="color-swatch active w-7 h-7 rounded-full border-2 border-gold-400 bg-neutral-900 shadow transition transform hover:scale-110" title="Negro Ónix"></button>
+              <button type="button" onclick="selectQuickViewColor('Café Tabaco', '#4a2e18')" class="color-swatch w-7 h-7 rounded-full border border-cardBorder bg-[#4a2e18] shadow transition transform hover:scale-110" title="Café Tabaco"></button>
+              <button type="button" onclick="selectQuickViewColor('Miel Silvestre', '#a86527')" class="color-swatch w-7 h-7 rounded-full border border-cardBorder bg-[#a86527] shadow transition transform hover:scale-110" title="Miel Silvestre"></button>
+              <button type="button" onclick="selectQuickViewColor('Vino Cherry', '#54121d')" class="color-swatch w-7 h-7 rounded-full border border-cardBorder bg-[#54121d] shadow transition transform hover:scale-110" title="Vino Cherry"></button>
+            </div>
+          </div>
+
+          <!-- Ficha Técnica de Dimensiones & Capacidad -->
+          <div id="qvDimensionsContainer" class="grid grid-cols-2 gap-2 p-2.5 rounded-lg bg-neutral-950/80 border border-cardBorder text-[11px]">
+            <div>
+              <span class="text-zinc-500 uppercase tracking-widest block text-[9px]">Medidas Aproximadas:</span>
+              <span id="qvDimensionsText" class="text-zinc-200 font-mono">32 cm × 26 cm × 12 cm</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 uppercase tracking-widest block text-[9px]">Capacidad / Dispositivos:</span>
+              <span id="qvCapacityText" class="text-gold-400">iPad / Laptop 13" - 14"</span>
+            </div>
+          </div>
           <p id="qvDescription" class="text-xs text-zinc-400 leading-relaxed"></p>
           
           <div class="pt-4 border-t border-cardBorder space-y-3">
@@ -982,6 +1007,73 @@
               <div class="text-[10px] text-zinc-500 text-right">
                 <span id="customPreviewPlacement" class="block text-zinc-400">Frente - Esquina Inferior Derecha</span>
                 <span class="text-gold-400 font-medium">Grabado a fuego en Tlaquepaque</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso Adicional A: Cupón de Descuento Promocional -->
+        <div class="pt-4 border-t border-cardBorder">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs tracking-widest uppercase font-semibold text-zinc-200 flex items-center gap-2">
+              <i class="fa-solid fa-tag text-gold-400"></i>
+              ¿Tienes un Cupón de Descuento?
+            </h4>
+            <span class="text-[10px] text-zinc-400">Ej. VIZANTINO10</span>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="checkoutCouponCode" placeholder="Ingresa tu código" uppercase
+                   class="bg-cardBg border border-cardBorder rounded px-3 py-2 text-zinc-200 uppercase tracking-wider text-xs focus:outline-none focus:border-gold-500 flex-1">
+            <button type="button" onclick="applyCheckoutCoupon()" class="px-4 py-2 bg-darkSurface hover:bg-gold-500 hover:text-black border border-gold-500/40 text-gold-400 font-bold text-xs rounded transition uppercase tracking-wider">
+              Aplicar
+            </button>
+          </div>
+          <div id="checkoutCouponAlert" class="hidden text-xs mt-1.5 font-medium"></div>
+        </div>
+
+        <!-- Paso Adicional B: Solicitud de Factura Fiscal (CFDI México) -->
+        <div class="pt-4 border-t border-cardBorder">
+          <div class="flex items-center justify-between mb-2">
+            <label class="flex items-center gap-2 cursor-pointer text-xs text-zinc-200 font-semibold select-none">
+              <input type="checkbox" id="reqBillingCheckbox" onchange="toggleBillingFields(this.checked)" class="w-4 h-4 accent-gold-500 rounded">
+              <span>¿Requieres Factura Fiscal para tu compra?</span>
+            </label>
+            <span class="text-[10px] text-emerald-400 font-semibold">Sin cargo extra (SAT)</span>
+          </div>
+
+          <div id="billingFieldsContainer" class="hidden space-y-3 bg-neutral-900/90 p-4 rounded-lg border border-cardBorder text-xs mt-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-zinc-400 mb-1">RFC con Homoclave *</label>
+                <input type="text" id="billRfc" placeholder="XAXX010101000" maxlength="13" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 uppercase font-mono focus:border-gold-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 mb-1">Nombre o Razón Social *</label>
+                <input type="text" id="billLegalName" placeholder="Tal como aparece en CSF" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:border-gold-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 mb-1">Código Postal Fiscal *</label>
+                <input type="text" id="billZip" placeholder="C.P. Fiscal" maxlength="5" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 font-mono focus:border-gold-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 mb-1">Régimen Fiscal *</label>
+                <select id="billRegime" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:border-gold-500 focus:outline-none">
+                  <option value="601">601 - General de Ley Personas Morales</option>
+                  <option value="605">605 - Sueldos y Salarios e Ingresos Asimilados</option>
+                  <option value="606">606 - Arrendamiento</option>
+                  <option value="612">612 - Personas Físicas con Actividades Empresariales</option>
+                  <option value="621">621 - Incorporación Fiscal</option>
+                  <option value="626" selected>626 - Régimen Simplificado de Confianza (RESICO)</option>
+                  <option value="616">616 - Sin obligaciones fiscales</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-zinc-400 mb-1">Uso de CFDI *</label>
+                <select id="billUseCfdi" class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:border-gold-500 focus:outline-none">
+                  <option value="G01">G01 - Adquisición de mercancías</option>
+                  <option value="G03" selected>G03 - Gastos en general</option>
+                  <option value="S01">S01 - Sin efectos fiscales</option>
+                </select>
               </div>
             </div>
           </div>
@@ -1519,6 +1611,9 @@
           <button onclick="switchAdminSubTab('abandoned')" id="admTab-abandoned" class="px-4 py-2 bg-cardBg text-zinc-400 hover:text-white rounded border border-cardBorder transition">
             <i class="fa-solid fa-cart-arrow-down mr-1.5 text-amber-400"></i> Carritos Abandonados (<span id="admBadgeAbandoned">0</span>)
           </button>
+          <button onclick="switchAdminSubTab('transfers')" id="admTab-transfers" class="px-4 py-2 bg-cardBg text-zinc-400 hover:text-white rounded border border-cardBorder transition">
+            <i class="fa-solid fa-truck-moving mr-1.5 text-emerald-400"></i> Transferencias Sucursales
+          </button>
         </div>
 
         <!-- SUB-PESTAÑA 1: INVENTARIO DE PRODUCTOS -->
@@ -1587,6 +1682,41 @@
                 </tr>
               </thead>
               <tbody id="adminOrdersTableBody" class="divide-y divide-cardBorder">
+                <!-- Inyectado por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUB-PESTAÑA 5: GESTIÓN DE TRANSFERENCIAS ENTRE SUCURSALES -->
+        <div id="admSection-transfers" class="space-y-4 hidden">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-cardBg p-4 rounded-lg border border-emerald-500/30">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="font-bold text-emerald-400 text-xs uppercase tracking-wider">Control de Movimientos entre Sucursales</span>
+              </div>
+              <p class="text-zinc-400 text-xs mt-1">Registra envíos de piezas entre Independencia, Alfareros y Tonalá con trazabilidad y folio auditado.</p>
+            </div>
+            <button onclick="openNewTransferModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-bold uppercase tracking-wider transition flex items-center gap-2 shadow">
+              <i class="fa-solid fa-plus"></i> Nueva Transferencia
+            </button>
+          </div>
+
+          <div class="overflow-x-auto rounded-lg border border-cardBorder bg-cardBg">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-carbon text-zinc-400 text-[11px] uppercase tracking-wider border-b border-cardBorder">
+                <tr>
+                  <th class="p-3">Folio & Fecha</th>
+                  <th class="p-3">Sucursal Origen</th>
+                  <th class="p-3">Sucursal Destino</th>
+                  <th class="p-3">Producto y Cantidad</th>
+                  <th class="p-3">Responsable</th>
+                  <th class="p-3 text-center">Estatus</th>
+                  <th class="p-3 text-right">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="adminTransfersTableBody" class="divide-y divide-cardBorder">
                 <!-- Inyectado por JS -->
               </tbody>
             </table>
@@ -2591,12 +2721,50 @@
     /* ==========================================
        MODAL DE VISTA RÁPIDA (QUICK VIEW)
     ========================================== */
+    
+    let currentSelectedColor = 'Negro Ónix';
+
+    function selectQuickViewColor(colorName, colorHex) {
+      currentSelectedColor = colorName;
+      const label = document.getElementById('qvSelectedColorName');
+      if (label) label.textContent = colorName;
+
+      document.querySelectorAll('#qvColorSwatches .color-swatch').forEach(btn => {
+        if (btn.getAttribute('title') === colorName) {
+          btn.className = "color-swatch active w-7 h-7 rounded-full border-2 border-gold-400 shadow-md transition transform scale-110 ring-2 ring-gold-500/40";
+        } else {
+          btn.className = "color-swatch w-7 h-7 rounded-full border border-cardBorder shadow transition transform hover:scale-110 opacity-70 hover:opacity-100";
+        }
+      });
+    }
+  
     function openQuickView(id) {
       const prod = products.find(p => p.id === id);
       if (!prod) return;
 
       document.getElementById('qvImage').src = prod.image;
       document.getElementById('qvCategory').textContent = prod.category + " · Tlaquepaque, Jal.";
+      selectQuickViewColor('Negro Ónix', '#1a1a1a');
+      const dimText = document.getElementById('qvDimensionsText');
+      const capText = document.getElementById('qvCapacityText');
+      if (dimText && capText) {
+        if (prod.category === 'Mochilas') {
+          dimText.textContent = "42 cm × 30 cm × 15 cm";
+          capText.textContent = "Laptop hasta 15.6" + Cuadernos";
+        } else if (prod.category === 'Bolsos') {
+          dimText.textContent = "32 cm × 26 cm × 12 cm";
+          capText.textContent = "iPad, cosmetiquera y billetera";
+        } else if (prod.category === 'Carteras') {
+          dimText.textContent = "11 cm × 9 cm × 1.5 cm";
+          capText.textContent = "6-10 tarjetas y billetes doblados";
+        } else if (prod.category === 'Crossbody') {
+          dimText.textContent = "24 cm × 18 cm × 7 cm";
+          capText.textContent = "Celular, llaves y tarjetero";
+        } else {
+          dimText.textContent = "Ajustable / Estándar artesanal";
+          capText.textContent = "Pieza de uso cotidiano";
+        }
+      }
       document.getElementById('qvTitle').textContent = prod.name;
       document.getElementById('qvPrice').innerHTML = `${prod.price.toLocaleString('es-MX')} <span class="text-xs text-zinc-400 font-sans">MXN</span>`;
       const msi3 = (prod.price / 3).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -2923,6 +3091,52 @@
       });
     }
 
+    
+    let appliedDiscountAmount = 0;
+    let appliedCouponCode = null;
+
+    function applyCheckoutCoupon() {
+      const code = document.getElementById('checkoutCouponCode').value.trim().toUpperCase();
+      const alertEl = document.getElementById('checkoutCouponAlert');
+      alertEl.classList.remove('hidden');
+
+      if (!code) {
+        alertEl.className = "text-xs mt-1.5 text-amber-400";
+        alertEl.textContent = "Por favor ingresa un código de cupón";
+        return;
+      }
+
+      const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+
+      if (code === 'VIZANTINO10' || code === 'BIENVENIDO10') {
+        if (subtotal < 1000) {
+          alertEl.className = "text-xs mt-1.5 text-amber-400";
+          alertEl.textContent = "El cupón requiere una compra mínima de $1,000.00 MXN";
+          return;
+        }
+        appliedDiscountAmount = Math.round(subtotal * 0.10);
+        appliedCouponCode = code;
+        alertEl.className = "text-xs mt-1.5 text-emerald-400 font-bold flex items-center gap-1";
+        alertEl.innerHTML = `<i class="fa-solid fa-check"></i> ¡Cupón ${code} aplicado! Descuento de ${appliedDiscountAmount.toLocaleString('es-MX')} MXN`;
+        
+        // Update checkout total display
+        const isFree = subtotal >= FREE_SHIPPING_THRESHOLD;
+        const total = Math.max(0, subtotal - appliedDiscountAmount + (isFree ? 0 : SHIPPING_COST_STANDARD));
+        document.getElementById('checkoutTotalAmount').textContent = `${total.toLocaleString('es-MX')} MXN`;
+      } else {
+        alertEl.className = "text-xs mt-1.5 text-red-400";
+        alertEl.textContent = "Cupón no válido o expirado.";
+      }
+    }
+
+    function toggleBillingFields(show) {
+      const container = document.getElementById('billingFieldsContainer');
+      if (container) {
+        if (show) container.classList.remove('hidden');
+        else container.classList.add('hidden');
+      }
+    }
+  
     function handleCheckoutSubmit(event) {
       event.preventDefault();
 
@@ -3110,6 +3324,54 @@
       }
     }
 
+    
+    function printAuthenticityCertificate() {
+      const folio = document.getElementById('receiptFolio') ? document.getElementById('receiptFolio').textContent : '#VZ-OFICIAL';
+      const cust = document.getElementById('receiptCustomer') ? document.getElementById('receiptCustomer').textContent : 'Cliente Distinguido';
+      const date = document.getElementById('receiptDate') ? document.getElementById('receiptDate').textContent : new Date().toLocaleDateString('es-MX');
+
+      const printWin = window.open('', '_blank');
+      printWin.document.write(`
+        <html>
+        <head>
+          <title>Certificado de Autenticidad - Vizantino Piel</title>
+          <style>
+            body { font-family: 'Times New Roman', serif; background: #fff; color: #111; padding: 40px; text-align: center; }
+            .cert-box { border: 4px double #c5a059; padding: 35px; max-width: 650px; margin: 0 auto; position: relative; }
+            .gold-badge { color: #846427; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; font-weight: bold; }
+            h1 { font-size: 32px; letter-spacing: 3px; color: #111; margin: 15px 0 5px 0; font-weight: normal; }
+            h2 { font-size: 14px; letter-spacing: 5px; color: #a7823b; margin: 0 0 25px 0; text-transform: uppercase; }
+            p { font-size: 15px; line-height: 1.8; color: #333; margin: 15px 0; }
+            .details { border-top: 1px solid #c5a059; border-bottom: 1px solid #c5a059; padding: 15px 0; margin: 25px 0; font-size: 13px; font-family: sans-serif; }
+            .signature { margin-top: 40px; }
+            .sig-line { width: 200px; border-bottom: 1px solid #111; margin: 0 auto 5px auto; }
+            @media print { body { padding: 0; } }
+          </style>
+        </head>
+        <body onload="window.print()">
+          <div class="cert-box">
+            <div class="gold-badge">Tlaquepaque, Jalisco, México</div>
+            <h1>VIZANTINO PIEL</h1>
+            <h2>Certificado de Autenticidad & Calidad</h2>
+            <p>Certificamos que esta obra ha sido elaborada íntegramente a mano por maestros artesanos utilizando exclusivamente <strong>Piel Genuina Corte Vacuno 100% Mexicano</strong>, seleccionada rigurosamente por su textura, nobleza y longevidad.</p>
+            <div class="details">
+              <strong>Folio Oficial de Garantía:</strong> ${folio} &nbsp;|&nbsp; 
+              <strong>Cliente:</strong> ${cust} &nbsp;|&nbsp; 
+              <strong>Fecha:</strong> ${date}
+            </div>
+            <p style="font-style: italic; font-size: 14px;">"Diseñado para distinguir. Creado para trascender."</p>
+            <div class="signature">
+              <div class="sig-line"></div>
+              <strong style="font-size: 12px; letter-spacing: 2px;">MAESTRÍA MARROQUINERA VIZANTINO</strong><br>
+              <span style="font-size: 11px; color: #666;">Garantía de Taller por 5 Años</span>
+            </div>
+          </div>
+        </body>
+        </html>
+      `);
+      printWin.document.close();
+    }
+  
     function closeReceiptModal() {
       document.getElementById('orderReceiptModal').classList.add('hidden');
     }
@@ -3174,7 +3436,7 @@
     }
 
     function switchAdminSubTab(tab) {
-      const tabs = ['inventory', 'orders', 'users', 'abandoned'];
+      const tabs = ['inventory', 'orders', 'users', 'abandoned', 'transfers'];
       tabs.forEach(t => {
         const btn = document.getElementById(`admTab-${t}`);
         const sec = document.getElementById(`admSection-${t}`);
@@ -3191,6 +3453,7 @@
       if (tab === 'users') renderAdminUsersTable();
       if (tab === 'inventory') renderAdminTable();
       if (tab === 'abandoned') renderAdminAbandonedTable();
+      if (tab === 'transfers') renderAdminTransfersTable();
     }
 
     
@@ -3326,6 +3589,97 @@
     }
 
     // Renderizar tabla de Carritos Abandonados en Admin
+    
+    const STORAGE_KEY_TRANSFERS = "vizantino_transfers_v1";
+
+    function getTransfers() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY_TRANSFERS) || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveTransfers(list) {
+      localStorage.setItem(STORAGE_KEY_TRANSFERS, JSON.stringify(list));
+    }
+
+    function renderAdminTransfersTable() {
+      const tbody = document.getElementById('adminTransfersTableBody');
+      if (!tbody) return;
+      const transfers = getTransfers();
+
+      if (transfers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-zinc-500">
+          <div class="w-12 h-12 mx-auto rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl mb-2">
+            <i class="fa-solid fa-truck-moving"></i>
+          </div>
+          No hay transferencias entre sucursales registradas.
+        </td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = transfers.map(t => {
+        return `
+          <tr class="hover:bg-darkSurface/60 transition">
+            <td class="p-3 font-mono font-bold text-gold-400">${t.folio}<div class="text-[10px] text-zinc-500">${t.date}</div></td>
+            <td class="p-3 font-semibold text-white">${t.origin}</td>
+            <td class="p-3 font-semibold text-emerald-400">${t.destination}</td>
+            <td class="p-3"><strong class="text-white">${t.productName}</strong> <span class="text-gold-400 font-mono font-bold">(${t.qty} pzas)</span></td>
+            <td class="p-3 text-zinc-400">${t.responsible}</td>
+            <td class="p-3 text-center">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.status === 'Recibido' ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' : 'bg-amber-950 text-amber-300 border border-amber-500/40'}">
+                ${t.status}
+              </span>
+            </td>
+            <td class="p-3 text-right">
+              ${t.status !== 'Recibido' ? `<button onclick="completeTransfer('${t.folio}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-[10px] font-bold uppercase tracking-wider transition">Marcar Recibido</button>` : `<span class="text-[10px] text-zinc-500"><i class="fa-solid fa-check-double text-emerald-400"></i> Completado</span>`}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openNewTransferModal() {
+      const prodSelect = prompt("Ingresa el Nombre o ID del producto a transferir (Ej. Bolso calidad élite):");
+      if (!prodSelect) return;
+      const origin = prompt("Sucursal de Origen (Independencia / Alfareros / Tonalá):", "Independencia");
+      if (!origin) return;
+      const destination = prompt("Sucursal de Destino (Independencia / Alfareros / Tonalá):", "Alfareros");
+      if (!destination) return;
+      const qty = parseInt(prompt("Cantidad de piezas a transferir:", "2") || "0", 10);
+      if (!qty || qty <= 0) return;
+      const responsible = prompt("Nombre del Responsable del Envío:", "Hugo Hernández") || "Taller Vizantino";
+
+      const transfers = getTransfers();
+      const newTransfer = {
+        folio: "TRF-" + Math.floor(1000 + Math.random() * 9000),
+        date: new Date().toLocaleDateString('es-MX'),
+        origin,
+        destination,
+        productName: prodSelect,
+        qty,
+        responsible,
+        status: "En Tránsito"
+      };
+
+      transfers.unshift(newTransfer);
+      saveTransfers(transfers);
+      renderAdminTransfersTable();
+      showToast(`Transferencia ${newTransfer.folio} creada en estado En Tránsito`, "success");
+    }
+
+    function completeTransfer(folio) {
+      let transfers = getTransfers();
+      const trf = transfers.find(t => t.folio === folio);
+      if (trf) {
+        trf.status = "Recibido";
+        saveTransfers(transfers);
+        renderAdminTransfersTable();
+        showToast(`Transferencia ${folio} marcada como Recibida en ${trf.destination}`, "success");
+      }
+    }
+  
     function renderAdminAbandonedTable() {
       const tbody = document.getElementById('adminAbandonedTableBody');
       if (!tbody) return;
