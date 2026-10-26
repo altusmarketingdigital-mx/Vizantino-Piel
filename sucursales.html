@@ -32,16 +32,29 @@
       theme: {
         extend: {
           colors: {
-            carbon: '#12100e',
-            darkSurface: '#1a1613',
-            cardBg: '#201b17',
-            cardBorder: '#342c24',
+            carbon: '#1b1612',      /* Madera oscura tostada / café base */
+            darkSurface: '#251e18', /* Nogal cálido */
+            cardBg: '#2d231b',      /* Tarjeta café cuero natural */
+            cardBorder: '#45372d',  /* Borde madera y cuero */
+            wood: {
+              light: '#5c4737',
+              DEFAULT: '#3e2e23',
+              dark: '#241a13'
+            },
+            beige: {
+              50: '#faf6f0',
+              100: '#f5ebe1',
+              200: '#ebd8c5',
+              300: '#d6c7b8',
+              400: '#b8a594',
+              500: '#9c8a79'
+            },
             gold: {
-              300: '#f0d28d',
+              300: '#f2dab0',
               400: '#dfb96c',
-              500: '#c5a059',
-              600: '#a7823b',
-              700: '#846427',
+              500: '#c48e48',      /* Tono miel ámbar de madera */
+              600: '#a67232',
+              700: '#7f531f',
             }
           },
           fontFamily: {
@@ -55,15 +68,15 @@
 
   <style>
     body {
-      /* Fondo cálido y envolvente: Ébano profundo con halos sutiles tono cuero cognac y ámbar ahumado */
-      background-color: #12100e;
+      /* PALETA DE IDENTIDAD CROMÁTICA: MADERA NATURAL, TONOS CAFÉ Y BEIGE CÁLIDO */
+      background-color: #1b1612;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(197, 160, 89, 0.07) 0%, transparent 45%),
-        radial-gradient(circle at 85% 35%, rgba(138, 92, 42, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 50% 80%, rgba(197, 160, 89, 0.05) 0%, transparent 60%),
-        linear-gradient(180deg, #13110f 0%, #171411 35%, #14110e 70%, #0f0d0b 100%);
+        radial-gradient(circle at 18% 18%, rgba(196, 142, 72, 0.12) 0%, transparent 48%),
+        radial-gradient(circle at 82% 38%, rgba(140, 90, 45, 0.14) 0%, transparent 52%),
+        radial-gradient(circle at 50% 85%, rgba(196, 142, 72, 0.08) 0%, transparent 60%),
+        linear-gradient(180deg, #1d1813 0%, #221c17 40%, #1c1713 75%, #16120e 100%);
       background-attachment: fixed;
-      color: #eae5de;
+      color: #f5ebe1; /* Beige cálido premium */
       font-family: 'Montserrat', sans-serif;
       overflow-x: hidden;
       min-height: 100vh;
@@ -245,6 +258,25 @@
     }
 
   </style>
+
+  <style>
+    :root {
+      /* PALETA DE IDENTIDAD CROMÁTICA - MADERA NATURAL, CUERO ARTESANAL & BEIGE CÁLIDO */
+      --bg-base: #1b1612;          /* Fondo base madera tostada / ébano cálido */
+      --bg-surface: #251e18;       /* Superficie contenedor madera nogal */
+      --bg-card: #2f251e;          /* Tarjeta cuero café cálido */
+      --border-card: #45372d;      /* Borde suave tono madera y pespunte */
+      --border-accent: #b88646;    /* Acento miel dorado / bronce natural */
+      
+      --color-beige-warm: #f5ebe1; /* Beige cálido para textos principales */
+      --color-beige-muted: #d6c7b8;/* Beige suave para descripciones */
+      --color-beige-dark: #9c8a79; /* Beige tenue / madera clara para metadatos */
+      
+      --brand-leather-gold: #dfb96c; /* Tono insignia de marca Vizantino */
+      --brand-wood-accent: #c48e48;  /* Madera natural barnizada */
+      --brand-amber-glow: rgba(196, 142, 72, 0.18);
+    }
+  </style>
 </head>
 <body class="selection:bg-gold-500 selection:text-black">
 
@@ -271,7 +303,7 @@
   <!-- ========================================== -->
   <!-- 2. HEADER Y NAVEGACIÓN -->
   <!-- ========================================== -->
-  <header class="sticky top-0 z-40 bg-[#14110e]/95 backdrop-blur-md border-b border-cardBorder transition-all duration-300" id="mainHeader">
+  <header class="sticky top-0 z-40 bg-[#1c1713]/95 backdrop-blur-md border-b border-cardBorder transition-all duration-300" id="mainHeader">
     <div class="max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-10 h-20 flex items-center justify-between gap-6 xl:gap-8">
       
       <!-- Menú Hamburguesa Móvil -->
@@ -280,9 +312,11 @@
       </button>
 
       <!-- Logo e Identidad Oficial -->
-      <a href="#" class="flex flex-col items-center group py-1 flex-shrink-0">
-        <img src="logo-gold.png" alt="Vizantino" class="h-8 sm:h-9 md:h-10 w-auto object-contain brightness-105 group-hover:scale-105 transition-transform duration-300">
-        <span class="text-[9px] sm:text-[10px] tracking-[0.38em] uppercase text-gold-400 font-semibold mt-1 text-center whitespace-nowrap">
+      <a href="index.html" class="flex flex-col items-center group py-1 flex-shrink-0 relative">
+        <div class="relative flex items-center justify-center px-2 py-0.5 rounded-lg transition-all duration-300 group-hover:bg-gold-500/10">
+          <img src="logo-gold.png" alt="Vizantino" class="h-8 sm:h-9 md:h-10 w-auto object-contain brightness-110 drop-shadow-[0_2px_8px_rgba(223,185,108,0.35)] group-hover:scale-105 transition-transform duration-300">
+        </div>
+        <span class="brand-subtitle text-[8.5px] sm:text-[9.5px] tracking-[0.42em] uppercase font-bold mt-1 text-center whitespace-nowrap px-2 py-0.5 rounded bg-wood/50 border border-gold-500/30 text-amber-200/90 shadow-sm">
           PIEL · HECHO EN MÉXICO
         </span>
       </a>
@@ -380,8 +414,8 @@
   <div id="mobileMenu" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex-col">
     <div class="p-6 flex justify-between items-center border-b border-cardBorder">
       <div class="flex flex-col items-start">
-        <img src="logo-gold.png" alt="Vizantino" class="h-7 w-auto object-contain">
-        <span class="text-[8px] tracking-[0.35em] text-gold-400 uppercase font-semibold mt-1">
+        <img src="logo-gold.png" alt="Vizantino" class="h-7 w-auto object-contain brightness-110 drop-shadow-[0_2px_6px_rgba(223,185,108,0.35)]">
+        <span class="text-[8px] tracking-[0.38em] uppercase font-bold mt-1 px-1.5 py-0.5 rounded bg-wood/50 border border-gold-500/30 text-amber-200/90">
           PIEL · HECHO EN MÉXICO
         </span>
       </div>
@@ -558,9 +592,9 @@
       
       <!-- Marca -->
       <div class="space-y-4">
-        <a href="#" class="inline-flex flex-col items-start group">
-          <img src="logo-gold.png" alt="Vizantino" class="h-8 w-auto object-contain">
-          <span class="text-[9px] tracking-[0.35em] text-gold-400 uppercase font-semibold mt-1">
+        <a href="index.html" class="inline-flex flex-col items-start group">
+          <img src="logo-gold.png" alt="Vizantino" class="h-8 w-auto object-contain brightness-110 drop-shadow-[0_2px_8px_rgba(223,185,108,0.3)]">
+          <span class="text-[8.5px] tracking-[0.38em] uppercase font-bold mt-1.5 px-2 py-0.5 rounded bg-wood/60 border border-gold-500/30 text-amber-200/90 shadow-sm">
             PIEL · HECHO EN MÉXICO
           </span>
         </a>
