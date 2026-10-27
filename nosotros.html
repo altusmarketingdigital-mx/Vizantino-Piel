@@ -1714,6 +1714,9 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-2">
+            <button type="button" id="adminHeaderCertBtn" onclick="openAdminCertModal()" class="px-3.5 py-2 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs rounded transition flex items-center gap-1.5 shadow" title="Generar Certificado de Autenticidad para Regalo">
+              <i class="fa-solid fa-award text-sm"></i> Certificado de Regalo
+            </button>
             <button onclick="resetToFactoryCatalogue()" class="px-3 py-2 bg-cardBg hover:bg-red-950/60 border border-cardBorder hover:border-red-500/50 text-zinc-300 hover:text-red-300 font-medium text-xs rounded transition" title="Restablecer catálogo a inicial">
               <i class="fa-solid fa-rotate-left"></i> Restablecer Catálogo
             </button>
@@ -1800,6 +1803,9 @@
                 <option value="Ropa">Ropa</option>
               </select>
 
+              <button type="button" onclick="openAdminCertModal()" class="px-4 py-1.5 bg-cardBg hover:bg-gold-500/20 text-gold-400 border border-gold-500/50 hover:border-gold-400 font-bold text-xs uppercase tracking-wider rounded transition flex items-center gap-1.5 whitespace-nowrap shadow-sm" title="Emitir Certificado Oficial de Autenticidad para Regalo">
+                <i class="fa-solid fa-award"></i> Certificado de Regalo
+              </button>
               <button onclick="openNewProductModal()" class="px-4 py-1.5 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs uppercase tracking-wider rounded transition flex items-center gap-1.5 whitespace-nowrap">
                 <i class="fa-solid fa-plus"></i> Nuevo Producto
               </button>
@@ -1951,7 +1957,7 @@
   </div>
 
   <!-- Modal Generador de Certificado de Autenticidad para Regalos (Panel Admin) -->
-  <div id="adminCertModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
+  <div id="adminCertModal" class="fixed inset-0 z-[75] hidden flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeAdminCertModal()"></div>
     <div class="relative bg-cardBg border border-gold-500/50 rounded-xl max-w-lg w-full p-6 z-10 shadow-2xl space-y-4">
       <button onclick="closeAdminCertModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
@@ -5041,43 +5047,7 @@
               <span style="font-size: 11px; color: #666;">Garantía de Taller por 5 Años</span>
             </div>
           </div>
-        
-  <!-- Modal: Rastreo de Envío Skydropx -->
-  <div id="skydropxTrackingModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/80 modal-backdrop" onclick="closeTrackingModal()"></div>
-    <div class="relative bg-cardBg border border-gold-500/40 rounded-xl max-w-md w-full p-6 z-10 shadow-2xl text-center">
-      <button onclick="closeTrackingModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="w-14 h-14 mx-auto rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-2xl mb-3">
-        <i class="fa-solid fa-truck-fast"></i>
-      </div>
-
-      <span class="text-[10px] tracking-widest uppercase text-gold-400 font-bold">Rastreo de Paquetería</span>
-      <h3 class="font-serif text-xl text-white font-bold mt-1" id="trkCarrierName">FedEx / DHL Express</h3>
-      
-      <div class="my-4 p-3 bg-darkSurface rounded-lg border border-cardBorder">
-        <span class="text-[11px] text-zinc-400 block mb-1">Número de Guía / Rastreo:</span>
-        <strong id="trkNumber" class="font-mono text-base text-gold-300 select-all">VZ-TRK-PENDIENTE</strong>
-      </div>
-
-      <p class="text-xs text-zinc-400 mb-5 leading-relaxed">
-        El paquete se despacha desde nuestro taller artesanal en Tlaquepaque, Jalisco. Puedes consultar su trayecto en tiempo real.
-      </p>
-
-      <div class="space-y-2">
-        <a id="trkExternalLink" href="#" target="_blank" rel="noopener noreferrer"
-           class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-wider uppercase rounded transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> Rastrear en Portal Oficial
-        </a>
-        <button onclick="closeTrackingModal()" class="w-full py-2 text-zinc-400 hover:text-white text-xs transition">
-          Cerrar
-        </button>
-      </div>
-    </div>
-  </div>
-</body>
+        </body>
         </html>
       `);
       printWin.document.close();
@@ -6112,6 +6082,304 @@
     document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
   }
   document.addEventListener('DOMContentLoaded', initScrollAnimations);
+
+
+    /* ==========================================
+       GESTIÓN DE CERTIFICADOS DE AUTENTICIDAD & REGALO
+    ========================================== */
+    function openAdminCertModal(recipient = '', product = '', folio = '') {
+      const modal = document.getElementById('adminCertModal');
+      if (!modal) return;
+      document.getElementById('certRecipientName').value = recipient || '';
+      document.getElementById('certProductName').value = product || '';
+      document.getElementById('certFolioNumber').value = folio || ('#VZ-CERT-' + Date.now().toString(36).toUpperCase());
+      document.getElementById('certDedicationText').value = '';
+      modal.classList.remove('hidden');
+    }
+
+    function closeAdminCertModal() {
+      const modal = document.getElementById('adminCertModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleGenerateCustomCert(e) {
+      if (e) e.preventDefault();
+      const recipient = document.getElementById('certRecipientName').value.trim() || 'Apreciable Cliente';
+      const product = document.getElementById('certProductName').value.trim() || 'Pieza Artesanal Vizantino Piel';
+      const folio = document.getElementById('certFolioNumber').value.trim() || ('#VZ-CERT-' + Math.floor(1000 + Math.random() * 9000));
+      const dedication = document.getElementById('certDedicationText').value.trim();
+      const date = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      const printWin = window.open('', '_blank');
+      printWin.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <title>Certificado de Autenticidad - ${folio} - Vizantino Piel</title>
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
+            @page { size: letter landscape; margin: 12mm; }
+            * { box-sizing: border-box; }
+            body {
+              font-family: 'Montserrat', sans-serif;
+              background: #fff;
+              color: #1a1a1a;
+              margin: 0;
+              padding: 20px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              min-height: 95vh;
+            }
+            .cert-container {
+              border: 10px double #c5a059;
+              padding: 40px 50px;
+              max-width: 900px;
+              width: 100%;
+              position: relative;
+              background: radial-gradient(circle at center, #ffffff 0%, #faf8f5 100%);
+              text-align: center;
+              box-shadow: 0 0 25px rgba(197, 160, 89, 0.25);
+            }
+            .cert-corner {
+              position: absolute;
+              width: 40px;
+              height: 40px;
+              border: 2px solid #c5a059;
+            }
+            .corner-tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+            .corner-tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+            .corner-bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+            .corner-br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+            .brand-sub {
+              font-family: 'Montserrat', sans-serif;
+              font-size: 11px;
+              letter-spacing: 5px;
+              text-transform: uppercase;
+              color: #8f6e28;
+              font-weight: 600;
+              margin-bottom: 8px;
+            }
+            h1 {
+              font-family: 'Cinzel', serif;
+              font-size: 38px;
+              letter-spacing: 6px;
+              margin: 0 0 4px 0;
+              color: #111;
+              font-weight: 700;
+            }
+            h2 {
+              font-family: 'Cinzel', serif;
+              font-size: 15px;
+              letter-spacing: 6px;
+              text-transform: uppercase;
+              color: #c5a059;
+              margin: 0 0 25px 0;
+              font-weight: 600;
+            }
+            .statement {
+              font-size: 14px;
+              line-height: 1.8;
+              color: #333;
+              max-width: 720px;
+              margin: 0 auto 20px auto;
+            }
+            .recipient-block {
+              border-top: 1px solid #c5a059;
+              border-bottom: 1px solid #c5a059;
+              padding: 16px 20px;
+              margin: 22px auto;
+              max-width: 760px;
+              background: rgba(197, 160, 89, 0.05);
+            }
+            .recipient-label {
+              font-size: 10px;
+              letter-spacing: 3px;
+              text-transform: uppercase;
+              color: #8f6e28;
+              font-weight: 600;
+            }
+            .recipient-name {
+              font-family: 'Cinzel', serif;
+              font-size: 24px;
+              color: #111;
+              font-weight: 700;
+              letter-spacing: 2px;
+              margin: 4px 0 8px 0;
+            }
+            .piece-title {
+              font-size: 14px;
+              color: #333;
+              font-weight: 500;
+            }
+            .piece-title strong {
+              color: #8f6e28;
+            }
+            .dedication-box {
+              font-style: italic;
+              font-size: 13px;
+              color: #555;
+              max-width: 650px;
+              margin: 15px auto;
+              padding: 10px 20px;
+              background: #fff;
+              border-left: 3px solid #c5a059;
+              line-height: 1.6;
+            }
+            .meta-grid {
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+              margin-top: 25px;
+              padding-top: 15px;
+              font-size: 11px;
+              color: #555;
+            }
+            .seal-badge {
+              width: 72px;
+              height: 72px;
+              border: 2px dashed #c5a059;
+              border-radius: 50%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              font-size: 8px;
+              letter-spacing: 1.5px;
+              text-transform: uppercase;
+              color: #8f6e28;
+              font-weight: bold;
+              line-height: 1.2;
+              padding: 4px;
+            }
+            .sig-block {
+              text-align: center;
+            }
+            .sig-line {
+              width: 180px;
+              border-bottom: 1px solid #222;
+              margin: 0 auto 6px auto;
+            }
+            @media print {
+              body { padding: 0; background: none; }
+              .cert-container { box-shadow: none; border-color: #c5a059; }
+            }
+          </style>
+        </head>
+        <body onload="window.print()">
+          <div class="cert-container">
+            <div class="cert-corner corner-tl"></div>
+            <div class="cert-corner corner-tr"></div>
+            <div class="cert-corner corner-bl"></div>
+            <div class="cert-corner corner-br"></div>
+
+            <div class="brand-sub">San Pedro Tlaquepaque, Jalisco, México</div>
+            <h1>VIZANTINO PIEL</h1>
+            <h2>Certificado de Autenticidad & Calidad</h2>
+
+            <p class="statement">
+              Hacemos constar de manera oficial que la presente obra marroquinera ha sido forjada íntegramente por maestros artesanos bajo rigurosas normas de corte, armado y costura fina, empleando con exclusividad <strong>Piel Genuina de Origen Vacuno 100% Mexicano</strong> seleccionada por su suavidad, calibre y carácter eterno.
+            </p>
+
+            <div class="recipient-block">
+              <div class="recipient-label">Pieza Registrada en Taller a Nombre de:</div>
+              <div class="recipient-name">${recipient}</div>
+              <div class="piece-title">Artículo: <strong>${product}</strong></div>
+            </div>
+
+            ${dedication ? `<div class="dedication-box">"${dedication}"</div>` : ''}
+
+            <div class="meta-grid">
+              <div style="text-align: left;">
+                <div><strong>Folio Oficial:</strong> <span style="font-family: monospace; color:#8f6e28; font-weight:bold;">${folio}</span></div>
+                <div><strong>Emisión:</strong> ${date}</div>
+                <div><strong>Garantía:</strong> 5 Años en Costuras y Herrajes</div>
+              </div>
+
+              <div class="seal-badge">
+                <span>SELLO OFICIAL</span>
+                <strong>VIZANTINO</strong>
+                <span>100% PIEL</span>
+              </div>
+
+              <div class="sig-block">
+                <div class="sig-line"></div>
+                <strong style="font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;">Maestría Marroquinera</strong><br>
+                <span style="font-size: 10px; color: #777;">Taller Tlaquepaque, Jalisco</span>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `);
+      printWin.document.close();
+      closeAdminCertModal();
+      showToast("Certificado de regalo generado para impresión", "success");
+    }
+
+    function openTrackingModal(carrier = "FedEx / DHL Express", trackingNumber = "VZ-TRK-PENDIENTE") {
+      const modal = document.getElementById('skydropxTrackingModal');
+      if (!modal) return;
+      const carrierEl = document.getElementById('trkCarrierName');
+      const trkNumEl = document.getElementById('trkNumber');
+      const extLinkEl = document.getElementById('trkExternalLink');
+
+      if (carrierEl) carrierEl.textContent = carrier;
+      if (trkNumEl) trkNumEl.textContent = trackingNumber;
+      if (extLinkEl) {
+        if (trackingNumber && trackingNumber !== 'VZ-TRK-PENDIENTE') {
+          extLinkEl.href = `https://www.google.com/search?q=${encodeURIComponent(carrier + ' rastreo ' + trackingNumber)}`;
+        } else {
+          extLinkEl.href = '#';
+        }
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function closeTrackingModal() {
+      const modal = document.getElementById('skydropxTrackingModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
 </script>
+
+
+  <!-- Modal: Rastreo de Envío Skydropx -->
+  <div id="skydropxTrackingModal" class="fixed inset-0 z-[75] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/80 modal-backdrop" onclick="closeTrackingModal()"></div>
+    <div class="relative bg-cardBg border border-gold-500/40 rounded-xl max-w-md w-full p-6 z-10 shadow-2xl text-center">
+      <button onclick="closeTrackingModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="w-14 h-14 mx-auto rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-2xl mb-3">
+        <i class="fa-solid fa-truck-fast"></i>
+      </div>
+
+      <span class="text-[10px] tracking-widest uppercase text-gold-400 font-bold">Rastreo de Paquetería</span>
+      <h3 class="font-serif text-xl text-white font-bold mt-1" id="trkCarrierName">FedEx / DHL Express</h3>
+      
+      <div class="my-4 p-3 bg-darkSurface rounded-lg border border-cardBorder">
+        <span class="text-[11px] text-zinc-400 block mb-1">Número de Guía / Rastreo:</span>
+        <strong id="trkNumber" class="font-mono text-base text-gold-300 select-all">VZ-TRK-PENDIENTE</strong>
+      </div>
+
+      <p class="text-xs text-zinc-400 mb-5 leading-relaxed">
+        El paquete se despacha desde nuestro taller artesanal en Tlaquepaque, Jalisco. Puedes consultar su trayecto en tiempo real.
+      </p>
+
+      <div class="space-y-2">
+        <a id="trkExternalLink" href="#" target="_blank" rel="noopener noreferrer"
+           class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-carbon font-bold text-xs tracking-wider uppercase rounded transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Rastrear en Portal Oficial
+        </a>
+        <button onclick="closeTrackingModal()" class="w-full py-2 text-zinc-400 hover:text-white text-xs transition">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
