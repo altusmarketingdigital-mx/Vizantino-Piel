@@ -697,6 +697,20 @@
           <span>Subtotal</span>
           <span id="cartSubtotal" class="font-mono text-zinc-200">$0.00 MXN</span>
         </div>
+        <!-- Banner y línea de descuento 10% al llevar 3 o más artículos -->
+        <div id="cartDiscountRow" class="flex justify-between text-emerald-400 font-medium hidden">
+          <span class="flex items-center gap-1">
+            <i class="fa-solid fa-tag text-xs"></i> Promo 10% (3+ artículos en tu bolsa):
+          </span>
+          <span id="cartDiscountAmount" class="font-mono font-bold">-$0.00 MXN</span>
+        </div>
+        <!-- Descuento por Cupón Lealtad $350 -->
+        <div id="cartLoyaltyCouponRow" class="flex justify-between text-gold-400 font-medium hidden">
+          <span class="flex items-center gap-1">
+            <i class="fa-solid fa-gift text-xs"></i> Cupón Lealtad 3ra Compra:
+          </span>
+          <span id="cartLoyaltyDiscountAmount" class="font-mono font-bold">-$350.00 MXN</span>
+        </div>
         <div class="flex justify-between">
           <span>Envío</span>
           <span id="cartShippingCost" class="font-mono text-emerald-400">A calcular</span>
@@ -4236,12 +4250,38 @@
         </div>
       `).join('');
 
-      const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-      const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+            const calc = calculateCartDiscounts();
+      const subtotal = calc.subtotal;
+      const isFreeShipping = calc.discountedSubtotal >= FREE_SHIPPING_THRESHOLD;
       const shippingCost = isFreeShipping ? 0 : SHIPPING_COST_STANDARD;
-      const total = subtotal + shippingCost;
+      const total = calc.discountedSubtotal + shippingCost;
 
-      subtotalEl.textContent = `$${subtotal.toLocaleString('es-MX')} MXN`;
+      subtotalEl.textContent = `${subtotal.toLocaleString('es-MX')} MXN`;
+
+      // Visualización de Descuento 10% al total por 3 o más artículos
+      const discountRow = document.getElementById('cartDiscountRow');
+      const discountAmount = document.getElementById('cartDiscountAmount');
+      if (discountRow && discountAmount) {
+        if (calc.quantityDiscount > 0) {
+          discountAmount.textContent = `-$${calc.quantityDiscount.toLocaleString('es-MX')} MXN`;
+          discountRow.classList.remove('hidden');
+        } else {
+          discountRow.classList.add('hidden');
+        }
+      }
+
+      // Visualización de Descuento por Cupón de Lealtad ($350)
+      const loyaltyRow = document.getElementById('cartLoyaltyCouponRow');
+      const loyaltyAmount = document.getElementById('cartLoyaltyDiscountAmount');
+      if (loyaltyRow && loyaltyAmount) {
+        if (calc.loyaltyDiscount > 0) {
+          loyaltyAmount.textContent = `-$${calc.loyaltyDiscount.toLocaleString('es-MX')} MXN`;
+          loyaltyRow.classList.remove('hidden');
+        } else {
+          loyaltyRow.classList.add('hidden');
+        }
+      }
+
       shippingEl.textContent = isFreeShipping ? "GRATIS" : `$${shippingCost.toLocaleString('es-MX')} MXN (< 3kg)`;
       if (isFreeShipping) {
         shippingEl.className = "font-mono text-emerald-400 font-bold";
@@ -4365,12 +4405,63 @@
     }
 
     
+    /* ==========================================
+       PROMOCIÓN 10% (3+ PIEZAS) Y PROGRAMA DE LEALTAD VIZANTINO
+    ========================================== */
     let appliedDiscountAmount = 0;
     let appliedCouponCode = null;
 
+    function calculateCartDiscounts() {
+      const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const totalUnits = cart.reduce((acc, i) => acc + i.qty, 0);
+
+      // Regla 1: Al haber 3 o más artículos, aplica el 10% DE DESCUENTO AL TOTAL DE LA COMPRA
+      let quantityDiscount = 0;
+      if (totalUnits >= 3) {
+        quantityDiscount = Math.round(subtotal * 0.10);
+      }
+
+      // Regla 2: Programa de Lealtad - Cupón LEALTAD350 ($350 MXN)
+      // Válido a partir de la 3ra compra para una sola cuenta
+      // NO transferible ni acumulable con la promo del 10% ni aplicable al envío
+      let loyaltyDiscount = 0;
+      if (appliedCouponCode === 'LEALTAD350') {
+        if (quantityDiscount > 0) {
+          // No acumulable con promo del 10%
+          loyaltyDiscount = 0;
+        } else {
+          loyaltyDiscount = Math.min(350, subtotal);
+        }
+      }
+
+      // Cupones adicionales bienvenida (si aplican y no hay promo por cantidad)
+      let generalCouponDiscount = 0;
+      if (appliedCouponCode === 'VIZANTINO10' || appliedCouponCode === 'BIENVENIDO10') {
+        if (quantityDiscount === 0 && loyaltyDiscount === 0 && subtotal >= 1000) {
+          generalCouponDiscount = Math.round(subtotal * 0.10);
+        }
+      }
+
+      const totalPromoDiscount = quantityDiscount + loyaltyDiscount + generalCouponDiscount;
+      const discountedSubtotal = Math.max(0, subtotal - totalPromoDiscount);
+
+      return {
+        subtotal,
+        totalUnits,
+        quantityDiscount,
+        loyaltyDiscount,
+        generalCouponDiscount,
+        totalPromoDiscount,
+        discountedSubtotal
+      };
+    }
+
     function applyCheckoutCoupon() {
-      const code = document.getElementById('checkoutCouponCode').value.trim().toUpperCase();
+      const input = document.getElementById('checkoutCouponCode');
       const alertEl = document.getElementById('checkoutCouponAlert');
+      if (!input || !alertEl) return;
+
+      const code = input.value.trim().toUpperCase();
       alertEl.classList.remove('hidden');
 
       if (!code) {
@@ -4380,26 +4471,67 @@
       }
 
       const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const totalUnits = cart.reduce((acc, i) => acc + i.qty, 0);
 
-      if (code === 'VIZANTINO10' || code === 'BIENVENIDO10') {
-        if (subtotal < 1000) {
+      // 1. Cupón LEALTAD350
+      if (code === 'LEALTAD350') {
+        if (!currentUser) {
           alertEl.className = "text-xs mt-1.5 text-amber-400";
-          alertEl.textContent = "El cupón requiere una compra mínima de $1,000.00 MXN";
+          alertEl.textContent = "Debes iniciar sesión con tu cuenta para validar este beneficio de lealtad.";
           return;
         }
-        appliedDiscountAmount = Math.round(subtotal * 0.10);
+
+        const customerOrders = orders.filter(o => 
+          (o.customerEmail && o.customerEmail.toLowerCase() === currentUser.email.toLowerCase()) ||
+          (o.customerPhone && currentUser.phone && o.customerPhone.replace(/\D/g,'') === currentUser.phone.replace(/\D/g,''))
+        );
+
+        if (customerOrders.length < 2) {
+          alertEl.className = "text-xs mt-1.5 text-amber-400";
+          alertEl.textContent = `Este cupón se otorga en tu 3ra compra (Cuentas con ${customerOrders.length} compra${customerOrders.length===1?'':'s'} registrada${customerOrders.length===1?'':'s'}).`;
+          return;
+        }
+
+        if (totalUnits >= 3) {
+          alertEl.className = "text-xs mt-1.5 text-amber-400";
+          alertEl.textContent = "Ya tienes activo el 10% de descuento por llevar 3 o más artículos (No acumulable).";
+          return;
+        }
+
+        appliedCouponCode = 'LEALTAD350';
+        appliedDiscountAmount = 350;
+        alertEl.className = "text-xs mt-1.5 text-emerald-400 font-bold flex items-center gap-1";
+        alertEl.innerHTML = '<i class="fa-solid fa-gift"></i> ¡Cupón de Lealtad LEALTAD350 aplicado! Descuento de $350.00 MXN en tus piezas.';
+        
+        updateCartUI();
+        updateCheckoutTotalsWithShipping();
+        return;
+      }
+
+      // 2. Cupones de Bienvenida
+      if (code === 'VIZANTINO10' || code === 'BIENVENIDO10') {
+        if (totalUnits >= 3) {
+          alertEl.className = "text-xs mt-1.5 text-amber-400";
+          alertEl.textContent = "Ya cuentas con el 10% de descuento en el total de tu orden.";
+          return;
+        }
+        if (subtotal < 1000) {
+          alertEl.className = "text-xs mt-1.5 text-amber-400";
+          alertEl.textContent = "El cupón requiere una compra mínima de $1,000.00 MXN en piezas de piel.";
+          return;
+        }
         appliedCouponCode = code;
+        appliedDiscountAmount = Math.round(subtotal * 0.10);
         alertEl.className = "text-xs mt-1.5 text-emerald-400 font-bold flex items-center gap-1";
         alertEl.innerHTML = `<i class="fa-solid fa-check"></i> ¡Cupón ${code} aplicado! Descuento de ${appliedDiscountAmount.toLocaleString('es-MX')} MXN`;
         
-        // Update checkout total display
-        const isFree = subtotal >= FREE_SHIPPING_THRESHOLD;
-        const total = Math.max(0, subtotal - appliedDiscountAmount + (isFree ? 0 : SHIPPING_COST_STANDARD));
-        document.getElementById('checkoutTotalAmount').textContent = `${total.toLocaleString('es-MX')} MXN`;
-      } else {
-        alertEl.className = "text-xs mt-1.5 text-red-400";
-        alertEl.textContent = "Cupón no válido o expirado.";
+        updateCartUI();
+        updateCheckoutTotalsWithShipping();
+        return;
       }
+
+      alertEl.className = "text-xs mt-1.5 text-red-400";
+      alertEl.textContent = "Cupón no válido o no elegible para esta cuenta.";
     }
 
     function toggleBillingFields(show) {
