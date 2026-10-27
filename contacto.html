@@ -788,8 +788,15 @@
       </button>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-        <div class="rounded-lg overflow-hidden bg-black/50 aspect-square">
-          <img id="qvImage" src="" alt="" class="w-full h-full object-cover">
+        <div class="space-y-2">
+          <div class="rounded-lg overflow-hidden bg-black/50 aspect-square border border-cardBorder/60 relative group">
+            <img id="qvImage" src="" alt="" class="w-full h-full object-cover transition-transform duration-300">
+            <div id="qvImageCountIndicator" class="absolute bottom-2 right-2 px-2 py-0.5 bg-black/70 backdrop-blur-sm text-[10px] text-zinc-300 rounded border border-white/10 hidden">
+              1 / 1
+            </div>
+          </div>
+          <!-- Carrusel de Miniaturas (hasta 5 fotos) -->
+          <div id="qvThumbnails" class="grid grid-cols-5 gap-2"></div>
         </div>
         <div class="space-y-4">
           <span id="qvCategory" class="text-xs uppercase tracking-widest text-gold-400 font-semibold"></span>
@@ -1879,11 +1886,40 @@
           </select>
         </div>
 
-        <div>
-          <label class="block text-zinc-400 mb-1">URL de la Imagen (Opcional)</label>
-          <input type="url" id="pfImage" placeholder="https://images.unsplash.com/..." 
-                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500">
-          <p class="text-[10px] text-zinc-500 mt-1">Si se deja en blanco se asignará una fotografía de cuero vacuno de alta calidad.</p>
+                <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-zinc-300 font-semibold text-xs">
+              <i class="fa-solid fa-images text-gold-400 mr-1"></i> Fotografías del Producto (Hasta 5)
+            </label>
+            <span class="text-[10px] text-zinc-400" id="pfImageCountBadge">0 / 5 imágenes</span>
+          </div>
+
+          <!-- Selector de Archivo Local / Subir Imagen -->
+          <div class="p-3 bg-darkSurface/90 border border-dashed border-gold-500/40 rounded-lg mb-2.5 text-center hover:border-gold-400 transition-colors">
+            <input type="file" id="pfFileInput" accept="image/*" multiple class="hidden" onchange="handleProductImageFiles(this.files)">
+            <label for="pfFileInput" class="cursor-pointer flex flex-col items-center justify-center gap-1.5 py-1">
+              <div class="w-9 h-9 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400">
+                <i class="fa-solid fa-cloud-arrow-up text-base"></i>
+              </div>
+              <span class="text-xs text-gold-300 font-medium hover:underline">Seleccionar imagen desde tu dispositivo</span>
+              <span class="text-[10px] text-zinc-500">Puedes elegir o agregar hasta 5 fotos (JPG, PNG, WebP)</span>
+            </label>
+          </div>
+
+          <!-- O ingresar mediante URL directa -->
+          <div class="flex gap-2 mb-2">
+            <input type="url" id="pfImage" placeholder="O pega una URL: https://..." 
+                   class="flex-1 bg-darkSurface border border-cardBorder rounded px-3 py-1.5 text-zinc-200 text-xs focus:outline-none focus:border-gold-500 font-mono">
+            <button type="button" onclick="handleAddImageUrl()" class="px-3 py-1.5 bg-cardBg hover:bg-gold-500/20 text-gold-400 border border-gold-500/40 rounded text-xs transition flex items-center gap-1 font-medium">
+              <i class="fa-solid fa-plus text-[10px]"></i> Añadir URL
+            </button>
+          </div>
+
+          <!-- Cuadrícula interactiva de previsualización de hasta 5 imágenes -->
+          <div id="pfGalleryPreview" class="grid grid-cols-5 gap-2 min-h-[64px] p-2 bg-darkSurface/60 border border-cardBorder/60 rounded-lg">
+            <!-- Renderizado dinámico con JS -->
+          </div>
+          <p class="text-[10px] text-zinc-500 mt-1">La primera fotografía es la portada principal. Haz clic en "Portada" para reordenar.</p>
         </div>
 
         <div>
@@ -3895,12 +3931,61 @@
       });
     }
   
+    function setQuickViewMainImage(url, el) {
+      const qvImg = document.getElementById('qvImage');
+      if (qvImg) qvImg.src = url;
+      document.querySelectorAll('.qv-thumb-btn').forEach(btn => {
+        btn.classList.remove('border-gold-500', 'ring-1', 'ring-gold-500');
+        btn.classList.add('border-cardBorder');
+      });
+      if (el) {
+        el.classList.remove('border-cardBorder');
+        el.classList.add('border-gold-500', 'ring-1', 'ring-gold-500');
+      }
+    }
+
     function openQuickView(id) {
       const prod = products.find(p => p.id === id);
       if (!prod) return;
 
-      document.getElementById('qvImage').src = prod.image;
-      document.getElementById('qvCategory').textContent = prod.category + " · Tlaquepaque, Jal.";
+      // Imágenes del producto (hasta 5)
+      let prodImages = [];
+      if (Array.isArray(prod.images) && prod.images.length > 0) {
+        prodImages = prod.images;
+      } else if (prod.image) {
+        prodImages = [prod.image];
+      }
+
+      const qvImg = document.getElementById('qvImage');
+      if (qvImg) qvImg.src = prodImages[0] || prod.image;
+
+      const qvIndicator = document.getElementById('qvImageCountIndicator');
+      if (qvIndicator) {
+        if (prodImages.length > 1) {
+          qvIndicator.textContent = `1 / ${prodImages.length} fotos`;
+          qvIndicator.classList.remove('hidden');
+        } else {
+          qvIndicator.classList.add('hidden');
+        }
+      }
+
+      // Render miniaturas
+      const thumbsContainer = document.getElementById('qvThumbnails');
+      if (thumbsContainer) {
+        if (prodImages.length > 1) {
+          thumbsContainer.innerHTML = prodImages.map((img, idx) => `
+            <button type="button" onclick="setQuickViewMainImage('${img}', this)" class="qv-thumb-btn aspect-square rounded overflow-hidden border ${idx === 0 ? 'border-gold-500 ring-1 ring-gold-500' : 'border-cardBorder'} bg-black/40 hover:border-gold-400 transition">
+              <img src="${img}" class="w-full h-full object-cover">
+            </button>
+          `).join('');
+          thumbsContainer.classList.remove('hidden');
+        } else {
+          thumbsContainer.innerHTML = '';
+          thumbsContainer.classList.add('hidden');
+        }
+      }
+
+      document.getElementById('qvCategory').textContent = prod.category + " • Tlaquepaque, Jal.";
       selectQuickViewColor('Negro Ónix', '#1a1a1a');
       const dimText = document.getElementById('qvDimensionsText');
       const capText = document.getElementById('qvCapacityText');
@@ -5247,6 +5332,8 @@
       document.getElementById('pfCategory').value = "Bolsos";
       document.getElementById('pfImage').value = "";
       document.getElementById('pfDescription').value = "";
+      pfCurrentImages = [];
+      updateProductFormGalleryUI();
       document.getElementById('productFormModal').classList.remove('hidden');
     }
 
@@ -5260,13 +5347,122 @@
       document.getElementById('pfPrice').value = prod.price;
       document.getElementById('pfStock').value = prod.stock;
       document.getElementById('pfCategory').value = prod.category;
-      document.getElementById('pfImage').value = prod.image;
+      document.getElementById('pfImage').value = "";
       document.getElementById('pfDescription').value = prod.description;
+
+      // Cargar imágenes existentes (soporta array 'images' o fallback a 'image')
+      if (Array.isArray(prod.images) && prod.images.length > 0) {
+        pfCurrentImages = [...prod.images];
+      } else if (prod.image) {
+        pfCurrentImages = [prod.image];
+      } else {
+        pfCurrentImages = [];
+      }
+      updateProductFormGalleryUI();
+
       document.getElementById('productFormModal').classList.remove('hidden');
     }
 
     function closeProductFormModal() {
       document.getElementById('productFormModal').classList.add('hidden');
+    }
+
+    
+    /* ==========================================
+       GESTIÓN DE GALERÍA DE HASTA 5 IMÁGENES
+    ========================================== */
+    let pfCurrentImages = [];
+
+    function updateProductFormGalleryUI() {
+      const container = document.getElementById('pfGalleryPreview');
+      const badge = document.getElementById('pfImageCountBadge');
+      if (badge) {
+        badge.textContent = `${pfCurrentImages.length} / 5 imágenes`;
+      }
+      if (!container) return;
+
+      if (pfCurrentImages.length === 0) {
+        container.innerHTML = `<div class="col-span-5 text-center py-3 text-zinc-500 text-[11px] italic">No hay imágenes seleccionadas todavía.</div>`;
+        return;
+      }
+
+      container.innerHTML = pfCurrentImages.map((imgUrl, idx) => `
+        <div class="relative group aspect-square rounded-md overflow-hidden border ${idx === 0 ? 'border-gold-500 shadow-sm shadow-gold-500/20' : 'border-cardBorder'} bg-black/40">
+          <img src="${imgUrl}" class="w-full h-full object-cover">
+          ${idx === 0 ? '<span class="absolute top-1 left-1 bg-gold-500 text-carbon font-bold text-[8px] px-1 rounded uppercase tracking-wider">Portada</span>' : ''}
+          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 p-1">
+            ${idx > 0 ? `<button type="button" onclick="setAsPrimaryImage(${idx})" title="Convertir en portada" class="p-1 bg-zinc-800 hover:bg-gold-500 hover:text-carbon text-gold-400 rounded text-[9px] w-full text-center">Portada</button>` : ''}
+            <button type="button" onclick="removeProductImage(${idx})" title="Eliminar foto" class="p-1 bg-red-950/80 hover:bg-red-600 text-red-200 rounded text-[9px] w-full text-center">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleProductImageFiles(files) {
+      if (!files || files.length === 0) return;
+      const fileArray = Array.from(files);
+
+      fileArray.forEach(file => {
+        if (pfCurrentImages.length >= 5) {
+          showToast("Límite de hasta 5 imágenes alcanzado", "warning");
+          return;
+        }
+        if (!file.type.startsWith('image/')) {
+          showToast("Formato de imagen inválido", "error");
+          return;
+        }
+        // Tamaño máximo 5MB
+        if (file.size > 5 * 1024 * 1024) {
+          showToast("La imagen supera el límite de 5MB", "warning");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (pfCurrentImages.length < 5) {
+            pfCurrentImages.push(e.target.result);
+            updateProductFormGalleryUI();
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+
+      const fileInput = document.getElementById('pfFileInput');
+      if (fileInput) fileInput.value = "";
+    }
+
+    function handleAddImageUrl() {
+      const input = document.getElementById('pfImage');
+      if (!input) return;
+      const url = input.value.trim();
+      if (!url) {
+        showToast("Por favor ingresa una URL válida", "warning");
+        return;
+      }
+      if (pfCurrentImages.length >= 5) {
+        showToast("Límite máximo de 5 fotografías alcanzado", "warning");
+        return;
+      }
+      pfCurrentImages.push(url);
+      input.value = "";
+      updateProductFormGalleryUI();
+      showToast("Imagen agregada a la lista", "success");
+    }
+
+    function setAsPrimaryImage(index) {
+      if (index <= 0 || index >= pfCurrentImages.length) return;
+      const selected = pfCurrentImages.splice(index, 1)[0];
+      pfCurrentImages.unshift(selected);
+      updateProductFormGalleryUI();
+      showToast("Fotografía asignada como portada", "info");
+    }
+
+    function removeProductImage(index) {
+      if (index < 0 || index >= pfCurrentImages.length) return;
+      pfCurrentImages.splice(index, 1);
+      updateProductFormGalleryUI();
     }
 
     function handleProductFormSubmit(event) {
@@ -5276,12 +5472,21 @@
       const price = parseFloat(document.getElementById('pfPrice').value);
       const stock = parseInt(document.getElementById('pfStock').value, 10);
       const category = document.getElementById('pfCategory').value;
-      let image = document.getElementById('pfImage').value.trim();
       const description = document.getElementById('pfDescription').value.trim() || "Pieza elaborada artesanalmente en piel genuina vacuno de Tlaquepaque, Jalisco.";
 
-      if (!image) {
-        image = "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80";
+      // Si escribió una URL adicional en el input y olvidó presionar '+', agregarla
+      const singleUrlInput = document.getElementById('pfImage').value.trim();
+      if (singleUrlInput && !pfCurrentImages.includes(singleUrlInput) && pfCurrentImages.length < 5) {
+        pfCurrentImages.push(singleUrlInput);
       }
+
+      if (pfCurrentImages.length === 0) {
+        pfCurrentImages.push("https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80");
+      }
+
+      // La imagen principal siempre es la primera
+      const primaryImage = pfCurrentImages[0];
+      const imagesList = [...pfCurrentImages];
 
       if (id) {
         const prod = products.find(p => p.id === parseInt(id, 10));
@@ -5290,21 +5495,32 @@
           prod.price = price;
           prod.stock = stock;
           prod.category = category;
-          prod.image = image;
+          prod.image = primaryImage;
+          prod.images = imagesList;
           prod.description = description;
-          showToast(`Producto "${name}" actualizado`, "success");
+          prod.active = stock > 0;
+          syncProductToCloud(prod);
+          showToast(`Producto "${name}" actualizado con éxito`, "success");
         }
       } else {
         const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-        products.push({
+        const newProd = {
           id: newId,
+          sku: `VZ-${category.substring(0,3).toUpperCase()}-${String(newId).padStart(3, '0')}`,
           name,
           price,
           stock,
+          stock_independencia: Math.floor(stock * 0.4),
+          stock_alfareros: Math.floor(stock * 0.4),
+          stock_tonala: stock - (Math.floor(stock * 0.4) * 2),
           category,
-          image,
-          description
-        });
+          image: primaryImage,
+          images: imagesList,
+          description,
+          active: stock > 0
+        };
+        products.push(newProd);
+        syncProductToCloud(newProd);
         showToast(`Nuevo producto "${name}" agregado al catálogo`, "success");
       }
 
