@@ -1588,8 +1588,14 @@
             <label class="block text-zinc-400 mb-1">Contraseña Maestra</label>
             <div class="relative">
               <input type="password" id="adminPasswordInput" placeholder="••••••••••••" required
-                     class="w-full bg-cardBg border border-cardBorder rounded-lg px-3.5 py-2.5 pl-9 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-gold-500">
+                     class="w-full bg-cardBg border border-cardBorder rounded-lg px-3.5 py-2.5 pl-9 pr-10 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-gold-500">
               <i class="fa-solid fa-lock absolute left-3 top-3 text-zinc-500 text-xs"></i>
+              <button type="button" onclick="toggleAdminPasswordVisibility()" class="absolute right-3 top-2.5 text-zinc-400 hover:text-gold-400 p-1" title="Ver contraseña">
+                <i id="adminPwdToggleIcon" class="fa-regular fa-eye text-xs"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-zinc-500 pt-1">
+              <span>Usuario maestro: <strong class="text-zinc-400 font-mono">admin@vizantino.com</strong></span>
             </div>
           </div>
 
@@ -3457,20 +3463,76 @@
       document.getElementById('adminModal').classList.add('hidden');
     }
 
-    function handleAdminLogin(event) {
-      event.preventDefault();
-      const email = document.getElementById('adminEmailInput').value.trim().toLowerCase();
-      const pwd = document.getElementById('adminPasswordInput').value;
-
-      // Credenciales Oficiales de Administrador
-      if (email === "admin@vizantino.com" && pwd === "VizantinoAdmin2026") {
-        localStorage.setItem(STORAGE_KEY_ADMIN, "true");
-        document.getElementById('adminEmailInput').value = "";
-        document.getElementById('adminPasswordInput').value = "";
-        checkAdminSession();
-        showToast("Sesión de administrador iniciada con éxito", "success");
+    async 
+    function toggleAdminPasswordVisibility() {
+      const input = document.getElementById('adminPasswordInput');
+      const icon = document.getElementById('adminPwdToggleIcon');
+      if (!input || !icon) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-regular fa-eye-slash text-xs text-gold-400';
       } else {
-        showToast("Correo o contraseña de administrador incorrectos", "error");
+        input.type = 'password';
+        icon.className = 'fa-regular fa-eye text-xs text-zinc-400';
+      }
+    }
+  
+    async function handleAdminLogin(event) {
+      event.preventDefault();
+      const emailInput = document.getElementById('adminEmailInput');
+      const pwdInput = document.getElementById('adminPasswordInput');
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+
+      const email = emailInput ? emailInput.value.trim().toLowerCase() : "";
+      const pwd = pwdInput ? pwdInput.value.trim() : "";
+
+      if (!email || !pwd) {
+        showToast("Por favor ingresa correo y contraseña", "warning");
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Verificando credenciales...';
+      }
+
+      // 1. Verificación inmediata de credenciales maestras oficiales
+      const isOfficialMaster = (email === "admin@vizantino.com" && pwd === "VizantinoAdmin2026");
+
+      let isAuthenticated = isOfficialMaster;
+
+      // 2. Si no es la clave en duro, consultar tabla admin_users en Supabase
+      if (!isAuthenticated && supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('admin_users')
+            .select('*')
+            .eq('email', email)
+            .eq('password_hash', pwd)
+            .eq('active', true)
+            .limit(1);
+
+          if (!error && data && data.length > 0) {
+            isAuthenticated = true;
+          }
+        } catch (err) {
+          console.warn("Supabase admin auth fallback:", err);
+        }
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Iniciar Sesión como Administrador';
+      }
+
+      if (isAuthenticated) {
+        localStorage.setItem(STORAGE_KEY_ADMIN, "true");
+        if (emailInput) emailInput.value = "";
+        if (pwdInput) pwdInput.value = "";
+        checkAdminSession();
+        showToast("¡Bienvenido al Panel de Administración Vizantino!", "success");
+      } else {
+        showToast("Correo o contraseña incorrectos. Verifica tus datos.", "error");
       }
     }
 
