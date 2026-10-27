@@ -1680,6 +1680,25 @@
           </div>
         </div>
 
+        
+        <!-- Banner Alerta de Stock Mínimo (<= 5 piezas) -->
+        <div id="adminLowStockAlertBanner" class="p-3.5 bg-amber-950/40 border border-amber-500/50 rounded-lg flex items-center justify-between text-xs text-amber-200 hidden">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+              <strong class="font-bold text-white block">Alerta de Existencias Críticas:</strong>
+              <span id="adminLowStockCount" class="text-[11px] text-amber-300">Productos con 5 o menos piezas disponibles.</span>
+            </div>
+          </div>
+          <button type="button" onclick="document.getElementById('adminCategorySelect').value='all'; filterAdminTableByLowStock();" 
+                  class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-carbon font-bold text-[10px] uppercase tracking-wider rounded transition">
+            Ver Productos en Riesgo
+          </button>
+        </div>
+
+
         <!-- 4 Tarjetas de Métricas -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="bg-cardBg p-4 rounded-lg border border-cardBorder">
@@ -3924,13 +3943,7 @@
       if (!container) return;
 
       let filtered = products.filter(item => {
-        let matchCat = false;
-        if (currentCategoryFilter === 'todos') {
-          matchCat = true;
-        } else {
-          matchCat = (item.category === currentCategoryFilter);
-        }
-
+        let matchCat = (currentCategoryFilter === 'todos') || (item.category === currentCategoryFilter);
         let matchSearch = true;
         if (currentSearchQuery) {
           matchSearch = item.name.toLowerCase().includes(currentSearchQuery) || 
@@ -3938,8 +3951,29 @@
                         item.description.toLowerCase().includes(currentSearchQuery);
         }
 
-        return matchCat && matchSearch;
+        // Filtro por Rango de Precio
+        let matchPrice = true;
+        if (currentPriceFilter === 'under1000') {
+          matchPrice = item.price <= 1000;
+        } else if (currentPriceFilter === '1000to2500') {
+          matchPrice = item.price > 1000 && item.price <= 2500;
+        } else if (currentPriceFilter === 'above2500') {
+          matchPrice = item.price > 2500;
+        }
+
+        return matchCat && matchSearch && matchPrice;
       });
+
+      // Ordenamiento del Catálogo
+      if (currentSortOrder === 'price-asc') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (currentSortOrder === 'price-desc') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (currentSortOrder === 'name-asc') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (currentSortOrder === 'featured') {
+        filtered.sort((a, b) => (b.barcode === 'FEATURED' ? 1 : 0) - (a.barcode === 'FEATURED' ? 1 : 0));
+      }
 
       if (filtered.length === 0) {
         container.innerHTML = "";
@@ -4944,6 +4978,62 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Generador de Certificado de Autenticidad para Regalos (Panel Admin) -->
+  <div id="adminCertModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeAdminCertModal()"></div>
+    <div class="relative bg-cardBg border border-gold-500/50 rounded-xl max-w-lg w-full p-6 z-10 shadow-2xl space-y-4">
+      <button onclick="closeAdminCertModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="text-center pb-2 border-b border-cardBorder">
+        <div class="w-12 h-12 mx-auto rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-xl mb-2">
+          <i class="fa-solid fa-award"></i>
+        </div>
+        <span class="text-[10px] tracking-widest uppercase text-gold-400 font-bold">Documento Oficial de Garantía</span>
+        <h3 class="font-serif text-xl text-white font-bold mt-0.5">Certificado de Autenticidad para Regalo</h3>
+        <p class="text-[11px] text-zinc-400">Genera o imprime el certificado con sello artesanal de Tlaquepaque.</p>
+      </div>
+
+      <form id="adminCertForm" onsubmit="handleGenerateCustomCert(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-zinc-300 font-medium mb-1">Nombre de Quien Recibe el Regalo / Propietario *</label>
+          <input type="text" id="certRecipientName" required placeholder="Ej. Lic. Fernando Sandoval Morales" 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-100 focus:outline-none focus:border-gold-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-zinc-300 font-medium mb-1">Pieza / Producto *</label>
+            <input type="text" id="certProductName" required placeholder="Ej. Maletín Chelsea Piel Vacuno" 
+                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-100 focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-zinc-300 font-medium mb-1">Folio Único de Garantía</label>
+            <input type="text" id="certFolioNumber" placeholder="Ej. #VZ-CERT-2026" 
+                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-gold-400 font-mono font-bold focus:outline-none focus:border-gold-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-zinc-300 font-medium mb-1">Dedicatoria / Mensaje Especial (Opcional)</label>
+          <textarea id="certDedicationText" rows="2" placeholder="Ej. Con aprecio por tu trayectoria y compromiso..." 
+                    class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500"></textarea>
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAdminCertModal()" class="px-4 py-2 bg-darkSurface border border-cardBorder rounded text-zinc-400 hover:text-white transition">
+            Cancelar
+          </button>
+          <button type="submit" class="px-5 py-2 bg-gold-500 hover:bg-gold-400 text-carbon font-bold uppercase tracking-wider rounded transition flex items-center gap-1.5 shadow-lg shadow-gold-500/20">
+            <i class="fa-solid fa-print"></i> Generar e Imprimir
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </body>
         </html>
       `);
@@ -5086,6 +5176,7 @@
       if (tab === 'orders') renderAdminOrdersTable();
       if (tab === 'users') renderAdminUsersTable();
       if (tab === 'inventory') renderAdminTable();
+      checkLowStockAlerts();
       if (tab === 'abandoned') renderAdminAbandonedTable();
       if (tab === 'transfers') renderAdminTransfersTable();
     }
@@ -5433,6 +5524,54 @@
       }
     }
   
+    
+    function filterAdminTableByLowStock() {
+      const searchInput = document.getElementById('adminSearchInput');
+      if (searchInput) searchInput.value = '';
+      const tbody = document.getElementById('adminTableBody');
+      if (!tbody) return;
+
+      const lowStockList = products.filter(p => p.stock <= 5);
+      if (lowStockList.length === 0) {
+        showToast("No hay productos con stock menor o igual a 5 piezas", "info");
+        return;
+      }
+      showToast(`Mostrando ${lowStockList.length} productos con stock crítico (≤ 5 piezas)`, "warning");
+      // Temporalmente re-renderizar solo esos
+      tbody.innerHTML = lowStockList.map(p => {
+        let statusBadge = p.stock <= 0 ? 
+          '<span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-500/40 text-[10px] font-bold">Agotado (0)</span>' : 
+          `<span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/40 text-[10px] font-bold">Alerta: ${p.stock} pzas</span>`;
+
+        return `
+          <tr class="bg-amber-950/20 hover:bg-amber-950/30 transition border-l-2 border-amber-500">
+            <td class="p-3">
+              <div class="flex items-center gap-3">
+                <img src="${p.image}" class="w-10 h-10 object-cover rounded bg-black">
+                <div>
+                  <div class="font-bold text-white">${p.name}</div>
+                  <div class="text-[10px] text-zinc-500">ID: #${p.id}</div>
+                </div>
+              </div>
+            </td>
+            <td class="p-3 text-zinc-400 font-medium">${p.category}</td>
+            <td class="p-3 font-mono text-zinc-100 font-bold">${p.price.toLocaleString('es-MX')}</td>
+            <td class="p-3 text-center">
+              <div class="inline-flex items-center border border-amber-500/40 rounded bg-darkSurface">
+                <button onclick="updateProductStock(${p.id}, -1); filterAdminTableByLowStock();" class="px-2 py-1 text-zinc-400 hover:text-white">-</button>
+                <input type="number" value="${p.stock}" min="0" onchange="setProductStockDirect(${p.id}, this.value); filterAdminTableByLowStock();" class="w-12 text-center bg-transparent text-amber-300 font-mono font-bold text-xs focus:outline-none">
+                <button onclick="updateProductStock(${p.id}, 1); filterAdminTableByLowStock();" class="px-2 py-1 text-zinc-400 hover:text-white">+</button>
+              </div>
+            </td>
+            <td class="p-3 text-center">${statusBadge}</td>
+            <td class="p-3 text-right">
+              <button onclick="openEditProductModal(${p.id})" class="p-1.5 text-zinc-400 hover:text-gold-400 rounded transition"><i class="fa-regular fa-pen-to-square"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+    
     function renderAdminTable() {
       const tbody = document.getElementById('adminTableBody');
       const search = (document.getElementById('adminSearchInput').value || "").toLowerCase().trim();
