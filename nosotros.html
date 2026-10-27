@@ -277,6 +277,7 @@
       --brand-amber-glow: rgba(196, 142, 72, 0.18);
     }
   </style>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
 <body class="selection:bg-gold-500 selection:text-black">
 
@@ -1397,6 +1398,19 @@
       </div>
 
       <div class="space-y-3">
+        
+      <!-- Botón Principal de Pago Mercado Pago -->
+      <div id="receiptMpContainer" class="mb-3 space-y-2">
+        <a id="receiptMpPayBtn" href="#" target="_blank" rel="noopener noreferrer"
+           class="w-full py-4 bg-[#009EE3] hover:bg-[#0081B8] text-white font-bold text-sm tracking-wide uppercase rounded-lg transition-all flex items-center justify-center gap-3 shadow-xl shadow-[#009EE3]/30">
+          <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.5/mercadopago/favicon.svg" alt="MP" class="w-6 h-6">
+          <span>Pagar Ahora con Mercado Pago</span>
+        </a>
+        <p class="text-[11px] text-zinc-400">
+          <i class="fa-solid fa-lock text-sky-400 mr-1"></i> Acepta Tarjetas (hasta 3 MSI), Débito, Transferencia SPEI y Efectivo en OXXO.
+        </p>
+      </div>
+
         <a id="receiptWhatsAppBtn" href="#" target="_blank" rel="noopener noreferrer" 
            class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-widest uppercase rounded transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20">
           <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Confirmación por WhatsApp
@@ -3246,6 +3260,20 @@
     }
 
     // Claves en LocalStorage (Caché local offline)
+    
+    // Configuración Oficial de Mercado Pago México (Vizantino Piel)
+    const MP_PUBLIC_KEY = "APP_USR-9958486d-4fc8-4d39-b1b2-ffa78982a76f";
+    const MP_ACCESS_TOKEN = "APP_USR-8049053096303513-102514-d35d7ecd85bc46741eba7680aecddb80-1316092337";
+    const MP_CLIENT_ID = "8049053096303513";
+    let mpInstance = null;
+    try {
+      if (window.MercadoPago) {
+        mpInstance = new MercadoPago(MP_PUBLIC_KEY, { locale: 'es-MX' });
+      }
+    } catch(e) {
+      console.warn("Mercado Pago SDK fallback:", e);
+    }
+
     const STORAGE_KEY_PRODUCTS = "vizantino_products_v1";
     const STORAGE_KEY_CART = "vizantino_cart_v1";
     const STORAGE_KEY_ADMIN = "vizantino_admin_logged";
@@ -4564,6 +4592,85 @@
 
       closeCheckoutModal();
       document.getElementById('orderReceiptModal').classList.remove('hidden');
+    }
+
+    
+    /* ==========================================
+       INTEGRACIÓN MERCADO PAGO MÉXICO (PREFERENCIAS)
+    ========================================== */
+    async function createMercadoPagoPreference(order) {
+      const items = order.items.map(item => ({
+        id: String(item.id),
+        title: `${item.name} - Vizantino Piel`,
+        description: `Pieza artesanal en piel corte vacuno. ${order.customization || ''}`.substring(0, 250),
+        quantity: parseInt(item.qty, 10),
+        currency_id: "MXN",
+        unit_price: parseFloat(item.price)
+      }));
+
+      // Si aplica costo de envío menor a $1,800
+      if (order.shipping > 0) {
+        items.push({
+          id: "SHIPPING-STANDARD",
+          title: "Costo de Envío Estándar Paquetería (< 3kg)",
+          description: "Envío seguro asegurado a cualquier código postal de la República Mexicana",
+          quantity: 1,
+          currency_id: "MXN",
+          unit_price: parseFloat(order.shipping)
+        });
+      }
+
+      const returnUrl = window.location.origin + window.location.pathname;
+
+      const preferencePayload = {
+        items: items,
+        payer: {
+          name: order.customerName,
+          email: order.customerEmail,
+          phone: {
+            area_code: "52",
+            number: order.customerPhone.replace(/\D/g, '')
+          },
+          address: {
+            street_name: order.customerAddress.substring(0, 100),
+            zip_code: document.getElementById('custZip') ? document.getElementById('custZip').value.trim() : "45500"
+          }
+        },
+        external_reference: order.folio,
+        statement_descriptor: "VIZANTINO PIEL",
+        payment_methods: {
+          installments: 12
+        },
+        back_urls: {
+          success: returnUrl + "?payment=success&folio=" + encodeURIComponent(order.folio),
+          failure: returnUrl + "?payment=failure&folio=" + encodeURIComponent(order.folio),
+          pending: returnUrl + "?payment=pending&folio=" + encodeURIComponent(order.folio)
+        },
+        auto_return: "approved"
+      };
+
+      try {
+        const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + MP_ACCESS_TOKEN,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(preferencePayload)
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          return data;
+        } else {
+          const errText = await response.text();
+          console.error("Error al crear preferencia de Mercado Pago:", response.status, errText);
+          return null;
+        }
+      } catch (err) {
+        console.error("Fallo de red al conectar con Mercado Pago:", err);
+        return null;
+      }
     }
 
     /* Envío Automático de Notificaciones por Correo */
