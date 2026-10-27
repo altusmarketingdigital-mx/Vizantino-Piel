@@ -4767,7 +4767,7 @@
 
     /* Envío Automático de Notificaciones por Correo */
     async function sendOrderEmailNotification(order) {
-      const recipientEmails = ["vizantinopiel@gmail.com", "altusmarketingdigital@gmail.com"];
+      const recipientEmails = ["vizantinopiel@gmail.com"];
       const itemsList = order.items.map(i => `• ${i.name} (Cantidad: ${i.qty}) - $${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('\n');
 
       const emailPayload = {
@@ -5112,7 +5112,7 @@
         beneficio: "Envío seguro garantizado + Grabado de personalización gratis",
         enlace_para_finalizar: window.location.origin + window.location.pathname,
         atencion_whatsapp: "https://wa.me/523329089920?text=" + encodeURIComponent(`Hola Vizantino Piel, deseo finalizar mi carrito de compras pendiente (${item.id})`),
-        notificar_copia: "vizantinopiel@gmail.com, altusmarketingdigital@gmail.com"
+        notificar_copia: "vizantinopiel@gmail.com"
       };
 
       showToast(`Enviando correo de recuperación a ${item.email}...`, 'info');
