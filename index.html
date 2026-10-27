@@ -2014,6 +2014,62 @@
     </div>
   </div>
 
+  <!-- Modal Generador de Certificado de Autenticidad para Regalos (Panel Admin) -->
+  <div id="adminCertModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeAdminCertModal()"></div>
+    <div class="relative bg-cardBg border border-gold-500/50 rounded-xl max-w-lg w-full p-6 z-10 shadow-2xl space-y-4">
+      <button onclick="closeAdminCertModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="text-center pb-2 border-b border-cardBorder">
+        <div class="w-12 h-12 mx-auto rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-xl mb-2">
+          <i class="fa-solid fa-award"></i>
+        </div>
+        <span class="text-[10px] tracking-widest uppercase text-gold-400 font-bold">Documento Oficial de Garantía</span>
+        <h3 class="font-serif text-xl text-white font-bold mt-0.5">Certificado de Autenticidad para Regalo</h3>
+        <p class="text-[11px] text-zinc-400">Genera o imprime el certificado con sello artesanal de Tlaquepaque.</p>
+      </div>
+
+      <form id="adminCertForm" onsubmit="handleGenerateCustomCert(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-zinc-300 font-medium mb-1">Nombre de Quien Recibe el Regalo / Propietario *</label>
+          <input type="text" id="certRecipientName" required placeholder="Ej. Lic. Fernando Sandoval Morales" 
+                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-100 focus:outline-none focus:border-gold-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-zinc-300 font-medium mb-1">Pieza / Producto *</label>
+            <input type="text" id="certProductName" required placeholder="Ej. Maletín Chelsea Piel Vacuno" 
+                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-100 focus:outline-none focus:border-gold-500">
+          </div>
+          <div>
+            <label class="block text-zinc-300 font-medium mb-1">Folio Único de Garantía</label>
+            <input type="text" id="certFolioNumber" placeholder="Ej. #VZ-CERT-2026" 
+                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-gold-400 font-mono font-bold focus:outline-none focus:border-gold-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-zinc-300 font-medium mb-1">Dedicatoria / Mensaje Especial (Opcional)</label>
+          <textarea id="certDedicationText" rows="2" placeholder="Ej. Con aprecio por tu trayectoria y compromiso..." 
+                    class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500"></textarea>
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAdminCertModal()" class="px-4 py-2 bg-darkSurface border border-cardBorder rounded text-zinc-400 hover:text-white transition">
+            Cancelar
+          </button>
+          <button type="submit" class="px-5 py-2 bg-gold-500 hover:bg-gold-400 text-carbon font-bold uppercase tracking-wider rounded transition flex items-center gap-1.5 shadow-lg shadow-gold-500/20">
+            <i class="fa-solid fa-print"></i> Generar e Imprimir
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
   <!-- Modal Secundario: Formulario Crear / Editar Producto -->
   <div id="productFormModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeProductFormModal()"></div>
@@ -3887,7 +3943,7 @@
                     <span class="w-5 h-5 rounded-full bg-darkSurface border border-cardBorder flex items-center justify-center text-[10px] font-mono text-gold-400">${it.qty}</span>
                     <span>${it.name}</span>
                   </div>
-                  <span class="font-mono text-zinc-400">$${(it.price * it.qty).toLocaleString('es-MX')} MXN</span>
+                  <span class="font-mono text-zinc-400">${(it.price * it.qty).toLocaleString('es-MX')} MXN</span>
                 </div>
               `).join('')}
             </div>
@@ -3898,7 +3954,7 @@
                 <span class="text-zinc-300">${ord.customerAddress}, ${ord.customerCity}</span>
               </div>
               <div class="flex items-center gap-4">
-                <span class="font-serif text-base text-gold-300 font-bold">Total: $${ord.total.toLocaleString('es-MX')} MXN</span>
+                <span class="font-serif text-base text-gold-300 font-bold">Total: ${ord.total.toLocaleString('es-MX')} MXN</span>
                 <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20deseo%20saber%20el%20estatus%20de%20mi%20orden%20${ord.folio}" 
                    target="_blank" rel="noopener noreferrer" 
                    class="px-3 py-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded text-[11px] font-medium hover:bg-emerald-600 hover:text-white transition flex items-center gap-1">
@@ -4234,7 +4290,7 @@
                 <div>
                   <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Precio</span>
                   <span class="font-serif text-xl font-bold text-gold-300">
-                    $${product.price.toLocaleString('es-MX')} <span class="text-[10px] text-zinc-400 font-sans">MXN</span>
+                    ${product.price.toLocaleString('es-MX')} <span class="text-[10px] text-zinc-400 font-sans">MXN</span>
                   </span>
                 </div>
 
@@ -4526,7 +4582,7 @@
           <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded bg-black">
           <div class="flex-1 min-w-0">
             <h4 class="font-serif text-sm text-white font-bold truncate">${item.name}</h4>
-            <div class="text-gold-400 font-mono text-xs font-semibold mt-0.5">$${item.price.toLocaleString('es-MX')} MXN</div>
+            <div class="text-gold-400 font-mono text-xs font-semibold mt-0.5">${item.price.toLocaleString('es-MX')} MXN</div>
             
             <div class="flex items-center gap-3 mt-2">
               <div class="flex items-center border border-cardBorder rounded bg-darkSurface">
@@ -4540,7 +4596,7 @@
             </div>
           </div>
           <div class="text-right font-mono text-xs text-zinc-200 font-semibold">
-            $${(item.price * item.qty).toLocaleString('es-MX')}
+            ${(item.price * item.qty).toLocaleString('es-MX')}
           </div>
         </div>
       `).join('');
@@ -4558,7 +4614,7 @@
       const discountAmount = document.getElementById('cartDiscountAmount');
       if (discountRow && discountAmount) {
         if (calc.quantityDiscount > 0) {
-          discountAmount.textContent = `-$${calc.quantityDiscount.toLocaleString('es-MX')} MXN`;
+          discountAmount.textContent = `-${calc.quantityDiscount.toLocaleString('es-MX')} MXN`;
           discountRow.classList.remove('hidden');
         } else {
           discountRow.classList.add('hidden');
@@ -4570,20 +4626,20 @@
       const loyaltyAmount = document.getElementById('cartLoyaltyDiscountAmount');
       if (loyaltyRow && loyaltyAmount) {
         if (calc.loyaltyDiscount > 0) {
-          loyaltyAmount.textContent = `-$${calc.loyaltyDiscount.toLocaleString('es-MX')} MXN`;
+          loyaltyAmount.textContent = `-${calc.loyaltyDiscount.toLocaleString('es-MX')} MXN`;
           loyaltyRow.classList.remove('hidden');
         } else {
           loyaltyRow.classList.add('hidden');
         }
       }
 
-      shippingEl.textContent = isFreeShipping ? "GRATIS" : `$${shippingCost.toLocaleString('es-MX')} MXN (< 3kg)`;
+      shippingEl.textContent = isFreeShipping ? "GRATIS" : `${shippingCost.toLocaleString('es-MX')} MXN (< 3kg)`;
       if (isFreeShipping) {
         shippingEl.className = "font-mono text-emerald-400 font-bold";
       } else {
         shippingEl.className = "font-mono text-zinc-300";
       }
-      totalEl.textContent = `$${total.toLocaleString('es-MX')} MXN`;
+      totalEl.textContent = `${total.toLocaleString('es-MX')} MXN`;
 
       if (isFreeShipping) {
         freeShippingBar.style.width = "100%";
@@ -4593,7 +4649,7 @@
         const remaining = FREE_SHIPPING_THRESHOLD - subtotal;
         const percent = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
         freeShippingBar.style.width = `${percent}%`;
-        freeShippingText.textContent = `Añade $${remaining.toLocaleString('es-MX')} MXN para Envío Gratis (o 3 MSI)`;
+        freeShippingText.textContent = `Añade ${remaining.toLocaleString('es-MX')} MXN para Envío Gratis (o 3 MSI)`;
         freeShippingStatus.textContent = `${percent}%`;
       }
     }
@@ -4612,7 +4668,7 @@
       const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
       const total = subtotal + (isFreeShipping ? 0 : SHIPPING_COST_STANDARD);
 
-      document.getElementById('checkoutTotalAmount').textContent = `$${total.toLocaleString('es-MX')} MXN`;
+      document.getElementById('checkoutTotalAmount').textContent = `${total.toLocaleString('es-MX')} MXN`;
 
       // Si el cliente está logueado, autocompletar formulario
       const prefillAlert = document.getElementById('checkoutPrefillAlert');
@@ -4942,7 +4998,7 @@
       });
 
       // Mensaje WhatsApp
-      let orderSummaryLines = cart.map(i => `• ${i.name} (x${i.qty}) - $${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('%0A');
+      let orderSummaryLines = cart.map(i => `• ${i.name} (x${i.qty}) - ${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('%0A');
       const waMessage = `*NUEVA ORDEN EN VIZANTINO PIEL*%0A` +
         `*Folio:* ${randomFolio}%0A` +
         `*Cliente:* ${name}%0A` +
@@ -4951,8 +5007,8 @@
         `*Destino:* ${address}, ${city}%0A%0A` +
         `*Artículos Solicitados:*%0A${orderSummaryLines}%0A%0A` +
         `*Personalización de Pieza:*%0A${customizationSummary}%0A%0A` +
-        `*Envío:* ${shipping === 0 ? 'GRATIS' : `$${SHIPPING_COST_STANDARD} MXN (< 3kg)`}%0A` +
-        `*Total a Liquidar:* $${total.toLocaleString('es-MX')} MXN%0A` +
+        `*Envío:* ${shipping === 0 ? 'GRATIS' : `${SHIPPING_COST_STANDARD} MXN (< 3kg)`}%0A` +
+        `*Total a Liquidar:* ${total.toLocaleString('es-MX')} MXN%0A` +
         `*Método Elegido:* ${methodLabels[selectedPayment]}%0A%0A` +
         `_Agradezco confirmar la disponibilidad y dar seguimiento a mi pedido._`;
 
@@ -4965,7 +5021,7 @@
       document.getElementById('receiptCustomization').textContent = customizationSummary;
       document.getElementById('receiptPaymentMethod').textContent = methodLabels[selectedPayment];
       document.getElementById('receiptAddress').textContent = `${address}, ${city}`;
-      document.getElementById('receiptTotalAmount').textContent = `$${total.toLocaleString('es-MX')} MXN`;
+      document.getElementById('receiptTotalAmount').textContent = `${total.toLocaleString('es-MX')} MXN`;
       document.getElementById('receiptWhatsAppBtn').href = waLink;
 
       // Vaciar Carrito
@@ -5063,10 +5119,10 @@
     /* Envío Automático de Notificaciones por Correo */
     async function sendOrderEmailNotification(order) {
       const recipientEmails = ["vizantinopiel@gmail.com"];
-      const itemsList = order.items.map(i => `• ${i.name} (Cantidad: ${i.qty}) - $${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('\n');
+      const itemsList = order.items.map(i => `• ${i.name} (Cantidad: ${i.qty}) - ${(i.price * i.qty).toLocaleString('es-MX')} MXN`).join('\n');
 
       const emailPayload = {
-        _subject: `🛍️ NUEVA VENTA VIZANTINO PIEL: Orden ${order.folio} ($${order.total.toLocaleString('es-MX')} MXN)`,
+        _subject: `🛍️ NUEVA VENTA VIZANTINO PIEL: Orden ${order.folio} (${order.total.toLocaleString('es-MX')} MXN)`,
         folio: order.folio,
         fecha: order.date,
         cliente: order.customerName,
@@ -5076,8 +5132,8 @@
         articulos_comprados: itemsList,
         personalizacion_artesanal: order.customization || 'Sin grabado',
         metodo_de_pago: order.paymentMethod,
-        envio: order.shipping === 0 ? 'GRATIS' : `$${order.shipping} MXN`,
-        total_pagado: `$${order.total.toLocaleString('es-MX')} MXN`,
+        envio: order.shipping === 0 ? 'GRATIS' : `${order.shipping} MXN`,
+        total_pagado: `${order.total.toLocaleString('es-MX')} MXN`,
         notificar_a: recipientEmails.join(', ')
       };
 
@@ -5181,62 +5237,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Modal Generador de Certificado de Autenticidad para Regalos (Panel Admin) -->
-  <div id="adminCertModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeAdminCertModal()"></div>
-    <div class="relative bg-cardBg border border-gold-500/50 rounded-xl max-w-lg w-full p-6 z-10 shadow-2xl space-y-4">
-      <button onclick="closeAdminCertModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="text-center pb-2 border-b border-cardBorder">
-        <div class="w-12 h-12 mx-auto rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-xl mb-2">
-          <i class="fa-solid fa-award"></i>
-        </div>
-        <span class="text-[10px] tracking-widest uppercase text-gold-400 font-bold">Documento Oficial de Garantía</span>
-        <h3 class="font-serif text-xl text-white font-bold mt-0.5">Certificado de Autenticidad para Regalo</h3>
-        <p class="text-[11px] text-zinc-400">Genera o imprime el certificado con sello artesanal de Tlaquepaque.</p>
-      </div>
-
-      <form id="adminCertForm" onsubmit="handleGenerateCustomCert(event)" class="space-y-3 text-xs">
-        <div>
-          <label class="block text-zinc-300 font-medium mb-1">Nombre de Quien Recibe el Regalo / Propietario *</label>
-          <input type="text" id="certRecipientName" required placeholder="Ej. Lic. Fernando Sandoval Morales" 
-                 class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-100 focus:outline-none focus:border-gold-500">
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-zinc-300 font-medium mb-1">Pieza / Producto *</label>
-            <input type="text" id="certProductName" required placeholder="Ej. Maletín Chelsea Piel Vacuno" 
-                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-100 focus:outline-none focus:border-gold-500">
-          </div>
-          <div>
-            <label class="block text-zinc-300 font-medium mb-1">Folio Único de Garantía</label>
-            <input type="text" id="certFolioNumber" placeholder="Ej. #VZ-CERT-2026" 
-                   class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-gold-400 font-mono font-bold focus:outline-none focus:border-gold-500">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-zinc-300 font-medium mb-1">Dedicatoria / Mensaje Especial (Opcional)</label>
-          <textarea id="certDedicationText" rows="2" placeholder="Ej. Con aprecio por tu trayectoria y compromiso..." 
-                    class="w-full bg-darkSurface border border-cardBorder rounded px-3 py-2 text-zinc-200 focus:outline-none focus:border-gold-500"></textarea>
-        </div>
-
-        <div class="pt-2 flex justify-end gap-2">
-          <button type="button" onclick="closeAdminCertModal()" class="px-4 py-2 bg-darkSurface border border-cardBorder rounded text-zinc-400 hover:text-white transition">
-            Cancelar
-          </button>
-          <button type="submit" class="px-5 py-2 bg-gold-500 hover:bg-gold-400 text-carbon font-bold uppercase tracking-wider rounded transition flex items-center gap-1.5 shadow-lg shadow-gold-500/20">
-            <i class="fa-solid fa-print"></i> Generar e Imprimir
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
 </body>
         </html>
       `);
