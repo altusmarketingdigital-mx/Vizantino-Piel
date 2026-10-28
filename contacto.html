@@ -1970,7 +1970,7 @@
 
 
   <!-- Modal Secundario: Formulario Crear / Editar Producto -->
-  <div id="productFormModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+  <div id="productFormModal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center p-4" style="z-index: 9999;">
     <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeProductFormModal()"></div>
     <div class="relative bg-cardBg border border-gold-500/40 rounded-lg max-w-lg w-full p-6 z-10 max-h-[90vh] overflow-y-auto">
       <button onclick="closeProductFormModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
@@ -5608,7 +5608,7 @@
             <td class="p-3 text-center">${statusBadge}</td>
             <td class="p-3 text-right">
               <div class="flex items-center justify-end gap-2">
-                <button onclick="openEditProductModal(${p.id})" class="p-1.5 text-zinc-400 hover:text-gold-400 rounded transition" title="Editar">
+                <button type="button" onclick="event.stopPropagation(); openEditProductModal(${p.id})" class="p-1.5 text-zinc-400 hover:text-gold-400 rounded transition cursor-pointer" title="Editar Producto #${p.id}">
                   <i class="fa-regular fa-pen-to-square"></i>
                 </button>
                 <button onclick="deleteProduct(${p.id})" class="p-1.5 text-zinc-500 hover:text-red-400 rounded transition" title="Eliminar">
@@ -5769,31 +5769,72 @@
     }
 
     function openNewProductModal() {
-      document.getElementById('productFormTitle').textContent = "Nuevo Producto Artesanal";
-      document.getElementById('pfId').value = "";
-      document.getElementById('pfName').value = "";
-      document.getElementById('pfPrice').value = "";
-      document.getElementById('pfStock').value = "";
-      document.getElementById('pfCategory').value = "Bolsos";
-      document.getElementById('pfImage').value = "";
-      document.getElementById('pfDescription').value = "";
+      const titleEl = document.getElementById('productFormTitle');
+      const idEl = document.getElementById('pfId');
+      const nameEl = document.getElementById('pfName');
+      const priceEl = document.getElementById('pfPrice');
+      const stockEl = document.getElementById('pfStock');
+      const catEl = document.getElementById('pfCategory');
+      const imgEl = document.getElementById('pfImage');
+      const descEl = document.getElementById('pfDescription');
+      const modalEl = document.getElementById('productFormModal');
+
+      if (titleEl) titleEl.textContent = "Nuevo Producto Artesanal";
+      if (idEl) idEl.value = "";
+      if (nameEl) nameEl.value = "";
+      if (priceEl) priceEl.value = "";
+      if (stockEl) stockEl.value = "";
+      if (catEl) catEl.value = "Bolsos";
+      if (imgEl) imgEl.value = "";
+      if (descEl) descEl.value = "";
       pfCurrentImages = [];
-      updateProductFormGalleryUI();
-      document.getElementById('productFormModal').classList.remove('hidden');
+      if (typeof updateProductFormGalleryUI === 'function') {
+        updateProductFormGalleryUI();
+      }
+      if (modalEl) {
+        modalEl.classList.remove('hidden');
+        modalEl.style.display = 'flex';
+        modalEl.style.zIndex = '9999';
+      }
     }
 
     function openEditProductModal(id) {
-      const prod = products.find(p => p.id === id);
-      if (!prod) return;
+      const targetId = parseInt(id, 10);
+      const prod = products.find(p => p.id === targetId || String(p.id) === String(id));
+      if (!prod) {
+        showToast("No se encontró la información del producto seleccionado", "error");
+        console.error("openEditProductModal: producto no encontrado con ID", id);
+        return;
+      }
 
-      document.getElementById('productFormTitle').textContent = "Editar Producto";
-      document.getElementById('pfId').value = prod.id;
-      document.getElementById('pfName').value = prod.name;
-      document.getElementById('pfPrice').value = prod.price;
-      document.getElementById('pfStock').value = prod.stock;
-      document.getElementById('pfCategory').value = prod.category;
-      document.getElementById('pfImage').value = "";
-      document.getElementById('pfDescription').value = prod.description;
+      const titleEl = document.getElementById('productFormTitle');
+      const idEl = document.getElementById('pfId');
+      const nameEl = document.getElementById('pfName');
+      const priceEl = document.getElementById('pfPrice');
+      const stockEl = document.getElementById('pfStock');
+      const catEl = document.getElementById('pfCategory');
+      const imgEl = document.getElementById('pfImage');
+      const descEl = document.getElementById('pfDescription');
+      const modalEl = document.getElementById('productFormModal');
+
+      if (titleEl) titleEl.textContent = "Editar Producto: " + (prod.name || "");
+      if (idEl) idEl.value = prod.id;
+      if (nameEl) nameEl.value = prod.name || "";
+      if (priceEl) priceEl.value = prod.price || 0;
+      if (stockEl) stockEl.value = prod.stock !== undefined ? prod.stock : 0;
+      if (catEl) {
+        // Asegurar que la categoría exista en las opciones o seleccionarla
+        catEl.value = prod.category || "Bolsos";
+        if (!catEl.value) {
+          const opt = document.createElement('option');
+          opt.value = prod.category;
+          opt.textContent = prod.category;
+          catEl.appendChild(opt);
+          catEl.value = prod.category;
+        }
+      }
+      if (imgEl) imgEl.value = "";
+      if (descEl) descEl.value = prod.description || "";
 
       // Cargar imágenes existentes (soporta array 'images' o fallback a 'image')
       if (Array.isArray(prod.images) && prod.images.length > 0) {
@@ -5803,13 +5844,23 @@
       } else {
         pfCurrentImages = [];
       }
-      updateProductFormGalleryUI();
+      if (typeof updateProductFormGalleryUI === 'function') {
+        updateProductFormGalleryUI();
+      }
 
-      document.getElementById('productFormModal').classList.remove('hidden');
+      if (modalEl) {
+        modalEl.classList.remove('hidden');
+        modalEl.style.display = 'flex';
+        modalEl.style.zIndex = '9999';
+      }
     }
 
     function closeProductFormModal() {
-      document.getElementById('productFormModal').classList.add('hidden');
+      const modalEl = document.getElementById('productFormModal');
+      if (modalEl) {
+        modalEl.classList.add('hidden');
+        modalEl.style.display = 'none';
+      }
     }
 
     
