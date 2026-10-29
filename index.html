@@ -5738,7 +5738,7 @@
             </td>
             <td class="p-3 text-center">${statusBadge}</td>
             <td class="p-3 text-right">
-              <button onclick="openEditProductModal(${p.id})" class="p-1.5 text-zinc-400 hover:text-gold-400 rounded transition"><i class="fa-regular fa-pen-to-square"></i></button>
+              <button type="button" onclick="event.stopPropagation(); openEditProductModal(${p.id})" class="p-1.5 text-zinc-400 hover:text-gold-400 rounded transition cursor-pointer" title="Editar Producto #${p.id}"><i class="fa-regular fa-pen-to-square"></i></button>
             </td>
           </tr>
         `;
