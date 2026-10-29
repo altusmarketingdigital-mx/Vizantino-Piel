@@ -5785,6 +5785,12 @@
     }
 
     function openNewProductModal() {
+      let modalEl = document.getElementById('productFormModal');
+      if (!modalEl) return;
+      if (modalEl.parentNode !== document.body) {
+        document.body.appendChild(modalEl);
+      }
+
       const titleEl = document.getElementById('productFormTitle');
       const idEl = document.getElementById('pfId');
       const nameEl = document.getElementById('pfName');
@@ -5793,7 +5799,6 @@
       const catEl = document.getElementById('pfCategory');
       const imgEl = document.getElementById('pfImage');
       const descEl = document.getElementById('pfDescription');
-      const modalEl = document.getElementById('productFormModal');
 
       if (titleEl) titleEl.textContent = "Nuevo Producto Artesanal";
       if (idEl) idEl.value = "";
@@ -5807,20 +5812,31 @@
       if (typeof updateProductFormGalleryUI === 'function') {
         updateProductFormGalleryUI();
       }
-      if (modalEl) {
-        modalEl.classList.remove('hidden');
-        modalEl.style.display = 'flex';
-        modalEl.style.zIndex = '9999';
-      }
+      modalEl.classList.remove('hidden');
+      modalEl.style.cssText = "position: fixed !important; inset: 0 !important; z-index: 999999 !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 1rem !important;";
     }
 
     function openEditProductModal(id) {
+      console.log("=== openEditProductModal ejecutado para ID:", id, "===");
       const targetId = parseInt(id, 10);
-      const prod = products.find(p => p.id === targetId || String(p.id) === String(id));
+      let prod = products.find(p => p.id === targetId || String(p.id) === String(id));
+      if (!prod && window.products) {
+        prod = window.products.find(p => p.id === targetId || String(p.id) === String(id));
+      }
       if (!prod) {
-        showToast("No se encontró la información del producto seleccionado", "error");
-        console.error("openEditProductModal: producto no encontrado con ID", id);
+        alert("Atención: No se encontró el producto con ID " + id + " en la memoria local.");
         return;
+      }
+
+      let modalEl = document.getElementById('productFormModal');
+      if (!modalEl) {
+        alert("Error crítico: El elemento productFormModal no existe en el DOM.");
+        return;
+      }
+
+      // Asegurar que el modal esté directamente bajo el <body> para que ningún contenedor lo oculte
+      if (modalEl.parentNode !== document.body) {
+        document.body.appendChild(modalEl);
       }
 
       const titleEl = document.getElementById('productFormTitle');
@@ -5831,7 +5847,6 @@
       const catEl = document.getElementById('pfCategory');
       const imgEl = document.getElementById('pfImage');
       const descEl = document.getElementById('pfDescription');
-      const modalEl = document.getElementById('productFormModal');
 
       if (titleEl) titleEl.textContent = "Editar Producto: " + (prod.name || "");
       if (idEl) idEl.value = prod.id;
@@ -5839,7 +5854,6 @@
       if (priceEl) priceEl.value = prod.price || 0;
       if (stockEl) stockEl.value = prod.stock !== undefined ? prod.stock : 0;
       if (catEl) {
-        // Asegurar que la categoría exista en las opciones o seleccionarla
         catEl.value = prod.category || "Bolsos";
         if (!catEl.value) {
           const opt = document.createElement('option');
@@ -5852,7 +5866,6 @@
       if (imgEl) imgEl.value = "";
       if (descEl) descEl.value = prod.description || "";
 
-      // Cargar imágenes existentes (soporta array 'images' o fallback a 'image')
       if (Array.isArray(prod.images) && prod.images.length > 0) {
         pfCurrentImages = [...prod.images];
       } else if (prod.image) {
@@ -5860,23 +5873,22 @@
       } else {
         pfCurrentImages = [];
       }
+
       if (typeof updateProductFormGalleryUI === 'function') {
         updateProductFormGalleryUI();
       }
 
-      if (modalEl) {
-        modalEl.classList.remove('hidden');
-        modalEl.style.display = 'flex';
-        modalEl.style.zIndex = '9999';
-      }
+      modalEl.classList.remove('hidden');
+      modalEl.style.cssText = "position: fixed !important; inset: 0 !important; z-index: 999999 !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 1rem !important;";
     }
 
     function closeProductFormModal() {
       const modalEl = document.getElementById('productFormModal');
       if (modalEl) {
         modalEl.classList.add('hidden');
-        modalEl.style.display = 'none';
+        modalEl.style.cssText = "display: none !important;";
       }
+    }
     }
 
     
