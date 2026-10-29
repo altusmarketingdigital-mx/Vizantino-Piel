@@ -473,14 +473,53 @@
     <!-- ========================================== -->
     <!-- 4. CATÁLOGO FILTRABLE E INTERACTIVO -->
     <!-- ========================================== -->
-    <section id="catalogo" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="text-xs font-semibold tracking-[0.3em] uppercase text-gold-400">Colección Oficial</span>
-        <h2 class="font-serif text-3xl sm:text-4xl text-white font-bold mt-2">Catálogo de Obras en Piel</h2>
-        <div class="w-16 h-0.5 bg-gold-500 mx-auto mt-4 mb-4"></div>
-        <p class="text-zinc-400 text-xs sm:text-sm">
-          Explora bolsos, carteras slim, tarjeteros minimalistas y mochilas de viaje fabricados a mano en nuestro taller de Tlaquepaque.
-        </p>
+    <section id="catalogo" class="pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <!-- HERO BANNER CON IMAGEN DE FONDO DE PRIMERA INSTANCIA -->
+      <div class="relative overflow-hidden rounded-2xl border border-cardBorder mb-12 shadow-2xl">
+        <!-- Imagen de Fondo: Taller de Piel Artesanal y Marroquinería Fina -->
+        <div class="absolute inset-0 z-0">
+          <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=1600&q=80" 
+               alt="Taller Artesanal Vizantino Piel" 
+               class="w-full h-full object-cover object-center transform scale-105 filter brightness-75 contrast-125 transition-transform duration-1000">
+          <!-- Capas de Degradado para Contraste y Legibilidad Superior -->
+          <div class="absolute inset-0 bg-gradient-to-t from-[#14100c] via-[#1c1713]/85 to-[#1c1713]/70"></div>
+          <div class="absolute inset-0 bg-radial-gradient from-transparent via-black/40 to-black/80"></div>
+          <div class="absolute -top-24 -right-24 w-96 h-96 bg-gold-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        </div>
+
+        <!-- Contenido Central del Banner -->
+        <div class="relative z-10 py-16 sm:py-20 md:py-24 px-6 sm:px-12 text-center max-w-3xl mx-auto">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-500/15 border border-gold-500/40 text-gold-400 text-[11px] sm:text-xs tracking-[0.28em] uppercase font-bold mb-4 backdrop-blur-md shadow-lg shadow-gold-500/10">
+            <i class="fa-solid fa-crown text-[10px]"></i> Colección Oficial Vizantino
+          </div>
+
+          <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl text-white font-bold leading-tight tracking-wide drop-shadow-md">
+            Catálogo de <span class="gold-gradient-text italic font-serif">Obras en Piel</span>
+          </h1>
+
+          <div class="w-20 h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto my-5"></div>
+
+          <p class="text-zinc-200 text-xs sm:text-sm md:text-base font-light leading-relaxed max-w-2xl mx-auto drop-shadow-sm">
+            Explora bolsos, carteras slim, tarjeteros minimalistas y mochilas de viaje fabricados a mano en nuestro taller de Tlaquepaque, Jalisco con piel genuina 100% corte vacuno.
+          </p>
+
+          <!-- Badges de Confianza Rápidos en el Banner -->
+          <div class="mt-8 pt-6 border-t border-white/10 grid grid-cols-3 gap-2 sm:gap-4 max-w-lg mx-auto text-zinc-300">
+            <div class="flex flex-col items-center">
+              <span class="text-gold-400 font-bold text-xs sm:text-sm flex items-center gap-1.5"><i class="fa-solid fa-gem text-[11px]"></i> 100% Piel</span>
+              <span class="text-[10px] text-zinc-400 font-light">Corte Vacuno</span>
+            </div>
+            <div class="flex flex-col items-center border-x border-white/10 px-2">
+              <span class="text-gold-400 font-bold text-xs sm:text-sm flex items-center gap-1.5"><i class="fa-solid fa-hands-holding text-[11px]"></i> Hecho a Mano</span>
+              <span class="text-[10px] text-zinc-400 font-light">Tlaquepaque, Jal.</span>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-gold-400 font-bold text-xs sm:text-sm flex items-center gap-1.5"><i class="fa-solid fa-truck-fast text-[11px]"></i> Envío Gratis</span>
+              <span class="text-[10px] text-zinc-400 font-light">Desde $1,800 MXN</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Filtros por Pestañas Oficiales -->
