@@ -1773,13 +1773,14 @@
             <table class="w-full text-left text-xs text-zinc-300">
               <thead class="bg-carbon text-zinc-400 text-[11px] uppercase tracking-wider border-b border-cardBorder">
                 <tr>
-                  <th class="p-3">Producto</th>
+                  <th class="p-3">Producto & Foto</th>
                   <th class="p-3">Categoría</th>
                   <th class="p-3">Precio (MXN)</th>
-                  <th class="p-3 text-center">Stock Actual</th>
-                  <th class="p-3 text-center">Destacado (Inicio)</th>
+                  <th class="p-3 text-center">Stock</th>
+                  <th class="p-3">Descripción / Detalles</th>
+                  <th class="p-3 text-center">Destacado</th>
                   <th class="p-3 text-center">Estado</th>
-                  <th class="p-3 text-right">Acciones</th>
+                  <th class="p-3 text-right">Guardar / Acciones</th>
                 </tr>
               </thead>
               <tbody id="adminTableBody" class="divide-y divide-cardBorder">
@@ -5580,39 +5581,76 @@
           statusBadge = `<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">Activo</span>`;
         }
 
+        const safeDesc = (p.description || '').replace(/"/g, '&quot;');
+        const safeName = (p.name || '').replace(/"/g, '&quot;');
+
         return `
-          <tr class="hover:bg-darkSurface/60 transition">
+          <tr class="hover:bg-darkSurface/60 transition group border-b border-cardBorder/50">
+            <!-- Columna 1: Producto, Foto & ID -->
             <td class="p-3">
-              <div class="flex items-center gap-3 cursor-pointer group/item" onclick="event.stopPropagation(); openEditProductModal(${p.id})" title="Clic para editar este producto">
-                <img src="${p.image}" alt="${p.name}" class="w-10 h-10 object-cover rounded bg-black group-hover/item:ring-2 group-hover/item:ring-gold-500 transition">
-                <div>
-                  <div class="font-bold text-white group-hover/item:text-gold-400 transition flex items-center gap-1.5">
-                    <span>${p.name}</span>
-                    <i class="fa-regular fa-pen-to-square text-[10px] text-zinc-500 group-hover/item:text-gold-400"></i>
+              <div class="flex items-start gap-2.5">
+                <div class="relative group/pic cursor-pointer shrink-0" onclick="changeProductImagePrompt(${p.id})" title="Clic para cambiar foto">
+                  <img src="${p.image}" alt="${safeName}" class="w-12 h-12 object-cover rounded bg-black border border-cardBorder group-hover/pic:border-gold-500 transition">
+                  <span class="absolute inset-0 bg-black/60 opacity-0 group-hover/pic:opacity-100 flex items-center justify-center text-gold-400 text-[10px] rounded transition font-bold"><i class="fa-solid fa-camera"></i></span>
+                </div>
+                <div class="flex-1 min-w-[150px]">
+                  <input type="text" value="${safeName}" 
+                         onchange="updateProductNameDirect(${p.id}, this.value)" 
+                         class="w-full bg-darkSurface/80 border border-cardBorder focus:border-gold-500 rounded px-2 py-1 text-xs text-white font-semibold focus:outline-none" 
+                         title="Edita el nombre y presiona Enter o haz clic fuera para guardar">
+                  <div class="text-[10px] text-zinc-500 mt-1 flex items-center gap-1.5">
+                    <span>ID: #${p.id}</span>
+                    <button type="button" onclick="changeProductImagePrompt(${p.id})" class="text-gold-400 hover:underline text-[10px]">Cambiar Foto</button>
                   </div>
-                  <div class="text-[10px] text-zinc-500">ID: #${p.id} • <span class="text-gold-400 font-semibold underline text-[10px]">Clic para Editar</span></div>
                 </div>
               </div>
             </td>
-            <td class="p-3 text-zinc-400 font-medium">${p.category}</td>
+
+            <!-- Columna 2: Categoría -->
+            <td class="p-3">
+              <select onchange="updateProductCategoryDirect(${p.id}, this.value)" 
+                      class="bg-darkSurface border border-cardBorder text-zinc-200 text-xs rounded px-2 py-1 focus:border-gold-500 focus:outline-none">
+                <option value="Bolsos" ${p.category === 'Bolsos' ? 'selected' : ''}>Bolsos</option>
+                <option value="Carteras" ${p.category === 'Carteras' ? 'selected' : ''}>Carteras</option>
+                <option value="Crossbody" ${p.category === 'Crossbody' ? 'selected' : ''}>Crossbody</option>
+                <option value="Mochilas" ${p.category === 'Mochilas' ? 'selected' : ''}>Mochilas</option>
+                <option value="Accesorios" ${p.category === 'Accesorios' ? 'selected' : ''}>Accesorios</option>
+                <option value="Ropa" ${p.category === 'Ropa' ? 'selected' : ''}>Ropa</option>
+              </select>
+            </td>
+
+            <!-- Columna 3: Precio -->
             <td class="p-3">
               <div class="flex items-center gap-1">
-                <span class="text-zinc-500">$</span>
+                <span class="text-zinc-500 font-bold text-xs">$</span>
                 <input type="number" value="${p.price}" min="1" step="1" 
                        onchange="updateProductPrice(${p.id}, this.value)" 
-                       class="w-20 bg-darkSurface border border-cardBorder rounded px-2 py-1 text-zinc-100 font-mono text-xs focus:border-gold-500 focus:outline-none">
+                       class="w-20 bg-darkSurface border border-cardBorder rounded px-2 py-1 text-gold-300 font-mono text-xs font-bold focus:border-gold-500 focus:outline-none"
+                       title="Cambia el precio y presiona Enter">
               </div>
             </td>
+
+            <!-- Columna 4: Stock -->
             <td class="p-3 text-center">
               <div class="inline-flex items-center border border-cardBorder rounded bg-darkSurface">
-                <button onclick="updateProductStock(${p.id}, -1)" class="px-2 py-1 text-zinc-400 hover:text-white">-</button>
+                <button onclick="updateProductStock(${p.id}, -1)" class="px-2 py-1 text-zinc-400 hover:text-white font-bold">-</button>
                 <input type="number" value="${p.stock}" min="0" step="1" 
                        onchange="setProductStockDirect(${p.id}, this.value)" 
-                       class="w-12 text-center bg-transparent text-white font-mono text-xs focus:outline-none">
-                <button onclick="updateProductStock(${p.id}, 1)" class="px-2 py-1 text-zinc-400 hover:text-white">+</button>
+                       class="w-12 text-center bg-transparent text-white font-mono text-xs focus:outline-none font-bold">
+                <button onclick="updateProductStock(${p.id}, 1)" class="px-2 py-1 text-zinc-400 hover:text-white font-bold">+</button>
               </div>
             </td>
-            
+
+            <!-- Columna 5: Descripción -->
+            <td class="p-3">
+              <textarea rows="2" 
+                        onchange="updateProductDescriptionDirect(${p.id}, this.value)" 
+                        placeholder="Descripción del producto..." 
+                        class="w-full max-w-xs bg-darkSurface border border-cardBorder rounded px-2 py-1 text-[11px] text-zinc-300 focus:border-gold-500 focus:outline-none" 
+                        title="Edita la descripción y sal de la casilla para guardar">${p.description || ''}</textarea>
+            </td>
+
+            <!-- Columna 6: Destacado -->
             <td class="p-3 text-center">
               <button onclick="toggleProductFeatured(${p.id})" 
                       class="px-2.5 py-1 rounded-full text-[11px] font-bold transition flex items-center gap-1.5 mx-auto ${p.barcode === 'FEATURED' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/60 shadow-sm' : 'bg-darkSurface text-zinc-500 border border-cardBorder hover:text-zinc-300'}">
@@ -5620,14 +5658,18 @@
                 <span>${p.barcode === 'FEATURED' ? 'Destacado' : 'No'}</span>
               </button>
             </td>
+
+            <!-- Columna 7: Estado -->
             <td class="p-3 text-center">${statusBadge}</td>
+
+            <!-- Columna 8: Acciones -->
             <td class="p-3 text-right">
-              <div class="flex items-center justify-end gap-2">
-                <button type="button" onclick="event.stopPropagation(); openEditProductModal(${p.id})" class="px-3 py-1.5 bg-gold-500 hover:bg-gold-400 text-carbon rounded font-bold text-xs uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-gold-500/10" title="Editar Producto #${p.id}">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                  <span>Editar</span>
+              <div class="flex items-center justify-end gap-1.5">
+                <button type="button" onclick="openEditProductModal(${p.id})" class="px-2.5 py-1.5 bg-cardBg hover:bg-gold-500/20 border border-gold-500/40 text-gold-400 rounded text-xs transition cursor-pointer flex items-center gap-1" title="Abrir Formulario Completo de Galería">
+                  <i class="fa-solid fa-up-right-from-square text-[10px]"></i>
+                  <span>Detalles</span>
                 </button>
-                <button onclick="deleteProduct(${p.id})" class="p-1.5 text-zinc-500 hover:text-red-400 rounded transition" title="Eliminar">
+                <button onclick="deleteProduct(${p.id})" class="p-1.5 text-zinc-500 hover:text-red-400 rounded transition" title="Eliminar del catálogo">
                   <i class="fa-regular fa-trash-can"></i>
                 </button>
               </div>
@@ -6391,6 +6433,71 @@
     function closeTrackingModal() {
       const modal = document.getElementById('skydropxTrackingModal');
       if (modal) modal.classList.add('hidden');
+    }
+
+
+
+    /* ==========================================
+       EDICIÓN DIRECTA EN LÍNEA DE PRODUCTOS
+    ========================================== */
+    function updateProductNameDirect(id, val) {
+      const targetId = parseInt(id, 10);
+      const prod = products.find(p => p.id === targetId || String(p.id) === String(id));
+      if (prod && val.trim()) {
+        prod.name = val.trim();
+        saveProductsToStorage();
+        syncProductToCloud(prod);
+        showToast(`Nombre actualizado a "${prod.name}"`, "success");
+      }
+    }
+
+    function updateProductCategoryDirect(id, val) {
+      const targetId = parseInt(id, 10);
+      const prod = products.find(p => p.id === targetId || String(p.id) === String(id));
+      if (prod) {
+        prod.category = val;
+        saveProductsToStorage();
+        syncProductToCloud(prod);
+        showToast(`Categoría de "${prod.name}" cambiada a ${val}`, "success");
+      }
+    }
+
+    function updateProductDescriptionDirect(id, val) {
+      const targetId = parseInt(id, 10);
+      const prod = products.find(p => p.id === targetId || String(p.id) === String(id));
+      if (prod) {
+        prod.description = val.trim();
+        saveProductsToStorage();
+        syncProductToCloud(prod);
+        showToast(`Descripción de "${prod.name}" guardada`, "success");
+      }
+    }
+
+    function updateProductImageDirect(id, val) {
+      const targetId = parseInt(id, 10);
+      const prod = products.find(p => p.id === targetId || String(p.id) === String(id));
+      if (prod && val.trim()) {
+        prod.image = val.trim();
+        if (!Array.isArray(prod.images) || prod.images.length === 0) {
+          prod.images = [prod.image];
+        } else {
+          prod.images[0] = prod.image;
+        }
+        saveProductsToStorage();
+        syncProductToCloud(prod);
+        renderAdminTable();
+        showToast(`Fotografía de "${prod.name}" actualizada`, "success");
+      }
+    }
+
+    function changeProductImagePrompt(id) {
+      const targetId = parseInt(id, 10);
+      const prod = products.find(p => p.id === targetId || String(p.id) === String(id));
+      if (!prod) return;
+      const newUrl = prompt("Pega la nueva URL de la imagen para " + prod.name + ":", prod.image || "");
+      if (newUrl && newUrl.trim() && newUrl !== prod.image) {
+        updateProductImageDirect(id, newUrl.trim());
+      }
     }
 
 </script>
