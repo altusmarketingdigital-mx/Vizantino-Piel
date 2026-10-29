@@ -3403,6 +3403,8 @@
     let currentUser = null;
     let currentCategoryFilter = "todos";
     let currentSearchQuery = "";
+    let currentPriceFilter = "all";
+    let currentSortOrder = "featured";
     let selectedPayment = "mp";
     const SHIPPING_COST_STANDARD = 250; // Envío paquetes menores a 3kg
     const FREE_SHIPPING_THRESHOLD = 1800; // Gratis desde $1,800.0 MXN
@@ -3995,6 +3997,27 @@
       renderCatalog();
     }
 
+    
+    function filterByPriceRange(range) {
+      currentPriceFilter = range;
+      document.querySelectorAll('.price-filter-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-gold-500', 'text-carbon');
+        btn.classList.add('text-zinc-300');
+      });
+      const activeBtn = document.querySelector('.price-filter-btn[onclick*="' + range + '"]') || 
+                        document.querySelector('.price-filter-btn[onclick*=\""' + range + '"\"]');
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-gold-500', 'text-carbon');
+        activeBtn.classList.remove('text-zinc-300');
+      }
+      renderCatalog();
+    }
+
+    function sortCatalogProducts(sortVal) {
+      currentSortOrder = sortVal;
+      renderCatalog();
+    }
+
     function handleSearch(query) {
       currentSearchQuery = query.trim().toLowerCase();
       renderCatalog();
@@ -4006,7 +4029,7 @@
       if (!container) return;
 
       let filtered = products.filter(item => {
-        let matchCat = (currentCategoryFilter === 'todos') || (item.category === currentCategoryFilter);
+        let matchCat = (!currentCategoryFilter || currentCategoryFilter.toLowerCase() === 'todos') || (item.category && item.category.toLowerCase() === currentCategoryFilter.toLowerCase());
         let matchSearch = true;
         if (currentSearchQuery) {
           matchSearch = item.name.toLowerCase().includes(currentSearchQuery) || 
