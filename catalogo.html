@@ -475,12 +475,12 @@
     <!-- ========================================== -->
     <section id="catalogo" class="pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <!-- HERO BANNER CON IMAGEN DE FONDO DE PRIMERA INSTANCIA -->
-      <div class="relative overflow-hidden rounded-2xl border border-cardBorder mb-12 shadow-2xl">
+      <div class="relative overflow-hidden rounded-2xl border border-cardBorder mb-10 shadow-2xl bg-[#14100c]">
         <!-- Imagen de Fondo: Taller de Piel Artesanal y Marroquinería Fina -->
         <div class="absolute inset-0 z-0">
           <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=1600&q=80" 
                alt="Taller Artesanal Vizantino Piel" 
-               class="w-full h-full object-cover object-center transform scale-105 filter brightness-75 contrast-125 transition-transform duration-1000">
+               class="w-full h-full object-cover object-center transform scale-105 filter brightness-70 contrast-125">
           <!-- Capas de Degradado para Contraste y Legibilidad Superior -->
           <div class="absolute inset-0 bg-gradient-to-t from-[#14100c] via-[#1c1713]/85 to-[#1c1713]/70"></div>
           <div class="absolute inset-0 bg-radial-gradient from-transparent via-black/40 to-black/80"></div>
@@ -489,55 +489,68 @@
         </div>
 
         <!-- Contenido Central del Banner -->
-        <div class="relative z-10 py-16 sm:py-20 md:py-24 px-6 sm:px-12 text-center max-w-3xl mx-auto">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-500/15 border border-gold-500/40 text-gold-400 text-[11px] sm:text-xs tracking-[0.28em] uppercase font-bold mb-4 backdrop-blur-md shadow-lg shadow-gold-500/10">
+        <div class="relative z-10 py-12 sm:py-16 md:py-20 px-6 sm:px-12 text-center max-w-3xl mx-auto">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-500/15 border border-gold-500/40 text-gold-400 text-[11px] sm:text-xs tracking-[0.28em] uppercase font-bold mb-3 backdrop-blur-md shadow-lg shadow-gold-500/10">
             <i class="fa-solid fa-crown text-[10px]"></i> Colección Oficial Vizantino
           </div>
 
-          <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl text-white font-bold leading-tight tracking-wide drop-shadow-md">
+          <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl text-white font-bold leading-tight tracking-wide drop-shadow-md">
             Catálogo de <span class="gold-gradient-text italic font-serif">Obras en Piel</span>
           </h1>
 
-          <div class="w-20 h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto my-5"></div>
+          <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto my-4"></div>
 
-          <p class="text-zinc-200 text-xs sm:text-sm md:text-base font-light leading-relaxed max-w-2xl mx-auto drop-shadow-sm">
+          <p class="text-zinc-200 text-xs sm:text-sm font-light leading-relaxed max-w-2xl mx-auto drop-shadow-sm">
             Explora bolsos, carteras slim, tarjeteros minimalistas y mochilas de viaje fabricados a mano en nuestro taller de Tlaquepaque, Jalisco con piel genuina 100% corte vacuno.
           </p>
 
           <!-- Badges de 3 Sucursales Oficiales en el Banner -->
           <div class="mt-8 pt-6 border-t border-white/10 max-w-xl mx-auto text-zinc-300">
-            <span class="text-[10px] tracking-[0.25em] uppercase font-bold text-gold-400 block mb-2.5 text-center">
-              <i class="fa-solid fa-store text-[11px] mr-1"></i> Nuestras 3 Sucursales Físicas
-            </span>
+            <div class="flex items-center justify-between mb-3 px-1">
+              <span class="text-[10px] tracking-[0.25em] uppercase font-bold text-gold-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-store text-[11px]"></i> Nuestras 3 Sucursales Físicas
+              </span>
+              <a href="sucursales.html" class="text-[10px] text-zinc-400 hover:text-gold-400 underline transition flex items-center gap-1">
+                Ver boutiques <i class="fa-solid fa-arrow-right text-[8px]"></i>
+              </a>
+            </div>
+            
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-left">
               <a href="https://maps.google.com/?q=Independencia+248+Tlaquepaque+Centro+Jalisco" target="_blank" rel="noopener noreferrer"
-                 class="p-2.5 rounded-lg bg-black/60 backdrop-blur-sm border border-gold-500/30 hover:border-gold-400 hover:bg-gold-500/15 transition flex flex-col justify-between group">
-                <div class="text-gold-400 font-bold text-[11px] flex items-center gap-1.5 mb-0.5">
-                  <i class="fa-solid fa-location-dot text-gold-400 group-hover:scale-110 transition-transform"></i> Independencia #248
+                 class="p-3 rounded-xl bg-black/60 backdrop-blur-md border border-gold-500/30 hover:border-gold-400 hover:bg-gold-500/15 transition flex flex-col justify-between group shadow-lg">
+                <div>
+                  <div class="text-gold-400 font-bold text-[11px] flex items-center gap-1.5 mb-0.5">
+                    <i class="fa-solid fa-location-dot text-gold-400 group-hover:scale-110 transition-transform"></i> Independencia #248
+                  </div>
+                  <span class="text-[10px] text-zinc-300 font-medium block">Tlaquepaque Centro</span>
                 </div>
-                <span class="text-[10px] text-zinc-300 font-medium">Tlaquepaque Centro</span>
-                <span class="text-[9px] text-emerald-400 mt-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Abierto Hoy</span>
+                <span class="text-[9px] text-emerald-400 mt-2 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Abierto Hoy</span>
               </a>
 
               <a href="https://maps.google.com/?q=Alfareros+129A+Tlaquepaque+Centro+Jalisco" target="_blank" rel="noopener noreferrer"
-                 class="p-2.5 rounded-lg bg-black/60 backdrop-blur-sm border border-gold-500/30 hover:border-gold-400 hover:bg-gold-500/15 transition flex flex-col justify-between group">
-                <div class="text-gold-400 font-bold text-[11px] flex items-center gap-1.5 mb-0.5">
-                  <i class="fa-solid fa-location-dot text-gold-400 group-hover:scale-110 transition-transform"></i> Alfareros #129
+                 class="p-3 rounded-xl bg-black/60 backdrop-blur-md border border-gold-500/30 hover:border-gold-400 hover:bg-gold-500/15 transition flex flex-col justify-between group shadow-lg">
+                <div>
+                  <div class="text-gold-400 font-bold text-[11px] flex items-center gap-1.5 mb-0.5">
+                    <i class="fa-solid fa-location-dot text-gold-400 group-hover:scale-110 transition-transform"></i> Alfareros #129
+                  </div>
+                  <span class="text-[10px] text-zinc-300 font-medium block">Tlaquepaque Centro</span>
                 </div>
-                <span class="text-[10px] text-zinc-300 font-medium">Tlaquepaque Centro</span>
-                <span class="text-[9px] text-emerald-400 mt-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Abierto Hoy</span>
+                <span class="text-[9px] text-emerald-400 mt-2 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Abierto Hoy</span>
               </a>
 
               <a href="https://maps.google.com/?q=Av+Tonaltecas+274+Tonala+Centro+Jalisco" target="_blank" rel="noopener noreferrer"
-                 class="p-2.5 rounded-lg bg-black/60 backdrop-blur-sm border border-gold-500/30 hover:border-gold-400 hover:bg-gold-500/15 transition flex flex-col justify-between group">
-                <div class="text-gold-400 font-bold text-[11px] flex items-center gap-1.5 mb-0.5">
-                  <i class="fa-solid fa-location-dot text-gold-400 group-hover:scale-110 transition-transform"></i> Av. Tonaltecas #274
+                 class="p-3 rounded-xl bg-black/60 backdrop-blur-md border border-gold-500/30 hover:border-gold-400 hover:bg-gold-500/15 transition flex flex-col justify-between group shadow-lg">
+                <div>
+                  <div class="text-gold-400 font-bold text-[11px] flex items-center gap-1.5 mb-0.5">
+                    <i class="fa-solid fa-location-dot text-gold-400 group-hover:scale-110 transition-transform"></i> Av. Tonaltecas #274
+                  </div>
+                  <span class="text-[10px] text-zinc-300 font-medium block">Tonalá Centro</span>
                 </div>
-                <span class="text-[10px] text-zinc-300 font-medium">Tonalá Centro</span>
-                <span class="text-[9px] text-emerald-400 mt-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Abierto Hoy</span>
+                <span class="text-[9px] text-emerald-400 mt-2 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Abierto Hoy</span>
               </a>
             </div>
-          </div>/div>
+          </div>
+        </div>
       </div>
 
       <!-- Filtros por Pestañas Oficiales -->
