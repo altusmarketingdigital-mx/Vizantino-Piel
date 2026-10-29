@@ -4220,6 +4220,18 @@
         };
       }
 
+      const qvEditBtn = document.getElementById('qvEditAdminBtn');
+      if (qvEditBtn) {
+        if (typeof isAdminLoggedIn === 'function' && isAdminLoggedIn()) {
+          qvEditBtn.style.display = 'flex';
+          qvEditBtn.onclick = () => {
+            closeQuickView();
+            openEditProductModal(prod.id);
+          };
+        } else {
+          qvEditBtn.style.display = 'none';
+        }
+      }
       document.getElementById('quickViewModal').classList.remove('hidden');
     }
 
@@ -5553,11 +5565,14 @@
         return `
           <tr class="hover:bg-darkSurface/60 transition">
             <td class="p-3">
-              <div class="flex items-center gap-3">
-                <img src="${p.image}" alt="${p.name}" class="w-10 h-10 object-cover rounded bg-black">
+              <div class="flex items-center gap-3 cursor-pointer group/item" onclick="event.stopPropagation(); openEditProductModal(${p.id})" title="Clic para editar este producto">
+                <img src="${p.image}" alt="${p.name}" class="w-10 h-10 object-cover rounded bg-black group-hover/item:ring-2 group-hover/item:ring-gold-500 transition">
                 <div>
-                  <div class="font-bold text-white">${p.name}</div>
-                  <div class="text-[10px] text-zinc-500">ID: #${p.id}</div>
+                  <div class="font-bold text-white group-hover/item:text-gold-400 transition flex items-center gap-1.5">
+                    <span>${p.name}</span>
+                    <i class="fa-regular fa-pen-to-square text-[10px] text-zinc-500 group-hover/item:text-gold-400"></i>
+                  </div>
+                  <div class="text-[10px] text-zinc-500">ID: #${p.id} • <span class="text-gold-400 font-semibold underline text-[10px]">Clic para Editar</span></div>
                 </div>
               </div>
             </td>
@@ -5590,8 +5605,9 @@
             <td class="p-3 text-center">${statusBadge}</td>
             <td class="p-3 text-right">
               <div class="flex items-center justify-end gap-2">
-                <button type="button" onclick="event.stopPropagation(); openEditProductModal(${p.id})" class="p-1.5 text-zinc-400 hover:text-gold-400 rounded transition cursor-pointer" title="Editar Producto #${p.id}">
-                  <i class="fa-regular fa-pen-to-square"></i>
+                <button type="button" onclick="event.stopPropagation(); openEditProductModal(${p.id})" class="px-3 py-1.5 bg-gold-500 hover:bg-gold-400 text-carbon rounded font-bold text-xs uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-gold-500/10" title="Editar Producto #${p.id}">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                  <span>Editar</span>
                 </button>
                 <button onclick="deleteProduct(${p.id})" class="p-1.5 text-zinc-500 hover:text-red-400 rounded transition" title="Eliminar">
                   <i class="fa-regular fa-trash-can"></i>
