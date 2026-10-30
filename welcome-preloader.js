@@ -27,12 +27,14 @@
     return;
   }
 
-  // 2. Control de visualización por sesión:
-  // Si visita la raíz (https://vizantino.vercel.app/ o index.html) directamente, permitimos que se disfrute.
-  // Solo se omite si el usuario está activamente navegando dentro del sitio navegando entre pestañas internas.
-  const isDirectHome = (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) && !window.location.hash;
+  // 2. Control de visualización:
+  // En la página principal (raíz '/' o 'index.html') en cualquier dominio (vercel.app, vizantinopiel.com, www.vizantinopiel.com):
+  // Permitimos disfrutar la intro cinematográfica de bienvenida.
+  const path = window.location.pathname;
+  const isDirectHome = (path === '' || path === '/' || path.endsWith('index.html')) && (!window.location.hash || window.location.hash === '#inicio');
   const forceIntro = urlParams.get('intro') === '1' || urlParams.get('replay') === '1';
 
+  // Solo se omite automáticamente si NO está en el home y ya se mostró en esta sesión
   try {
     if (!forceIntro && !isDirectHome && sessionStorage.getItem(PRELOADER_SESSION_KEY)) {
       dismissImmediately();
