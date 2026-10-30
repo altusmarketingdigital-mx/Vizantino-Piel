@@ -6781,108 +6781,230 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAL DE PERSONALIZACIÓN Y SIMULADOR EN VIVO (HERO CTA) -->
+  <!-- MODAL DE PERSONALIZACIÓN Y SIMULADOR EN VIVO SOBRE PRODUCTO REAL -->
   <!-- ========================================== -->
-  <div id="simulatorModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-6">
-    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeSimulatorModal()"></div>
+  <div id="simulatorModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-5">
+    <div class="absolute inset-0 bg-black/90 backdrop-blur-md modal-backdrop" onclick="closeSimulatorModal()"></div>
     
-    <div class="relative bg-[#1a1410] border border-gold-500/50 rounded-2xl max-w-xl w-full p-6 sm:p-8 z-10 max-h-[92vh] overflow-y-auto shadow-2xl space-y-6 text-left">
+    <div class="relative bg-[#17110d] border border-gold-500/50 rounded-2xl max-w-4xl w-full p-5 sm:p-7 z-10 max-h-[94vh] overflow-y-auto shadow-2xl space-y-6 text-left">
       <!-- Botón Cerrar -->
-      <button type="button" onclick="closeSimulatorModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+      <button type="button" onclick="closeSimulatorModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2 z-20">
         <i class="fa-solid fa-xmark text-xl"></i>
       </button>
 
       <!-- Cabecera del Simulador -->
-      <div class="border-b border-cardBorder pb-4">
+      <div class="border-b border-cardBorder pb-3">
         <div class="flex items-center gap-2 text-gold-400 text-xs font-semibold tracking-[0.25em] uppercase mb-1">
-          <i class="fa-solid fa-pencil"></i> Taller Artesanal Tlaquepaque
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Taller Artesanal Tlaquepaque · Vista en Vivo
         </div>
         <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold leading-tight">
-          Personaliza Tu Pieza
+          Personaliza Tu Pieza en Piel
         </h3>
-        <p class="text-zinc-400 text-xs sm:text-sm mt-1">
-          Grabado artesanal a fuego con tus iniciales, nombre o frase sin costo adicional.
+        <p class="text-zinc-400 text-xs sm:text-sm mt-0.5">
+          Elige una pieza de nuestro catálogo y visualiza cómo luce tu grabado artesanal a fuego en tiempo real.
         </p>
       </div>
 
-      <!-- Simulador interactivo -->
-      <div class="space-y-4">
-        <div>
-          <label class="block text-zinc-300 text-xs uppercase tracking-wider font-semibold mb-1.5">
-            Texto a Grabar (Iniciales, Nombre o Frase)
-          </label>
-          <input type="text" id="simHeroText" maxlength="30" placeholder="Ej. A. Vizcaíno / M & R" 
-                 oninput="updateHeroCustomizerPreview()"
-                 class="w-full bg-[#120d0a] border border-gold-500/40 focus:border-gold-400 rounded-lg px-4 py-3 text-zinc-100 text-sm focus:outline-none">
+      <!-- Grid Principal: Selector y Opciones (Izquierda) + Vista Previa en el Producto (Derecha) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Columna Izquierda: Configuración (Lg: 5 cols) -->
+        <div class="lg:col-span-5 space-y-4">
+          <!-- 1. Selección de Producto -->
+          <div>
+            <label class="block text-zinc-200 text-xs uppercase tracking-wider font-semibold mb-1.5 flex items-center justify-between">
+              <span>1. Selecciona el Producto</span>
+              <span id="simProductPriceTag" class="text-gold-400 font-serif font-bold text-sm">$3,000 MXN</span>
+            </label>
+            <div class="relative">
+              <select id="simProductSelect" onchange="onSimulatorProductChange()" 
+                      class="w-full bg-[#100b08] border border-gold-500/40 focus:border-gold-400 rounded-lg px-3 py-2.5 text-zinc-100 text-xs focus:outline-none cursor-pointer">
+                <!-- Se llena dinámicamente con productos disponibles -->
+              </select>
+            </div>
+            <p id="simProductDesc" class="text-[11px] text-zinc-400 mt-1 italic line-clamp-1">
+              Piel genuina corte vacuno de alta resistencia.
+            </p>
+          </div>
+
+          <!-- 2. Texto a Grabar -->
+          <div>
+            <label class="block text-zinc-200 text-xs uppercase tracking-wider font-semibold mb-1.5 flex items-center justify-between">
+              <span>2. Texto o Iniciales</span>
+              <span class="text-[10px] text-zinc-400">Grabado Gratis</span>
+            </label>
+            <input type="text" id="simHeroText" maxlength="24" value="A. VIZCAÍNO" placeholder="Ej. A. Vizcaíno / M & R" 
+                   oninput="updateHeroCustomizerPreview()"
+                   class="w-full bg-[#100b08] border border-gold-500/40 focus:border-gold-400 rounded-lg px-3.5 py-2.5 text-zinc-100 text-sm focus:outline-none tracking-wider">
+          </div>
+
+          <!-- 3. Tipografía y Ubicación -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-zinc-300 text-[11px] uppercase tracking-wider font-semibold mb-1">
+                Tipografía
+              </label>
+              <select id="simHeroFont" onchange="updateHeroCustomizerPreview()" 
+                      class="w-full bg-[#100b08] border border-gold-500/40 focus:border-gold-400 rounded-lg px-2.5 py-2 text-zinc-200 text-xs focus:outline-none cursor-pointer">
+                <option value="serif">Cormorant (Serif)</option>
+                <option value="sans">Montserrat (Sans)</option>
+                <option value="cursive">Cursiva Artesanal</option>
+                <option value="mono">Monospace (Técnico)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-zinc-300 text-[11px] uppercase tracking-wider font-semibold mb-1">
+                Ubicación
+              </label>
+              <select id="simHeroPlacement" onchange="updateHeroCustomizerPreview()" 
+                      class="w-full bg-[#100b08] border border-gold-500/40 focus:border-gold-400 rounded-lg px-2.5 py-2 text-zinc-200 text-xs focus:outline-none cursor-pointer">
+                <option value="bottom-right">Esquina Inferior Der.</option>
+                <option value="bottom-left">Esquina Inferior Izq.</option>
+                <option value="center">Centro de la Pieza</option>
+                <option value="top-right">Frente Superior</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Beneficio artesanal -->
+          <div class="p-3 rounded-lg bg-gold-500/10 border border-gold-500/20 text-[11px] text-zinc-300 flex items-start gap-2.5">
+            <i class="fa-solid fa-award text-gold-400 text-sm mt-0.5"></i>
+            <div>
+              <span class="font-semibold text-gold-300">Grabado a Fuego en Tlaquepaque</span>
+              <p class="text-zinc-400 text-[10.5px]">Se aplica manualmente con tipografía de bronce caliente, fijando un relieve permanente sobre el cuero.</p>
+            </div>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-zinc-300 text-xs uppercase tracking-wider font-semibold mb-1.5">
-              Tipografía de Grabado
-            </label>
-            <select id="simHeroFont" onchange="updateHeroCustomizerPreview()" 
-                    class="w-full bg-[#120d0a] border border-gold-500/40 focus:border-gold-400 rounded-lg px-3 py-2.5 text-zinc-100 text-xs focus:outline-none">
-              <option value="serif">Cormorant Garamond (Elegante Clásica)</option>
-              <option value="sans">Montserrat (Moderna Minimalista)</option>
-              <option value="cursive">Cursiva Artesanal (Caligráfica)</option>
-              <option value="mono">Monospace (Técnico / Industrial)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-zinc-300 text-xs uppercase tracking-wider font-semibold mb-1.5">
-              Ubicación Preferida
-            </label>
-            <select id="simHeroPlacement" onchange="updateHeroCustomizerPreview()" 
-                    class="w-full bg-[#120d0a] border border-gold-500/40 focus:border-gold-400 rounded-lg px-3 py-2.5 text-zinc-100 text-xs focus:outline-none">
-              <option value="Frente - Esquina Inferior Derecha">Frente (Esquina Inferior)</option>
-              <option value="Frente - Centrado Discreto">Frente (Centrado Discreto)</option>
-              <option value="Interior - Bolsillo">Interior Discreto</option>
-              <option value="Llavero o Colgante">Llavero / Placa Colgante</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Vista previa en vivo del grabado sobre piel vacuno -->
-        <div class="p-5 bg-[#0e0a08] rounded-xl border border-gold-500/40 relative overflow-hidden">
-          <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-gold-500/10 rounded-full blur-xl pointer-events-none"></div>
-          <div class="flex items-center justify-between text-[11px] text-zinc-400 mb-2">
-            <span class="tracking-widest uppercase font-semibold text-gold-400">Simulación en Piel Genuina:</span>
-            <span id="simHeroPlacementPreview" class="text-zinc-500">Frente - Esquina Inferior</span>
-          </div>
-          <div class="h-20 flex items-center justify-center bg-[#1e1510] border border-gold-500/20 rounded-lg p-3 shadow-inner">
-            <span id="simHeroPreviewOutput" class="text-xl sm:text-2xl text-gold-300 font-serif italic tracking-widest drop-shadow-md">
-              "Tu Grabado Aquí"
+        <!-- Columna Derecha: Vista Previa Realista Sobre la Fotografía del Producto (Lg: 7 cols) -->
+        <div class="lg:col-span-7">
+          <label class="block text-zinc-200 text-xs uppercase tracking-wider font-semibold mb-1.5 flex items-center justify-between">
+            <span class="flex items-center gap-1.5 text-gold-400">
+              <i class="fa-solid fa-eye"></i> Simulación en Producto Real
             </span>
-          </div>
-          <div class="mt-2 text-right">
-            <span class="text-[10px] text-zinc-400">✨ Aplicado a fuego en nuestro taller de Tlaquepaque</span>
+            <span id="simPlacementLabelBadge" class="text-[10px] bg-darkSurface px-2 py-0.5 rounded border border-gold-500/30 text-zinc-300">
+              Esquina Inferior Derecha
+            </span>
+          </label>
+
+          <!-- Contenedor del Canvas de la Fotografía -->
+          <div class="relative w-full aspect-square max-h-[360px] sm:max-h-[380px] bg-[#0c0806] rounded-xl overflow-hidden border border-gold-500/40 shadow-inner flex items-center justify-center group">
+            <!-- Imagen real del producto seleccionado -->
+            <img id="simProductMainImage" 
+                 src="https://vizantinopiel.com/products/elite/elite-1.jpg" 
+                 alt="Producto Seleccionado" 
+                 class="w-full h-full object-contain p-4 transition-transform duration-500">
+            
+            <!-- Sombra de realce -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none"></div>
+
+            <!-- Placa de Grabado Grabada a Fuego Sobre el Producto -->
+            <div id="simEngravingOverlay" 
+                 class="absolute transition-all duration-300 pointer-events-none z-10 bottom-6 right-6">
+              <div class="px-3 py-1.5 rounded bg-black/60 backdrop-blur-[2px] border border-amber-600/60 shadow-2xl flex flex-col items-center justify-center">
+                <span class="text-[8px] uppercase tracking-widest text-amber-400/80 font-mono">Vizantino · Grabado</span>
+                <span id="simHeroOverlayText" 
+                      class="text-sm sm:text-base font-serif italic text-amber-200 tracking-wider font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  "A. VIZCAÍNO"
+                </span>
+              </div>
+            </div>
+
+            <!-- Etiqueta de pie de foto -->
+            <div class="absolute bottom-2 left-3 text-[10px] text-zinc-400/90 bg-black/60 px-2 py-0.5 rounded backdrop-blur-sm pointer-events-none">
+              <span id="simProductBadgeName">Bolso Calidad Élite</span>
+            </div>
           </div>
         </div>
+
       </div>
 
-      <!-- Botones de Acción -->
-      <div class="pt-2 flex flex-col sm:flex-row gap-3">
+      <!-- Botones de Acción Finales -->
+      <div class="pt-2 border-t border-cardBorder flex flex-col sm:flex-row gap-3">
         <button type="button" onclick="sendHeroCustomizationWhatsApp()" 
            class="flex-1 py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold text-xs tracking-wider uppercase rounded-lg transition text-center shadow-lg flex items-center justify-center gap-2 cursor-pointer">
           <i class="fa-brands fa-whatsapp text-base"></i>
-          <span>Solicitar por WhatsApp</span>
+          <span>Pedir Esta Pieza Personalizada por WhatsApp</span>
         </button>
 
-        <a href="catalogo.html" 
-           class="flex-1 py-3.5 bg-gradient-to-r from-gold-500 to-amber-500 hover:from-gold-400 hover:to-amber-400 text-carbon font-bold text-xs tracking-wider uppercase rounded-lg transition text-center shadow-lg flex items-center justify-center gap-2">
-          <span>Ver Modelos para Personalizar</span>
-          <i class="fa-solid fa-arrow-right text-xs"></i>
-        </a>
+        <button type="button" onclick="addSimulatedProductToCart()" 
+           class="flex-1 py-3.5 bg-gradient-to-r from-gold-500 to-amber-500 hover:from-gold-400 hover:to-amber-400 text-carbon font-bold text-xs tracking-wider uppercase rounded-lg transition text-center shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-cart-shopping text-xs"></i>
+          <span>Agregar al Carrito con Este Grabado</span>
+        </button>
       </div>
     </div>
   </div>
 
   <script>
+    let currentSimulatedProduct = null;
+
+    function getSimulatorProductList() {
+      if (typeof products !== 'undefined' && Array.isArray(products) && products.length > 0) {
+        return products.filter(p => p && p.active !== false && p.image);
+      }
+      if (typeof INITIAL_PRODUCTS !== 'undefined' && Array.isArray(INITIAL_PRODUCTS)) {
+        return INITIAL_PRODUCTS.filter(p => p && p.active !== false && p.image);
+      }
+      return [];
+    }
+
+    function initSimulatorProductsDropdown() {
+      const select = document.getElementById('simProductSelect');
+      if (!select) return;
+
+      const prods = getSimulatorProductList();
+      select.innerHTML = '';
+
+      if (prods.length === 0) {
+        select.innerHTML = '<option value="">No hay productos cargados</option>';
+        return;
+      }
+
+      prods.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.name} (${p.category || 'Piel'}) - ${Number(p.price || 0).toLocaleString('es-MX')} MXN`;
+        select.appendChild(opt);
+      });
+
+      // Seleccionar el primer producto por defecto
+      currentSimulatedProduct = prods[0];
+      applySimulatedProduct(currentSimulatedProduct);
+    }
+
+    function onSimulatorProductChange() {
+      const select = document.getElementById('simProductSelect');
+      if (!select) return;
+      const pid = select.value;
+      const prods = getSimulatorProductList();
+      const found = prods.find(p => String(p.id) === String(pid));
+      if (found) {
+        currentSimulatedProduct = found;
+        applySimulatedProduct(found);
+      }
+    }
+
+    function applySimulatedProduct(prod) {
+      if (!prod) return;
+      const img = document.getElementById('simProductMainImage');
+      const priceTag = document.getElementById('simProductPriceTag');
+      const descTag = document.getElementById('simProductDesc');
+      const badgeName = document.getElementById('simProductBadgeName');
+
+      if (img) img.src = prod.image || 'https://vizantinopiel.com/products/elite/elite-1.jpg';
+      if (priceTag) priceTag.innerText = `${Number(prod.price || 0).toLocaleString('es-MX')} MXN`;
+      if (descTag) descTag.innerText = prod.description || prod.name || 'Piel corte vacuno legítima.';
+      if (badgeName) badgeName.innerText = prod.name || 'Pieza de Piel Genuina';
+
+      updateHeroCustomizerPreview();
+    }
+
     function openSimulatorModal() {
       const modal = document.getElementById('simulatorModal');
       if (modal) {
+        initSimulatorProductsDropdown();
         modal.classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
       }
@@ -6900,25 +7022,41 @@
       const textInput = document.getElementById('simHeroText');
       const fontSelect = document.getElementById('simHeroFont');
       const placementSelect = document.getElementById('simHeroPlacement');
-      const previewOutput = document.getElementById('simHeroPreviewOutput');
-      const placementOutput = document.getElementById('simHeroPlacementPreview');
+      const overlayContainer = document.getElementById('simEngravingOverlay');
+      const overlayText = document.getElementById('simHeroOverlayText');
+      const placementBadge = document.getElementById('simPlacementLabelBadge');
 
       const text = textInput ? textInput.value.trim() : '';
       const font = fontSelect ? fontSelect.value : 'serif';
-      const placement = placementSelect ? placementSelect.value : '';
+      const placement = placementSelect ? placementSelect.value : 'bottom-right';
 
-      if (previewOutput) {
-        previewOutput.innerText = text ? ('"' + text + '"') : '"Tu Grabado Aquí"';
+      if (overlayText) {
+        overlayText.innerText = text ? ('"' + text + '"') : '"Tu Grabado Aquí"';
         
-        previewOutput.className = 'text-xl sm:text-2xl text-gold-300 tracking-widest drop-shadow-md transition-all duration-300';
-        if (font === 'serif') previewOutput.className += ' font-serif italic';
-        else if (font === 'sans') previewOutput.className += ' font-sans uppercase font-bold';
-        else if (font === 'cursive') previewOutput.className += ' font-serif italic';
-        else if (font === 'mono') previewOutput.className += ' font-mono';
+        let fontClasses = 'text-sm sm:text-base tracking-wider font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] text-amber-200 transition-all duration-300';
+        if (font === 'serif') fontClasses += ' font-serif italic';
+        else if (font === 'sans') fontClasses += ' font-sans uppercase font-bold';
+        else if (font === 'cursive') fontClasses += ' font-serif italic tracking-widest';
+        else if (font === 'mono') fontClasses += ' font-mono';
+        overlayText.className = fontClasses;
       }
 
-      if (placementOutput && placement) {
-        placementOutput.innerText = placement;
+      if (overlayContainer) {
+        // Reset positioning
+        overlayContainer.className = 'absolute transition-all duration-300 pointer-events-none z-10';
+        if (placement === 'bottom-right') {
+          overlayContainer.classList.add('bottom-6', 'right-6');
+          if (placementBadge) placementBadge.innerText = 'Esquina Inferior Derecha';
+        } else if (placement === 'bottom-left') {
+          overlayContainer.classList.add('bottom-6', 'left-6');
+          if (placementBadge) placementBadge.innerText = 'Esquina Inferior Izquierda';
+        } else if (placement === 'center') {
+          overlayContainer.classList.add('top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2');
+          if (placementBadge) placementBadge.innerText = 'Centro de la Pieza';
+        } else if (placement === 'top-right') {
+          overlayContainer.classList.add('top-6', 'right-6');
+          if (placementBadge) placementBadge.innerText = 'Frente Superior';
+        }
       }
     }
 
@@ -6927,22 +7065,61 @@
       const fontSelect = document.getElementById('simHeroFont');
       const placementSelect = document.getElementById('simHeroPlacement');
 
+      const prodName = currentSimulatedProduct ? currentSimulatedProduct.name : 'Artículo de Piel';
+      const prodPrice = currentSimulatedProduct ? `${Number(currentSimulatedProduct.price).toLocaleString('es-MX')} MXN` : '';
       const text = textInput ? textInput.value.trim() : 'Sin especificar';
       const font = fontSelect ? fontSelect.options[fontSelect.selectedIndex].text : 'Clásica';
-      const placement = placementSelect ? placementSelect.value : 'Frente';
+      const placementText = placementSelect ? placementSelect.options[placementSelect.selectedIndex].text : 'Frente';
 
       const waMsg = encodeURIComponent(
-        'Hola Vizantino Piel, deseo cotizar y personalizar una pieza de piel genuina con el siguiente grabado:\n\n' +
-        '• Texto / Iniciales: "' + text + '"\n' +
-        '• Tipografía: ' + font + '\n' +
-        '• Ubicación deseada: ' + placement + '\n\n' +
-        '¿Qué modelos tienen disponibles para entrega o fabricación?'
+        `Hola Vizantino Piel, deseo cotizar y apartar esta pieza personalizada con grabado artesanal:\n\n` +
+        `• Producto: *${prodName}* (${prodPrice})\n` +
+        `• Grabado deseado: "${text}"\n` +
+        `• Tipografía: ${font}\n` +
+        `• Ubicación del grabado: ${placementText}\n\n` +
+        `¿Me confirman tiempo de entrega para este modelo?`
       );
 
-      window.open('https://wa.me/523329089920?text=' + waMsg, '_blank');
+      window.open(`https://wa.me/523329089920?text=${waMsg}`, '_blank');
+    }
+
+    function addSimulatedProductToCart() {
+      if (!currentSimulatedProduct) return;
+      const textInput = document.getElementById('simHeroText');
+      const fontSelect = document.getElementById('simHeroFont');
+      const placementSelect = document.getElementById('simHeroPlacement');
+
+      const text = textInput ? textInput.value.trim() : '';
+      const font = fontSelect ? fontSelect.options[fontSelect.selectedIndex].text : 'Clásica';
+      const placementText = placementSelect ? placementSelect.options[placementSelect.selectedIndex].text : 'Frente';
+
+      if (typeof addToCart === 'function') {
+        addToCart(currentSimulatedProduct.id);
+        
+        // Guardar la personalización seleccionada para el checkout
+        try {
+          const customObj = {
+            productId: currentSimulatedProduct.id,
+            text: text,
+            font: font,
+            placement: placementText
+          };
+          localStorage.setItem('vizantino_hero_customization', JSON.stringify(customObj));
+          
+          // Si los inputs del checkout existen, llenarlos
+          const cText = document.getElementById('customText');
+          if (cText && text) cText.value = text;
+        } catch(e) {}
+
+        closeSimulatorModal();
+        if (typeof toggleCartDrawer === 'function') {
+          toggleCartDrawer(true);
+        }
+      } else {
+        window.location.href = 'catalogo.html';
+      }
     }
   </script>
-  
   <script src="welcome-preloader.js"></script>
 </body>
 </html>
