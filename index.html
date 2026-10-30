@@ -6881,6 +6881,7 @@
                 <option value="bottom-left">Esquina Inferior Izq.</option>
                 <option value="upper-center">Solapa / Parte Alta</option>
                 <option value="tag">Etiqueta / Placa Colgante</option>
+                <option value="custom">✋ Libre (Arrastra donde gustes)</option>
               </select>
             </div>
           </div>
@@ -6899,7 +6900,7 @@
         <div class="lg:col-span-7">
           <label class="block text-zinc-200 text-xs uppercase tracking-wider font-semibold mb-1.5 flex items-center justify-between">
             <span class="flex items-center gap-1.5 text-gold-400">
-              <i class="fa-solid fa-crosshairs"></i> Vista Técnica Digitalizada
+              <i class="fa-solid fa-hand-pointer text-xs"></i> Arrastra el grabado a cualquier parte
             </span>
             <span id="simPlacementLabelBadge" class="text-[10px] bg-darkSurface px-2 py-0.5 rounded border border-gold-500/30 text-amber-300 font-mono">
               Centro de la Pieza
@@ -6937,13 +6938,18 @@
               <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-gold-500/40"></div>
               <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-gold-500/40"></div>
 
-              <!-- PLACA DE GRABADO JUSTAMENTE EN LA SILUETA DEL PRODUCTO -->
+              <!-- PLACA DE GRABADO ARRASTRABLE (DRAGGABLE) JUSTAMENTE EN LA SILUETA -->
               <div id="simEngravingOverlay" 
-                   class="absolute transition-all duration-300 z-20 pointer-events-auto">
-                <div class="px-3.5 py-1.5 rounded-sm bg-[#120a05]/85 border border-amber-500/80 shadow-[0_4px_20px_rgba(0,0,0,0.95)] flex flex-col items-center justify-center transform hover:scale-105 transition-transform backdrop-blur-xs">
-                  <span class="text-[7.5px] uppercase tracking-[0.25em] text-amber-400/90 font-mono font-bold">VIZANTINO PIEL</span>
+                   class="absolute z-30 pointer-events-auto cursor-grab active:cursor-grabbing select-none touch-none transition-transform duration-75">
+                <div class="relative px-3.5 py-1.5 rounded-sm bg-[#120a05]/90 border border-amber-500/90 shadow-[0_4px_25px_rgba(0,0,0,0.95)] flex flex-col items-center justify-center group ring-1 ring-gold-500/30 backdrop-blur-xs">
+                  <!-- Indicador sutil de arrastre -->
+                  <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-carbon rounded-full px-1.5 py-0.2 text-[8px] font-bold tracking-wider flex items-center gap-1 shadow opacity-80 group-hover:opacity-100 transition">
+                    <i class="fa-solid fa-up-down-left-right text-[7px]"></i>
+                    <span>ARRASTRAR</span>
+                  </div>
+                  <span class="text-[7.5px] uppercase tracking-[0.25em] text-amber-400/90 font-mono font-bold pointer-events-none">VIZANTINO PIEL</span>
                   <span id="simHeroOverlayText" 
-                        class="text-sm sm:text-base font-serif italic text-amber-200 tracking-wider font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] leading-tight">
+                        class="text-sm sm:text-base font-serif italic text-amber-200 tracking-wider font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] leading-tight pointer-events-none">
                     "MIRIAM"
                   </span>
                 </div>
@@ -7148,6 +7154,7 @@
       const modal = document.getElementById('simulatorModal');
       if (modal) {
         initSimulatorProductsDropdown();
+        initDraggableEngraving();
         modal.classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
       }
@@ -7158,6 +7165,98 @@
       if (modal) {
         modal.classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    // Coordenadas libres de arrastre en porcentajes (%)
+    let customDragPos = { x: 50, y: 52 };
+    let isDraggingEngraving = false;
+    let dragStartOffset = { x: 0, y: 0 };
+
+    function initDraggableEngraving() {
+      const overlay = document.getElementById('simEngravingOverlay');
+      const stage = document.getElementById('simProductStage');
+      if (!overlay || !stage) return;
+
+      // Mouse events
+      overlay.addEventListener('mousedown', startDrag);
+      window.addEventListener('mousemove', onDrag);
+      window.addEventListener('mouseup', endDrag);
+
+      // Touch events (Móvil y Tablets)
+      overlay.addEventListener('touchstart', startDragTouch, { passive: false });
+      window.addEventListener('touchmove', onDragTouch, { passive: false });
+      window.addEventListener('touchend', endDragTouch);
+
+      function startDrag(e) {
+        e.preventDefault();
+        isDraggingEngraving = true;
+        const rect = overlay.getBoundingClientRect();
+        dragStartOffset.x = e.clientX - (rect.left + rect.width / 2);
+        dragStartOffset.y = e.clientY - (rect.top + rect.height / 2);
+        overlay.classList.add('cursor-grabbing');
+      }
+
+      function onDrag(e) {
+        if (!isDraggingEngraving) return;
+        e.preventDefault();
+        updateDragPosition(e.clientX, e.clientY);
+      }
+
+      function endDrag() {
+        if (!isDraggingEngraving) return;
+        isDraggingEngraving = false;
+        overlay.classList.remove('cursor-grabbing');
+      }
+
+      function startDragTouch(e) {
+        if (e.touches.length !== 1) return;
+        e.preventDefault();
+        isDraggingEngraving = true;
+        const touch = e.touches[0];
+        const rect = overlay.getBoundingClientRect();
+        dragStartOffset.x = touch.clientX - (rect.left + rect.width / 2);
+        dragStartOffset.y = touch.clientY - (rect.top + rect.height / 2);
+      }
+
+      function onDragTouch(e) {
+        if (!isDraggingEngraving || e.touches.length !== 1) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        updateDragPosition(touch.clientX, touch.clientY);
+      }
+
+      function endDragTouch() {
+        isDraggingEngraving = false;
+      }
+
+      function updateDragPosition(clientX, clientY) {
+        const stageRect = stage.getBoundingClientRect();
+        // Calcular porcentaje X e Y restringido al cuerpo del producto (15% a 85%)
+        let xPercent = ((clientX - dragStartOffset.x - stageRect.left) / stageRect.width) * 100;
+        let yPercent = ((clientY - dragStartOffset.y - stageRect.top) / stageRect.height) * 100;
+
+        xPercent = Math.max(15, Math.min(85, xPercent));
+        yPercent = Math.max(15, Math.min(85, yPercent));
+
+        customDragPos = { x: xPercent, y: yPercent };
+
+        // Cambiar select de ubicación a 'custom'
+        const placementSelect = document.getElementById('simHeroPlacement');
+        if (placementSelect && placementSelect.value !== 'custom') {
+          placementSelect.value = 'custom';
+        }
+
+        const placementBadge = document.getElementById('simPlacementLabelBadge');
+        if (placementBadge) {
+          placementBadge.innerText = `Ubicación Libre (${Math.round(xPercent)}%, ${Math.round(yPercent)}%)`;
+        }
+
+        overlay.style.top = yPercent + '%';
+        overlay.style.left = xPercent + '%';
+        overlay.style.bottom = 'auto';
+        overlay.style.right = 'auto';
+        overlay.style.transform = 'translate(-50%, -50%)';
       }
     }
 
@@ -7188,7 +7287,14 @@
         // Posicionamiento preciso dentro del cuerpo de la silueta
         overlayContainer.className = 'absolute transition-all duration-300 z-20 pointer-events-auto';
         
-        if (placement === 'center') {
+        if (placement === 'custom') {
+          overlayContainer.style.top = customDragPos.y + '%';
+          overlayContainer.style.left = customDragPos.x + '%';
+          overlayContainer.style.bottom = 'auto';
+          overlayContainer.style.right = 'auto';
+          overlayContainer.style.transform = 'translate(-50%, -50%)';
+          if (placementBadge) placementBadge.innerText = `Ubicación Libre (${Math.round(customDragPos.x)}%, ${Math.round(customDragPos.y)}%)`;
+        } else if (placement === 'center') {
           // Centrado geométrico sobre la cara frontal de la pieza
           overlayContainer.style.top = '52%';
           overlayContainer.style.left = '50%';
@@ -7196,6 +7302,7 @@
           overlayContainer.style.right = 'auto';
           overlayContainer.style.transform = 'translate(-50%, -50%)';
           if (placementBadge) placementBadge.innerText = 'Centro de la Pieza';
+          customDragPos = { x: 50, y: 52 };
         } else if (placement === 'bottom-right') {
           // Esquina inferior derecha sobre la piel del frente
           overlayContainer.style.top = 'auto';
