@@ -346,21 +346,21 @@
   <!-- ========================================== -->
   <!-- 1. TOP BANNER PROMOCIONAL -->
   <!-- ========================================== -->
-  <aside class="bg-gradient-to-r from-neutral-950 via-[#1c160b] to-neutral-950 border-b border-gold-500/20 py-2 px-4 text-xs tracking-wider text-center text-zinc-300 flex flex-wrap items-center justify-center gap-x-6 gap-y-1">
-    <div class="flex items-center gap-2 text-gold-400">
-      <i class="fa-solid fa-gem text-[10px]"></i>
-      <span class="font-medium tracking-widest uppercase">Envío nacional gratis a partir de $1,800 o 3 MSI · Personalización gratis</span>
+  <aside class="bg-[#16120e] border-b border-gold-500/20 py-2.5 px-4 text-xs tracking-wider text-center text-zinc-300 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+    <div class="flex items-center gap-2 text-zinc-200 font-medium tracking-wider text-[11px] sm:text-xs">
+      <i class="fa-solid fa-truck text-gold-400 text-xs"></i>
+      <span>Envío gratis desde $1,800</span>
     </div>
-    <span class="hidden sm:inline text-zinc-600">|</span>
-    <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20deseo%20información%20sobre%20sus%20artículos%20de%20piel" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 transition flex items-center gap-1.5">
-      <i class="fa-brands fa-whatsapp text-emerald-400"></i>
-      <span>3329089920</span>
-    </a>
-    <span class="hidden sm:inline text-zinc-600">|</span>
-    <a href="https://instagram.com/vizantino_piel" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 transition flex items-center gap-1.5">
-      <i class="fa-brands fa-instagram text-pink-400"></i>
-      <span>@vizantino_piel</span>
-    </a>
+    <span class="hidden sm:inline text-gold-500/40">|</span>
+    <div class="flex items-center gap-2 text-zinc-200 font-medium tracking-wider text-[11px] sm:text-xs">
+      <i class="fa-regular fa-credit-card text-gold-400 text-xs"></i>
+      <span>3 MSI</span>
+    </div>
+    <span class="hidden sm:inline text-gold-500/40">|</span>
+    <div class="flex items-center gap-2 text-zinc-200 font-medium tracking-wider text-[11px] sm:text-xs">
+      <i class="fa-solid fa-pencil text-gold-400 text-xs"></i>
+      <span>Personalización gratis</span>
+    </div>
   </aside>
 
   <!-- ========================================== -->
@@ -533,166 +533,112 @@
 
   <main>
     <!-- ========================================== -->
-    <!-- 3. HERO SECTION (PORTADA PRINCIPAL) -->
+    <!-- 3. HERO SECTION (PORTADA PRINCIPAL CON FORMATO SOLICITADO) -->
     <!-- ========================================== -->
-    <section id="inicio" class="relative min-h-[85vh] flex items-center justify-center hero-pattern border-b border-cardBorder py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <!-- Luces decorativas de fondo -->
-      <div class="absolute -top-32 -left-32 w-96 h-96 bg-gold-600/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-gold-400/5 rounded-full blur-3xl pointer-events-none"></div>
+    <section id="inicio" class="relative min-h-[85vh] sm:min-h-[90vh] flex flex-col justify-between hero-pattern border-b border-cardBorder overflow-hidden bg-[#18120e]">
+      <!-- Background Image Texture with subtle artisan leather aesthetic -->
+      <div class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 scale-105 pointer-events-none opacity-40 mix-blend-luminosity" 
+           style="background-image: url('https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=1920&q=80');"></div>
+      <!-- Vignette & Warm Golden Gradients -->
+      <div class="absolute inset-0 z-0 bg-gradient-to-b from-[#18120e]/90 via-[#18120e]/75 to-[#120d0a] pointer-events-none"></div>
+      <div class="absolute inset-0 z-0 radial-glow pointer-events-none opacity-60"></div>
+      
+      <!-- Centralized Content matching exact screenshot format -->
+      <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 text-center flex-1 flex flex-col justify-center items-center">
+        <!-- Kicker: —— PIEL GENUINA —— -->
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <span class="h-[1px] w-8 sm:w-12 bg-gold-400/70 inline-block"></span>
+          <span class="text-gold-400 text-xs sm:text-sm tracking-[0.35em] uppercase font-semibold">
+            PIEL GENUINA
+          </span>
+          <span class="h-[1px] w-8 sm:w-12 bg-gold-400/70 inline-block"></span>
+        </div>
 
-      <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <!-- Texto Hero -->
-        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs tracking-[0.2em] uppercase font-semibold">
-            <i class="fa-solid fa-certificate text-[11px]"></i> Marroquinería Fina Artesanal
-          </div>
+        <!-- Main Title -->
+        <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl text-zinc-100 font-bold leading-[1.15] tracking-tight mb-6">
+          Hecho para durar.<br>
+          <span class="italic font-normal shimmer-text drop-shadow-sm">Diseñado para destacar.</span>
+        </h1>
+
+        <!-- Subtle Divider Line -->
+        <div class="w-12 sm:w-16 h-[1.5px] bg-gold-400/80 mb-6 mx-auto rounded-full"></div>
+
+        <!-- Subtitle -->
+        <p class="text-zinc-300 text-base sm:text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-10">
+          Piezas de piel genuina, hechas para acompañarte toda la vida.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+          <a href="#catalogo" 
+             class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 hover:from-gold-400 hover:to-gold-300 text-carbon font-bold text-xs sm:text-sm tracking-[0.2em] uppercase rounded-md transition-all duration-300 shadow-xl shadow-gold-500/20 transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
+            <span>EXPLORAR COLECCIÓN</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
           
-          <h1 class="font-serif text-4xl sm:text-5xl xl:text-6xl text-zinc-100 font-bold leading-tight tracking-wide">
-            Piezas Únicas en <br>
-            <span class="shimmer-text font-serif italic font-normal">Piel Genuina Corte Vacuno</span>
-          </h1>
-
-          <p class="text-zinc-400 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
-            Elaboradas con devoción por maestros artesanos en Tlaquepaque, Jalisco. Tradición, longevidad inquebrantable y elegancia atemporal en cada corte y costura.
-          </p>
-
-          <div class="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-4">
-            <a href="#catalogo" class="px-8 py-3.5 bg-gradient-to-r from-gold-500 to-gold-400 text-carbon font-semibold text-xs tracking-[0.2em] uppercase rounded-sm hover:from-gold-400 hover:to-gold-300 transition-all duration-300 shadow-lg shadow-gold-500/20 transform hover:-translate-y-0.5">
-              Explorar Colección
-            </a>
-            <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20me%20gustaría%20atención%20personalizada" target="_blank" rel="noopener noreferrer" 
-               class="px-7 py-3.5 bg-darkSurface border border-gold-500/40 text-gold-400 font-medium text-xs tracking-[0.2em] uppercase rounded-sm hover:bg-gold-500/10 transition-all duration-300 flex items-center gap-2.5">
-              <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
-              <span>Atención WhatsApp</span>
-            </a>
-          </div>
-
-          <!-- Badges de 3 Sucursales Oficiales -->
-          <div class="pt-6 border-t border-cardBorder/60 max-w-xl mx-auto lg:mx-0">
-            <div class="flex items-center justify-between mb-2.5">
-              <span class="text-[10px] tracking-[0.25em] uppercase font-bold text-gold-400 flex items-center gap-1.5">
-                <i class="fa-solid fa-store text-[11px]"></i> 3 Sucursales Oficiales
-              </span>
-              <a href="sucursales.html" class="text-[10.5px] text-zinc-400 hover:text-gold-400 underline transition flex items-center gap-1">
-                Ver mapas <i class="fa-solid fa-arrow-right text-[9px]"></i>
-              </a>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-              <a href="https://maps.google.com/?q=Independencia+248+Tlaquepaque+Centro+Jalisco" target="_blank" rel="noopener noreferrer" 
-                 class="p-2.5 rounded-lg bg-darkSurface/90 border border-cardBorder hover:border-gold-500/50 hover:bg-gold-500/10 transition group text-left flex flex-col justify-between">
-                <div class="flex items-center gap-1.5 text-gold-400 font-bold text-[11.5px] mb-0.5">
-                  <i class="fa-solid fa-location-dot text-gold-400 group-hover:scale-110 transition-transform"></i> Independencia #248
-                </div>
-                <span class="text-[10px] text-zinc-300 font-medium">Tlaquepaque Centro</span>
-                <span class="text-[9px] text-emerald-400 mt-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Abierto Hoy</span>
-              </a>
-
-              <a href="https://maps.google.com/?q=Alfareros+129A+Tlaquepaque+Centro+Jalisco" target="_blank" rel="noopener noreferrer" 
-                 class="p-2.5 rounded-lg bg-darkSurface/90 border border-cardBorder hover:border-gold-500/50 hover:bg-gold-500/10 transition group text-left flex flex-col justify-between">
-                <div class="flex items-center gap-1.5 text-gold-400 font-bold text-[11.5px] mb-0.5">
-                  <i class="fa-solid fa-location-dot text-gold-400 group-hover:scale-110 transition-transform"></i> Alfareros #129
-                </div>
-                <span class="text-[10px] text-zinc-300 font-medium">Tlaquepaque Centro</span>
-                <span class="text-[9px] text-emerald-400 mt-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Abierto Hoy</span>
-              </a>
-
-              <a href="https://maps.google.com/?q=Av+Tonaltecas+274+Tonala+Centro+Jalisco" target="_blank" rel="noopener noreferrer" 
-                 class="p-2.5 rounded-lg bg-darkSurface/90 border border-cardBorder hover:border-gold-500/50 hover:bg-gold-500/10 transition group text-left flex flex-col justify-between">
-                <div class="flex items-center gap-1.5 text-gold-400 font-bold text-[11.5px] mb-0.5">
-                  <i class="fa-solid fa-location-dot text-gold-400 group-hover:scale-110 transition-transform"></i> Av. Tonaltecas #274
-                </div>
-                <span class="text-[10px] text-zinc-300 font-medium">Tonalá Centro</span>
-                <span class="text-[9px] text-emerald-400 mt-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Abierto Hoy</span>
-              </a>
-            </div>
-          </div>
+          <button onclick="openSimulatorModal()" 
+             class="w-full sm:w-auto px-8 py-4 bg-[#231b15]/90 hover:bg-[#2e231b] border border-gold-400/50 hover:border-gold-300 text-zinc-100 font-semibold text-xs sm:text-sm tracking-[0.18em] uppercase rounded-md transition-all duration-300 shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2.5">
+            <i class="fa-solid fa-pencil text-gold-400 text-xs"></i>
+            <span>PERSONALIZA EL TUYO</span>
+          </button>
         </div>
+      </div>
 
-        <!-- Tarjeta Insignia (Estado en espera de nuevos productos) -->
-        <div class="lg:col-span-5 flex justify-center">
-          <!-- COMPONENTE: PRODUCTO ANCLA PROTAGONISTA CON JERARQUÍA FOTOGRÁFICA -->
-          <div class="relative w-full max-w-md animate-hero-float">
-            <!-- Resplandor sutil de fondo tono madera ámbar -->
-            <div class="absolute -inset-1 bg-gradient-to-r from-gold-600/30 via-amber-500/20 to-gold-600/30 rounded-2xl blur-lg opacity-40 group-hover:opacity-60 transition duration-700"></div>
-            
-            <div class="relative bg-cardBg/95 backdrop-blur-md rounded-2xl p-6 sm:p-7 border border-cardBorder shadow-2xl">
-              <!-- Encabezado de Jerarquía Visual -->
-              <div class="flex items-center justify-between pb-3.5 border-b border-cardBorder/80 mb-4">
-                <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-gold-400 animate-pulse"></span>
-                  <span class="text-[10.5px] font-bold text-gold-400 tracking-[0.25em] uppercase">Pieza Insignia de Taller</span>
-                </div>
-                <span class="px-2.5 py-0.5 bg-wood-dark/70 text-amber-200 border border-gold-500/30 rounded-full text-[9.5px] font-bold tracking-wider uppercase">
-                  100% Corte Vacuno
-                </span>
-              </div>
-
-              <!-- 1. FOTOGRAFÍA PRINCIPAL: PRODUCTO ANCLA EN PRIMER PLANO LIMPIO -->
-              <div class="relative aspect-square sm:aspect-[4/3] rounded-xl overflow-hidden bg-neutral-950/90 mb-4 group cursor-pointer border border-cardBorder shadow-inner" 
-                   onclick="window.location.href='catalogo.html?cat=Bolsos'" title="Click para ver en catálogo">
-                <!-- Imagen en estudio con máxima nitidez de producto sobre fondo no invasivo -->
-                <img id="heroAnchorProductImg" 
-                     src="https://vizantinopiel.com/products/elite/elite-1.jpg" 
-                     alt="Producto Ancla - Bolso Calidad Élite" 
-                     class="w-full h-full object-contain p-3 object-center group-hover:scale-105 transition-transform duration-500">
-                
-                <!-- Gradiente suave inferior para lectura del producto -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none"></div>
-
-                <!-- 2. ELEMENTO TERCIARIO/LIFESTYLE: Miniatura contextual de uso que NO oculta el producto principal -->
-                <div class="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/75 border border-gold-500/30 backdrop-blur-sm shadow-md" title="Acabado artesanal">
-                  <i class="fa-solid fa-magnifying-glass-plus text-gold-400 text-[10px]"></i>
-                  <span class="text-[9px] text-zinc-300 font-medium">Textura Genuina</span>
-                </div>
-
-                <!-- Datos de la Pieza Ancla -->
-                <div class="absolute bottom-3 left-3 right-3 flex items-end justify-between pointer-events-none">
-                  <div>
-                    <span class="text-[9.5px] tracking-widest uppercase text-gold-400 font-bold block mb-0.5">Edición Artesanal</span>
-                    <h3 id="heroAnchorProductTitle" class="font-serif text-xl sm:text-2xl font-bold text-beige-100 leading-tight">
-                      Bolso Calidad Élite
-                    </h3>
-                  </div>
-                  <div class="text-right">
-                    <span class="text-[9.5px] text-zinc-400 block uppercase tracking-wider">Taller Tlaquepaque</span>
-                    <span id="heroAnchorProductPrice" class="font-serif text-lg sm:text-xl text-gold-300 font-bold">$3,000 MXN</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 3. FOTOGRAFÍA SECUNDARIA & DETALLES DE MATERIAL (CARROUSEL/MINIATURAS) -->
-              <div class="grid grid-cols-3 gap-2 mb-4">
-                <div class="p-2 rounded-lg bg-darkSurface border border-cardBorder flex flex-col items-center text-center">
-                  <i class="fa-solid fa-gem text-gold-400 text-xs mb-1"></i>
-                  <span class="text-[10px] text-zinc-300 font-medium leading-tight">Gamuza & Oro</span>
-                  <span class="text-[8.5px] text-zinc-500">Herrajes Finos</span>
-                </div>
-                <div class="p-2 rounded-lg bg-darkSurface border border-cardBorder flex flex-col items-center text-center">
-                  <i class="fa-solid fa-fingerprint text-gold-400 text-xs mb-1"></i>
-                  <span class="text-[10px] text-zinc-300 font-medium leading-tight">Personalizado</span>
-                  <span class="text-[8.5px] text-zinc-500">Grabado Gratis</span>
-                </div>
-                <div class="p-2 rounded-lg bg-darkSurface border border-cardBorder flex flex-col items-center text-center">
-                  <i class="fa-solid fa-shield-halved text-gold-400 text-xs mb-1"></i>
-                  <span class="text-[10px] text-zinc-300 font-medium leading-tight">5 Años</span>
-                  <span class="text-[8.5px] text-zinc-500">Garantía Taller</span>
-                </div>
-              </div>
-
-              <!-- Botones de Acción Preparados para Sustitución Inmediata -->
-              <div class="flex items-center gap-3">
-                <a href="catalogo.html?cat=Bolsos" class="flex-1 py-2.5 sm:py-3 bg-gradient-to-r from-gold-500 to-amber-500 hover:from-gold-400 hover:to-amber-400 text-carbon font-bold text-xs uppercase tracking-widest rounded-lg transition text-center shadow-md active:scale-95">
-                  Ver Colección
-                </a>
-                <a href="https://wa.me/523329089920?text=Hola%20Vizantino%20Piel,%20me%20interesa%20información%20sobre%20el%20Bolso%20Calidad%20Élite" target="_blank" rel="noopener noreferrer" 
-                   class="px-4 py-2.5 sm:py-3 bg-darkSurface hover:bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 rounded-lg text-xs font-bold transition flex items-center gap-1.5 active:scale-95" title="Pedir asesoría por WhatsApp">
-                  <i class="fa-brands fa-whatsapp text-sm"></i>
-                  <span class="hidden sm:inline text-[11px]">Asesoría</span>
-                </a>
-              </div>
+      <!-- 3 Trust Badges Bar (Bottom of Hero) -->
+      <div class="relative z-10 w-full bg-[#140f0c]/90 border-t border-b border-cardBorder backdrop-blur-sm py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 divide-y md:divide-y-0 md:divide-x divide-white/5 text-center md:text-left">
+          
+          <!-- Badge 1: Piel genuina -->
+          <div class="flex items-center justify-center md:justify-start gap-4 pt-4 md:pt-0 md:px-4">
+            <div class="w-12 h-12 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center flex-shrink-0 text-gold-400">
+              <i class="fa-solid fa-gem text-lg"></i>
+            </div>
+            <div>
+              <h4 class="text-zinc-100 font-semibold text-sm sm:text-base tracking-wide">Piel genuina</h4>
+              <p class="text-zinc-400 text-xs sm:text-sm font-light">Calidad que se siente.</p>
             </div>
           </div>
+
+          <!-- Badge 2: Hecho en México -->
+          <div class="flex items-center justify-center md:justify-start gap-4 pt-4 md:pt-0 md:px-6">
+            <div class="w-12 h-12 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center flex-shrink-0 text-gold-400">
+              <i class="fa-solid fa-award text-lg"></i>
+            </div>
+            <div>
+              <h4 class="text-zinc-100 font-semibold text-sm sm:text-base tracking-wide">Hecho en México</h4>
+              <p class="text-zinc-400 text-xs sm:text-sm font-light">Tradición artesanal.</p>
+            </div>
+          </div>
+
+          <!-- Badge 3: Personalización gratis -->
+          <div class="flex items-center justify-center md:justify-start gap-4 pt-4 md:pt-0 md:px-6">
+            <div class="w-12 h-12 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center flex-shrink-0 text-gold-400">
+              <i class="fa-solid fa-pencil text-lg"></i>
+            </div>
+            <div>
+              <h4 class="text-zinc-100 font-semibold text-sm sm:text-base tracking-wide">Personalización gratis</h4>
+              <p class="text-zinc-400 text-xs sm:text-sm font-light">Hazlo único.</p>
+            </div>
+          </div>
+
         </div>
+      </div>
+
+      <!-- Banner Header: PIEZAS QUE HACEN LA DIFERENCIA -->
+      <div class="relative z-10 w-full py-12 sm:py-16 px-4 text-center bg-gradient-to-b from-[#140f0c]/90 to-transparent">
+        <div class="flex items-center justify-center gap-3 mb-2">
+          <span class="h-[1px] w-6 sm:w-10 bg-gold-400/60 inline-block"></span>
+          <span class="text-gold-400 text-[11px] sm:text-xs tracking-[0.3em] uppercase font-semibold">
+            PIEZAS QUE HACEN
+          </span>
+          <span class="h-[1px] w-6 sm:w-10 bg-gold-400/60 inline-block"></span>
+        </div>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-zinc-100 font-bold tracking-tight mb-2">
+          LA DIFERENCIA
+        </h2>
+        <p class="text-zinc-400 text-xs sm:text-sm tracking-wide font-light">
+          Diseño, carácter y piel genuina en cada detalle.
+        </p>
       </div>
     </section>
 
