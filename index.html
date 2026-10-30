@@ -6938,21 +6938,13 @@
               <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-gold-500/40"></div>
               <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-gold-500/40"></div>
 
-              <!-- PLACA DE GRABADO ARRASTRABLE (DRAGGABLE) JUSTAMENTE EN LA SILUETA -->
+              <!-- TEXTO DE GRABADO ARRASTRABLE DIRECTAMENTE SOBRE LA PIEL -->
               <div id="simEngravingOverlay" 
                    class="absolute z-30 pointer-events-auto cursor-grab active:cursor-grabbing select-none touch-none transition-transform duration-75">
-                <div class="relative px-3.5 py-1.5 rounded-sm bg-[#120a05]/90 border border-amber-500/90 shadow-[0_4px_25px_rgba(0,0,0,0.95)] flex flex-col items-center justify-center group ring-1 ring-gold-500/30 backdrop-blur-xs">
-                  <!-- Indicador sutil de arrastre -->
-                  <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-carbon rounded-full px-1.5 py-0.2 text-[8px] font-bold tracking-wider flex items-center gap-1 shadow opacity-80 group-hover:opacity-100 transition">
-                    <i class="fa-solid fa-up-down-left-right text-[7px]"></i>
-                    <span>ARRASTRAR</span>
-                  </div>
-                  <span class="text-[7.5px] uppercase tracking-[0.25em] text-amber-400/90 font-mono font-bold pointer-events-none">VIZANTINO PIEL</span>
-                  <span id="simHeroOverlayText" 
-                        class="text-sm sm:text-base font-serif italic text-amber-200 tracking-wider font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] leading-tight pointer-events-none">
-                    "MIRIAM"
-                  </span>
-                </div>
+                <span id="simHeroOverlayText" 
+                      class="text-sm sm:text-base font-serif italic text-amber-200 tracking-wider font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] leading-tight pointer-events-none">
+                  MIRIAM
+                </span>
               </div>
 
             </div>
@@ -7273,7 +7265,7 @@
       const placement = placementSelect ? placementSelect.value : 'center';
 
       if (overlayText) {
-        overlayText.innerText = text ? ('"' + text + '"') : '"Tu Grabado Aquí"';
+        overlayText.innerText = text ? text : 'Tu Grabado Aquí';
         
         let fontClasses = 'text-sm sm:text-base tracking-wider font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] text-amber-200 transition-all duration-300 leading-tight';
         if (font === 'serif') fontClasses += ' font-serif italic';
