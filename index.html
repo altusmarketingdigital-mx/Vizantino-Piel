@@ -6781,7 +6781,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAL DE PERSONALIZACIÓN Y SIMULADOR EN VIVO SOBRE PRODUCTO REAL -->
+  <!-- MODAL DE PERSONALIZACIÓN Y SIMULADOR EN VIVO: FOTO DIGITALIZADA Y SILUETA TÉCNICA -->
   <!-- ========================================== -->
   <div id="simulatorModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-5">
     <div class="absolute inset-0 bg-black/90 backdrop-blur-md modal-backdrop" onclick="closeSimulatorModal()"></div>
@@ -6795,36 +6795,53 @@
       <!-- Cabecera del Simulador -->
       <div class="border-b border-cardBorder pb-3">
         <div class="flex items-center gap-2 text-gold-400 text-xs font-semibold tracking-[0.25em] uppercase mb-1">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> Taller Artesanal Tlaquepaque · Vista en Vivo
+          <i class="fa-solid fa-compass-drafting"></i> Taller Artesanal Tlaquepaque · Digitalización Técnica
         </div>
         <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold leading-tight">
           Personaliza Tu Pieza en Piel
         </h3>
         <p class="text-zinc-400 text-xs sm:text-sm mt-0.5">
-          Elige una pieza de nuestro catálogo y visualiza cómo luce tu grabado artesanal a fuego en tiempo real.
+          Visualiza con precisión la silueta técnica y la fotografía digitalizada con tu grabado a fuego exactamente en el cuerpo del producto.
         </p>
       </div>
 
-      <!-- Grid Principal: Selector y Opciones (Izquierda) + Vista Previa en el Producto (Derecha) -->
+      <!-- Grid Principal: Configuración (Izquierda) + Visualizador Digitalizado y Silueta (Derecha) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <!-- Columna Izquierda: Configuración (Lg: 5 cols) -->
+        <!-- Columna Izquierda: Configuración (5 cols) -->
         <div class="lg:col-span-5 space-y-4">
           <!-- 1. Selección de Producto -->
           <div>
             <label class="block text-zinc-200 text-xs uppercase tracking-wider font-semibold mb-1.5 flex items-center justify-between">
-              <span>1. Selecciona el Producto</span>
+              <span>1. Selecciona el Modelo</span>
               <span id="simProductPriceTag" class="text-gold-400 font-serif font-bold text-sm">$3,000 MXN</span>
             </label>
-            <div class="relative">
-              <select id="simProductSelect" onchange="onSimulatorProductChange()" 
-                      class="w-full bg-[#100b08] border border-gold-500/40 focus:border-gold-400 rounded-lg px-3 py-2.5 text-zinc-100 text-xs focus:outline-none cursor-pointer">
-                <!-- Se llena dinámicamente con productos disponibles -->
-              </select>
-            </div>
+            <select id="simProductSelect" onchange="onSimulatorProductChange()" 
+                    class="w-full bg-[#100b08] border border-gold-500/40 focus:border-gold-400 rounded-lg px-3 py-2.5 text-zinc-100 text-xs focus:outline-none cursor-pointer">
+              <!-- Se llena dinámicamente con productos disponibles -->
+            </select>
             <p id="simProductDesc" class="text-[11px] text-zinc-400 mt-1 italic line-clamp-1">
               Piel genuina corte vacuno de alta resistencia.
             </p>
+          </div>
+
+          <!-- Selector de Modo de Vista: Fotografía Digitalizada vs Silueta Técnica -->
+          <div>
+            <label class="block text-zinc-300 text-[11px] uppercase tracking-wider font-semibold mb-1">
+              Modo de Visualización
+            </label>
+            <div class="grid grid-cols-2 gap-2 bg-[#100b08] p-1 rounded-lg border border-gold-500/30">
+              <button type="button" id="btnViewPhoto" onclick="setSimulatorViewMode('photo')" 
+                      class="py-1.5 px-3 rounded text-xs font-semibold transition flex items-center justify-center gap-1.5 bg-gold-500 text-carbon shadow">
+                <i class="fa-solid fa-image text-xs"></i>
+                <span>Foto Digital</span>
+              </button>
+              <button type="button" id="btnViewBlueprint" onclick="setSimulatorViewMode('blueprint')" 
+                      class="py-1.5 px-3 rounded text-xs font-semibold transition flex items-center justify-center gap-1.5 text-zinc-400 hover:text-white">
+                <i class="fa-solid fa-vector-square text-xs"></i>
+                <span>Silueta Vectorial</span>
+              </button>
+            </div>
           </div>
 
           <!-- 2. Texto a Grabar -->
@@ -6833,12 +6850,12 @@
               <span>2. Texto o Iniciales</span>
               <span class="text-[10px] text-zinc-400">Grabado Gratis</span>
             </label>
-            <input type="text" id="simHeroText" maxlength="24" value="A. VIZCAÍNO" placeholder="Ej. A. Vizcaíno / M & R" 
+            <input type="text" id="simHeroText" maxlength="20" value="MIRIAM" placeholder="Ej. MIRIAM / M & R" 
                    oninput="updateHeroCustomizerPreview()"
                    class="w-full bg-[#100b08] border border-gold-500/40 focus:border-gold-400 rounded-lg px-3.5 py-2.5 text-zinc-100 text-sm focus:outline-none tracking-wider">
           </div>
 
-          <!-- 3. Tipografía y Ubicación -->
+          <!-- 3. Tipografía y Ubicación en la Silueta -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-zinc-300 text-[11px] uppercase tracking-wider font-semibold mb-1">
@@ -6859,62 +6876,93 @@
               </label>
               <select id="simHeroPlacement" onchange="updateHeroCustomizerPreview()" 
                       class="w-full bg-[#100b08] border border-gold-500/40 focus:border-gold-400 rounded-lg px-2.5 py-2 text-zinc-200 text-xs focus:outline-none cursor-pointer">
+                <option value="center">Centro de la Pieza</option>
                 <option value="bottom-right">Esquina Inferior Der.</option>
                 <option value="bottom-left">Esquina Inferior Izq.</option>
-                <option value="center">Centro de la Pieza</option>
-                <option value="top-right">Frente Superior</option>
+                <option value="upper-center">Solapa / Parte Alta</option>
+                <option value="tag">Etiqueta / Placa Colgante</option>
               </select>
             </div>
           </div>
 
           <!-- Beneficio artesanal -->
           <div class="p-3 rounded-lg bg-gold-500/10 border border-gold-500/20 text-[11px] text-zinc-300 flex items-start gap-2.5">
-            <i class="fa-solid fa-award text-gold-400 text-sm mt-0.5"></i>
+            <i class="fa-solid fa-fire text-amber-500 text-sm mt-0.5"></i>
             <div>
-              <span class="font-semibold text-gold-300">Grabado a Fuego en Tlaquepaque</span>
-              <p class="text-zinc-400 text-[10.5px]">Se aplica manualmente con tipografía de bronce caliente, fijando un relieve permanente sobre el cuero.</p>
+              <span class="font-semibold text-gold-300">Grabado en Caliente a Fuego</span>
+              <p class="text-zinc-400 text-[10.5px]">Placa de bronce caliente prensada directamente sobre la flor de la piel.</p>
             </div>
           </div>
         </div>
 
-        <!-- Columna Derecha: Vista Previa Realista Sobre la Fotografía del Producto (Lg: 7 cols) -->
+        <!-- Columna Derecha: Canvas del Producto Digitalizado con Coordenadas Exactas (7 cols) -->
         <div class="lg:col-span-7">
           <label class="block text-zinc-200 text-xs uppercase tracking-wider font-semibold mb-1.5 flex items-center justify-between">
             <span class="flex items-center gap-1.5 text-gold-400">
-              <i class="fa-solid fa-eye"></i> Simulación en Producto Real
+              <i class="fa-solid fa-crosshairs"></i> Vista Técnica Digitalizada
             </span>
-            <span id="simPlacementLabelBadge" class="text-[10px] bg-darkSurface px-2 py-0.5 rounded border border-gold-500/30 text-zinc-300">
-              Esquina Inferior Derecha
+            <span id="simPlacementLabelBadge" class="text-[10px] bg-darkSurface px-2 py-0.5 rounded border border-gold-500/30 text-amber-300 font-mono">
+              Centro de la Pieza
             </span>
           </label>
 
-          <!-- Contenedor del Canvas de la Fotografía -->
-          <div class="relative w-full aspect-square max-h-[360px] sm:max-h-[380px] bg-[#0c0806] rounded-xl overflow-hidden border border-gold-500/40 shadow-inner flex items-center justify-center group">
-            <!-- Imagen real del producto seleccionado -->
-            <img id="simProductMainImage" 
-                 src="https://vizantinopiel.com/products/elite/elite-1.jpg" 
-                 alt="Producto Seleccionado" 
-                 class="w-full h-full object-contain p-4 transition-transform duration-500">
+          <!-- Escenario de Simulación con Área de la Silueta -->
+          <div id="simProductStage" 
+               class="relative w-full aspect-square max-h-[380px] bg-[#0c0806] rounded-xl overflow-hidden border border-gold-500/40 shadow-2xl flex items-center justify-center select-none">
             
-            <!-- Sombra de realce -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none"></div>
+            <!-- Cuadrícula técnica de fondo (Blueprint grid) -->
+            <div class="absolute inset-0 bg-[radial-gradient(#3a291e_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none"></div>
 
-            <!-- Placa de Grabado Grabada a Fuego Sobre el Producto -->
-            <div id="simEngravingOverlay" 
-                 class="absolute transition-all duration-300 pointer-events-none z-10 bottom-6 right-6">
-              <div class="px-3 py-1.5 rounded bg-black/60 backdrop-blur-[2px] border border-amber-600/60 shadow-2xl flex flex-col items-center justify-center">
-                <span class="text-[8px] uppercase tracking-widest text-amber-400/80 font-mono">Vizantino · Grabado</span>
-                <span id="simHeroOverlayText" 
-                      class="text-sm sm:text-base font-serif italic text-amber-200 tracking-wider font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  "A. VIZCAÍNO"
-                </span>
+            <!-- Capa A: Fotografía Digitalizada / Silueteada -->
+            <div id="simLayerPhoto" class="absolute inset-0 flex items-center justify-center p-6 transition-all duration-300">
+              <img id="simProductMainImage" 
+                   src="https://vizantinopiel.com/products/elite/elite-1.jpg" 
+                   alt="Producto Seleccionado" 
+                   class="max-w-full max-h-full object-contain filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)] transition-all duration-500">
+            </div>
+
+            <!-- Capa B: Silueta Vectorial Técnica (Blueprint CAD / Marroquinería) -->
+            <div id="simLayerBlueprint" class="absolute inset-0 hidden flex items-center justify-center p-8 transition-all duration-300">
+              <div id="simBlueprintSvgContainer" class="w-full h-full flex items-center justify-center text-gold-400">
+                <!-- Se inyecta la silueta SVG según la categoría del producto -->
               </div>
             </div>
 
-            <!-- Etiqueta de pie de foto -->
-            <div class="absolute bottom-2 left-3 text-[10px] text-zinc-400/90 bg-black/60 px-2 py-0.5 rounded backdrop-blur-sm pointer-events-none">
-              <span id="simProductBadgeName">Bolso Calidad Élite</span>
+            <!-- Marco de Contorno de la Silueta Digital para centrar el grabado -->
+            <div class="absolute inset-10 sm:inset-12 pointer-events-none border border-gold-500/15 rounded-lg flex items-center justify-center">
+              
+              <!-- Puntos Guía Técnicos en las Esquinas -->
+              <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-gold-500/40"></div>
+              <div class="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-gold-500/40"></div>
+              <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-gold-500/40"></div>
+              <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-gold-500/40"></div>
+
+              <!-- PLACA DE GRABADO JUSTAMENTE EN LA SILUETA DEL PRODUCTO -->
+              <div id="simEngravingOverlay" 
+                   class="absolute transition-all duration-300 z-20 pointer-events-auto">
+                <div class="px-3.5 py-1.5 rounded-sm bg-[#120a05]/85 border border-amber-500/80 shadow-[0_4px_20px_rgba(0,0,0,0.95)] flex flex-col items-center justify-center transform hover:scale-105 transition-transform backdrop-blur-xs">
+                  <span class="text-[7.5px] uppercase tracking-[0.25em] text-amber-400/90 font-mono font-bold">VIZANTINO PIEL</span>
+                  <span id="simHeroOverlayText" 
+                        class="text-sm sm:text-base font-serif italic text-amber-200 tracking-wider font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] leading-tight">
+                    "MIRIAM"
+                  </span>
+                </div>
+              </div>
+
             </div>
+
+            <!-- Etiqueta de pie de foto -->
+            <div class="absolute bottom-2 left-3 text-[10px] text-zinc-300 bg-black/80 px-2.5 py-1 rounded border border-gold-500/30 backdrop-blur-sm pointer-events-none flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="simProductBadgeName">Bolsa Sienna</span>
+            </div>
+
+            <!-- Botón flotante para alternar vista rápido -->
+            <button type="button" onclick="toggleSimulatorViewMode()" 
+                    class="absolute top-3 right-3 text-[10px] bg-black/80 hover:bg-gold-500 hover:text-carbon text-gold-400 px-2.5 py-1 rounded border border-gold-500/40 transition flex items-center gap-1.5 shadow-lg cursor-pointer">
+              <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+              <span id="simToggleViewText">Ver Silueta CAD</span>
+            </button>
           </div>
         </div>
 
@@ -6939,6 +6987,91 @@
 
   <script>
     let currentSimulatedProduct = null;
+    let currentSimulatorViewMode = 'photo'; // 'photo' o 'blueprint'
+
+    // Siluetas Vectoriales SVG para cada categoría de producto de marroquinería
+    const SILHOUETTES_SVG = {
+      'Bolsos': `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] stroke-gold-400/90 fill-gold-500/10" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Asas del Bolso -->
+        <path d="M 65 95 C 65 35, 135 35, 135 95" fill="none" stroke-dasharray="3 3"/>
+        <path d="M 75 95 C 75 48, 125 48, 125 95" fill="none"/>
+        <!-- Silueta del Bolso de Mano / Tote -->
+        <path d="M 40 95 L 160 95 L 175 180 L 25 180 Z"/>
+        <!-- Costuras decorativas y solapa -->
+        <path d="M 40 95 Q 100 125 160 95" fill="none" stroke-width="1.2"/>
+        <rect x="90" y="105" width="20" height="14" rx="2" fill="none" stroke-width="1.5"/>
+        <circle cx="100" cy="112" r="2" fill="currentColor"/>
+      </svg>`,
+      'Mochilas': `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] stroke-gold-400/90 fill-gold-500/10" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Asa superior -->
+        <path d="M 80 45 C 80 25, 120 25, 120 45" fill="none"/>
+        <!-- Cuerpo de la Mochila -->
+        <path d="M 45 180 L 45 85 C 45 45, 155 45, 155 85 L 155 180 Z"/>
+        <!-- Bolsillo frontal -->
+        <rect x="58" y="115" width="84" height="55" rx="6" fill="none"/>
+        <line x1="58" y1="125" x2="142" y2="125" stroke-dasharray="2 2"/>
+      </svg>`,
+      'Carteras': `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] stroke-gold-400/90 fill-gold-500/10" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Billetera / Cartera Larga -->
+        <rect x="30" y="60" width="140" height="90" rx="6"/>
+        <!-- Solapa / Broche -->
+        <path d="M 30 60 L 100 105 L 170 60" fill="none"/>
+        <circle cx="100" cy="110" r="4" fill="currentColor"/>
+        <line x1="35" y1="145" x2="165" y2="145" stroke-dasharray="2 2" stroke-width="1"/>
+      </svg>`,
+      'Crossbody': `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] stroke-gold-400/90 fill-gold-500/10" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Correa larga diagonal -->
+        <path d="M 20 20 L 55 90 M 180 20 L 145 90" fill="none" stroke-dasharray="3 3"/>
+        <!-- Cuerpo Crossbody -->
+        <rect x="45" y="85" width="110" height="85" rx="10"/>
+        <!-- Solapa Frontal -->
+        <path d="M 45 85 L 45 125 Q 100 145 155 125 L 155 85 Z"/>
+        <circle cx="100" cy="130" r="3" fill="currentColor"/>
+      </svg>`,
+      'Accesorios': `<svg viewBox="0 0 200 200" class="w-full h-full max-h-[260px] stroke-gold-400/90 fill-gold-500/10" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Tarjetero / Porta pasaporte -->
+        <rect x="45" y="50" width="110" height="110" rx="6"/>
+        <line x1="45" y1="80" x2="155" y2="80"/>
+        <line x1="45" y1="105" x2="155" y2="105"/>
+        <line x1="45" y1="130" x2="155" y2="130"/>
+        <path d="M 47 52 L 153 158" stroke-dasharray="2 2" stroke-width="0.8" fill="none"/>
+      </svg>`
+    };
+
+    function setSimulatorViewMode(mode) {
+      currentSimulatorViewMode = mode;
+      const photoLayer = document.getElementById('simLayerPhoto');
+      const bpLayer = document.getElementById('simLayerBlueprint');
+      const btnPhoto = document.getElementById('btnViewPhoto');
+      const btnBp = document.getElementById('btnViewBlueprint');
+      const toggleText = document.getElementById('simToggleViewText');
+
+      if (mode === 'blueprint') {
+        if (photoLayer) photoLayer.classList.add('hidden');
+        if (bpLayer) bpLayer.classList.remove('hidden');
+        if (btnBp) {
+          btnBp.className = 'py-1.5 px-3 rounded text-xs font-semibold transition flex items-center justify-center gap-1.5 bg-gold-500 text-carbon shadow';
+        }
+        if (btnPhoto) {
+          btnPhoto.className = 'py-1.5 px-3 rounded text-xs font-semibold transition flex items-center justify-center gap-1.5 text-zinc-400 hover:text-white';
+        }
+        if (toggleText) toggleText.innerText = 'Ver Foto Real';
+      } else {
+        if (photoLayer) photoLayer.classList.remove('hidden');
+        if (bpLayer) bpLayer.classList.add('hidden');
+        if (btnPhoto) {
+          btnPhoto.className = 'py-1.5 px-3 rounded text-xs font-semibold transition flex items-center justify-center gap-1.5 bg-gold-500 text-carbon shadow';
+        }
+        if (btnBp) {
+          btnBp.className = 'py-1.5 px-3 rounded text-xs font-semibold transition flex items-center justify-center gap-1.5 text-zinc-400 hover:text-white';
+        }
+        if (toggleText) toggleText.innerText = 'Ver Silueta CAD';
+      }
+    }
+
+    function toggleSimulatorViewMode() {
+      setSimulatorViewMode(currentSimulatorViewMode === 'photo' ? 'blueprint' : 'photo');
+    }
 
     function getSimulatorProductList() {
       if (typeof products !== 'undefined' && Array.isArray(products) && products.length > 0) {
@@ -6969,8 +7102,11 @@
         select.appendChild(opt);
       });
 
-      // Seleccionar el primer producto por defecto
-      currentSimulatedProduct = prods[0];
+      // Seleccionar el primer producto o el actual
+      if (!currentSimulatedProduct) {
+        currentSimulatedProduct = prods[0];
+      }
+      select.value = currentSimulatedProduct.id;
       applySimulatedProduct(currentSimulatedProduct);
     }
 
@@ -6992,11 +7128,18 @@
       const priceTag = document.getElementById('simProductPriceTag');
       const descTag = document.getElementById('simProductDesc');
       const badgeName = document.getElementById('simProductBadgeName');
+      const bpContainer = document.getElementById('simBlueprintSvgContainer');
 
       if (img) img.src = prod.image || 'https://vizantinopiel.com/products/elite/elite-1.jpg';
       if (priceTag) priceTag.innerText = `${Number(prod.price || 0).toLocaleString('es-MX')} MXN`;
       if (descTag) descTag.innerText = prod.description || prod.name || 'Piel corte vacuno legítima.';
       if (badgeName) badgeName.innerText = prod.name || 'Pieza de Piel Genuina';
+
+      // Actualizar silueta técnica vectorial según la categoría
+      if (bpContainer) {
+        const cat = prod.category || 'Bolsos';
+        bpContainer.innerHTML = SILHOUETTES_SVG[cat] || SILHOUETTES_SVG['Bolsos'];
+      }
 
       updateHeroCustomizerPreview();
     }
@@ -7028,34 +7171,63 @@
 
       const text = textInput ? textInput.value.trim() : '';
       const font = fontSelect ? fontSelect.value : 'serif';
-      const placement = placementSelect ? placementSelect.value : 'bottom-right';
+      const placement = placementSelect ? placementSelect.value : 'center';
 
       if (overlayText) {
         overlayText.innerText = text ? ('"' + text + '"') : '"Tu Grabado Aquí"';
         
-        let fontClasses = 'text-sm sm:text-base tracking-wider font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] text-amber-200 transition-all duration-300';
+        let fontClasses = 'text-sm sm:text-base tracking-wider font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] text-amber-200 transition-all duration-300 leading-tight';
         if (font === 'serif') fontClasses += ' font-serif italic';
-        else if (font === 'sans') fontClasses += ' font-sans uppercase font-bold';
+        else if (font === 'sans') fontClasses += ' font-sans uppercase';
         else if (font === 'cursive') fontClasses += ' font-serif italic tracking-widest';
         else if (font === 'mono') fontClasses += ' font-mono';
         overlayText.className = fontClasses;
       }
 
       if (overlayContainer) {
-        // Reset positioning
-        overlayContainer.className = 'absolute transition-all duration-300 pointer-events-none z-10';
-        if (placement === 'bottom-right') {
-          overlayContainer.classList.add('bottom-6', 'right-6');
+        // Posicionamiento preciso dentro del cuerpo de la silueta
+        overlayContainer.className = 'absolute transition-all duration-300 z-20 pointer-events-auto';
+        
+        if (placement === 'center') {
+          // Centrado geométrico sobre la cara frontal de la pieza
+          overlayContainer.style.top = '52%';
+          overlayContainer.style.left = '50%';
+          overlayContainer.style.bottom = 'auto';
+          overlayContainer.style.right = 'auto';
+          overlayContainer.style.transform = 'translate(-50%, -50%)';
+          if (placementBadge) placementBadge.innerText = 'Centro de la Pieza';
+        } else if (placement === 'bottom-right') {
+          // Esquina inferior derecha sobre la piel del frente
+          overlayContainer.style.top = 'auto';
+          overlayContainer.style.left = 'auto';
+          overlayContainer.style.bottom = '12%';
+          overlayContainer.style.right = '12%';
+          overlayContainer.style.transform = 'none';
           if (placementBadge) placementBadge.innerText = 'Esquina Inferior Derecha';
         } else if (placement === 'bottom-left') {
-          overlayContainer.classList.add('bottom-6', 'left-6');
+          // Esquina inferior izquierda
+          overlayContainer.style.top = 'auto';
+          overlayContainer.style.left = '12%';
+          overlayContainer.style.bottom = '12%';
+          overlayContainer.style.right = 'auto';
+          overlayContainer.style.transform = 'none';
           if (placementBadge) placementBadge.innerText = 'Esquina Inferior Izquierda';
-        } else if (placement === 'center') {
-          overlayContainer.classList.add('top-1/2', 'left-1/2', '-translate-x-1/2', '-translate-y-1/2');
-          if (placementBadge) placementBadge.innerText = 'Centro de la Pieza';
-        } else if (placement === 'top-right') {
-          overlayContainer.classList.add('top-6', 'right-6');
-          if (placementBadge) placementBadge.innerText = 'Frente Superior';
+        } else if (placement === 'upper-center') {
+          // Solapa o parte alta
+          overlayContainer.style.top = '28%';
+          overlayContainer.style.left = '50%';
+          overlayContainer.style.bottom = 'auto';
+          overlayContainer.style.right = 'auto';
+          overlayContainer.style.transform = 'translate(-50%, -50%)';
+          if (placementBadge) placementBadge.innerText = 'Solapa / Parte Alta';
+        } else if (placement === 'tag') {
+          // Placa o etiqueta colgante
+          overlayContainer.style.top = '22%';
+          overlayContainer.style.left = '22%';
+          overlayContainer.style.bottom = 'auto';
+          overlayContainer.style.right = 'auto';
+          overlayContainer.style.transform = 'none';
+          if (placementBadge) placementBadge.innerText = 'Placa / Colgante';
         }
       }
     }
@@ -7069,7 +7241,7 @@
       const prodPrice = currentSimulatedProduct ? `${Number(currentSimulatedProduct.price).toLocaleString('es-MX')} MXN` : '';
       const text = textInput ? textInput.value.trim() : 'Sin especificar';
       const font = fontSelect ? fontSelect.options[fontSelect.selectedIndex].text : 'Clásica';
-      const placementText = placementSelect ? placementSelect.options[placementSelect.selectedIndex].text : 'Frente';
+      const placementText = placementSelect ? placementSelect.options[placementSelect.selectedIndex].text : 'Centro de la Pieza';
 
       const waMsg = encodeURIComponent(
         `Hola Vizantino Piel, deseo cotizar y apartar esta pieza personalizada con grabado artesanal:\n\n` +
@@ -7091,12 +7263,11 @@
 
       const text = textInput ? textInput.value.trim() : '';
       const font = fontSelect ? fontSelect.options[fontSelect.selectedIndex].text : 'Clásica';
-      const placementText = placementSelect ? placementSelect.options[placementSelect.selectedIndex].text : 'Frente';
+      const placementText = placementSelect ? placementSelect.options[placementSelect.selectedIndex].text : 'Centro de la Pieza';
 
       if (typeof addToCart === 'function') {
         addToCart(currentSimulatedProduct.id);
         
-        // Guardar la personalización seleccionada para el checkout
         try {
           const customObj = {
             productId: currentSimulatedProduct.id,
@@ -7106,7 +7277,6 @@
           };
           localStorage.setItem('vizantino_hero_customization', JSON.stringify(customObj));
           
-          // Si los inputs del checkout existen, llenarlos
           const cText = document.getElementById('customText');
           if (cText && text) cText.value = text;
         } catch(e) {}
