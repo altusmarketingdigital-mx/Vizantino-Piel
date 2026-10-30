@@ -7,44 +7,40 @@
 (function initWelcomePreloader() {
   const PRELOADER_SESSION_KEY = 'vizantino_intro_shown';
 
-  // 1. Validar condiciones de omisión rápida:
+  // 1. Obtener parámetros de URL de forma segura una sola vez
+  let urlParams = null;
+  try {
+    urlParams = new URLSearchParams(window.location.search);
+  } catch (e) {
+    urlParams = { get: () => null };
+  }
+
   // - Usuario con prefers-reduced-motion
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches && !urlParams.get('intro')) {
     dismissImmediately();
     return;
   }
 
-  // - Soporte de forzado o reset por URL (?intro=1 o ?reset_intro=1)
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('intro') === '1' || urlParams.get('reset_intro') === '1') {
-    try { sessionStorage.removeItem(PRELOADER_SESSION_KEY); } catch(e){}
-  }
-
-  // - Solo omitir si el usuario explícitamente ya la vio y NO estamos en la raíz principal visitada directamente
-  // Para que el cliente pueda probarla al refrescar, usaremos sessionStorage pero garantizando que no se bloquee.
-  try {
-    if (sessionStorage.getItem(PRELOADER_SESSION_KEY) && !urlParams.get('replay')) {
-      // Si ya la vio en esta pestaña, permitimos verla con ?replay=1 o cuando pasa un tiempo
-      // pero para pruebas activas dejamos que se reproduzca si recarga la raíz
-      const lastShown = parseInt(sessionStorage.getItem(PRELOADER_SESSION_KEY + '_time') || '0', 10);
-      if (Date.now() - lastShown < 1000 * 60 * 10 && !window.location.hash) {
-        // Visto hace menos de 10 min
-        dismissImmediately();
-        return;
-      }
-    }
-  } catch (e) {
-    // Si sessionStorage no está disponible, continuar
-  }
-
-  // - Parámetros de URL que indican flujo específico (ej. pago, admin directo, quick view)
-  const urlParams = new URLSearchParams(window.location.search);
+  // - Si el usuario pide omitir explícitamente (?skip_intro=1, ?admin=1, etc.)
   if (urlParams.get('admin') || urlParams.get('order') || urlParams.get('status') || urlParams.get('skip_intro')) {
     dismissImmediately();
     return;
   }
 
-  // 2. Esperar que el DOM esté listo para interactuar con los elementos
+  // 2. Control de visualización por sesión:
+  // Si visita la raíz (https://vizantino.vercel.app/ o index.html) directamente, permitimos que se disfrute.
+  // Solo se omite si el usuario está activamente navegando dentro del sitio navegando entre pestañas internas.
+  const isDirectHome = (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) && !window.location.hash;
+  const forceIntro = urlParams.get('intro') === '1' || urlParams.get('replay') === '1';
+
+  try {
+    if (!forceIntro && !isDirectHome && sessionStorage.getItem(PRELOADER_SESSION_KEY)) {
+      dismissImmediately();
+      return;
+    }
+  } catch (e) {}
+
+  // 3. Ejecutar la secuencia
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', startSequence);
   } else {
@@ -55,17 +51,25 @@
     const el = document.getElementById('welcomePreloader');
     if (el) {
       el.style.display = 'none';
-      el.remove();
+      if (el.parentNode) el.parentNode.removeChild(el);
     }
-    document.body && document.body.classList.remove('overflow-hidden');
+    if (document.body) {
+      document.body.classList.remove('overflow-hidden');
+    }
   }
 
   function startSequence() {
     const preloader = document.getElementById('welcomePreloader');
     if (!preloader) return;
 
-    // Evitar scroll de fondo durante la intro
-    document.body.classList.add('overflow-hidden');
+    // Asegurar que el preloader sea visible
+    preloader.style.display = 'flex';
+    preloader.classList.remove('preloader-hidden');
+
+    // Bloquear scroll temporalmente durante la intro
+    if (document.body) {
+      document.body.classList.add('overflow-hidden');
+    }
 
     const slides = preloader.querySelectorAll('.vp-cinematic-slide');
     const progressBar = preloader.querySelector('.vp-preloader-progress-bar');
@@ -77,7 +81,6 @@
     const skipBtn = preloader.querySelector('.vp-preloader-skip');
 
     let isDismissed = false;
-    let currentSlide = 0;
     const totalSlides = slides.length;
 
     // Iniciar barra de progreso
@@ -90,7 +93,7 @@
       slides[0].classList.add('active');
     }
 
-    // Escena 2: Secuencia dinámica de productos (0.8s, 1.4s, 2.0s)
+    // Escena 2: Secuencia dinámica de productos (0.8s, 1.4s, 2.0s, 2.6s)
     const slideTimers = [
       setTimeout(() => switchSlide(1), 800),
       setTimeout(() => switchSlide(2), 1400),
@@ -107,10 +110,9 @@
           s.classList.remove('active');
         }
       });
-      currentSlide = idx;
     }
 
-    // Escena 3: Entrada elegante del mensaje de Bienvenida (a partir de 1.8s - 2.0s)
+    // Escena 3: Entrada elegante del mensaje de Bienvenida (a partir de 1.8s - 2.2s)
     const textTimer1 = setTimeout(() => {
       if (isDismissed) return;
       if (logo) logo.classList.add('show');
@@ -124,12 +126,12 @@
       if (tagline) tagline.classList.add('show');
     }, 2200);
 
-    // Escena 4: Entrada a la tienda (3.4s - 4.0s)
+    // Escena 4: Entrada a la tienda (3.8s - 4.2s)
     const exitTimer = setTimeout(() => {
       finishIntro();
-    }, 3800);
+    }, 4000);
 
-    // Soporte para botón "Omitir"
+    // Soporte para botón "Entrar a la tienda"
     if (skipBtn) {
       skipBtn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -154,19 +156,20 @@
       clearTimeout(exitTimer);
       window.removeEventListener('keydown', keyHandler);
 
-      // Registrar que ya se mostró en esta sesión
+      // Registrar sesión
       try {
         sessionStorage.setItem(PRELOADER_SESSION_KEY, 'true');
-      sessionStorage.setItem(PRELOADER_SESSION_KEY + '_time', Date.now().toString());
       } catch (err) {}
 
       // Desvanecer preloader suavemente
       preloader.classList.add('preloader-hidden');
 
       // Restaurar desplazamiento normal del navegador
-      document.body.classList.remove('overflow-hidden');
+      if (document.body) {
+        document.body.classList.remove('overflow-hidden');
+      }
 
-      // Remover del DOM tras completar la animación CSS (700ms)
+      // Remover del DOM tras completar la animación CSS
       setTimeout(() => {
         if (preloader.parentNode) {
           preloader.parentNode.removeChild(preloader);
