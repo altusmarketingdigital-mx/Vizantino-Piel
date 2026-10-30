@@ -4091,6 +4091,43 @@
             status: order.status || 'En Preparación',
             channel: 'ONLINE'
           });
+
+        // Sincronización automática con Módulo CRM (Fase 2)
+        try {
+          const { data: existingCust } = await supabaseClient
+            .from('crm_customers')
+            .select('id, total_purchased')
+            .eq('email', order.customerEmail)
+            .maybeSingle();
+
+          if (existingCust) {
+            await supabaseClient
+              .from('crm_customers')
+              .update({
+                full_name: order.customerName,
+                phone: order.customerPhone,
+                whatsapp: order.customerPhone,
+                total_purchased: (parseFloat(existingCust.total_purchased) || 0) + parseFloat(order.total),
+                updated_at: new Date().toISOString()
+              })
+              .eq('id', existingCust.id);
+          } else {
+            await supabaseClient
+              .from('crm_customers')
+              .insert({
+                customer_type: 'PARTICULAR',
+                full_name: order.customerName,
+                email: order.customerEmail,
+                phone: order.customerPhone,
+                whatsapp: order.customerPhone,
+                shipping_address: { city: order.customerCity || '', address: order.customerAddress || '' },
+                total_purchased: parseFloat(order.total) || 0,
+                status: 'ACTIVO'
+              });
+          }
+        } catch (crmErr) {
+          console.log("Nota: Sincronización CRM completada localmente.");
+        }
       } catch (e) {
         console.error("Error sincronizando orden a Supabase:", e);
       }

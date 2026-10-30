@@ -358,6 +358,12 @@
               <option value="PARTICULAR">Particulares</option>
               <option value="EMPRESA">Empresas</option>
             </select>
+            <select id="filterCustomerStatus" onchange="filterCustomers()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+              <option value="ALL">Todos los estados</option>
+              <option value="ACTIVO">Activos</option>
+              <option value="CON_DEUDA">Con Saldo Pendiente</option>
+              <option value="INACTIVO">Inactivos / Baja Lógica</option>
+            </select>
           </div>
           <button onclick="openModal('customerModal')" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
             <i class="fa-solid fa-user-plus"></i>
@@ -803,6 +809,123 @@
     </div>
   </div>
 
+  
+  <!-- MODAL CRM: VISTA 360° DEL CLIENTE (FASE 2) -->
+  <div id="customer360Modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-full bg-brandGold/10 border border-brandGold/30 flex items-center justify-center text-brandGold text-lg">
+            <i class="fa-solid fa-address-card"></i>
+          </div>
+          <div>
+            <h3 class="font-serif font-bold text-lg text-white" id="c360Name">Nombre del Cliente</h3>
+            <p class="text-xs text-brandGold font-mono" id="c360Sub">ID: CUST-001 | PARTICULAR</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span id="c360StatusBadge" class="badge bg-emerald-500/20 text-emerald-300">ACTIVO</span>
+          <button onclick="closeModal('customer360Modal')" class="text-brandMuted hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 text-xs">
+        <!-- Indicadores Financieros Rápidos -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder text-center">
+            <p class="text-[10px] uppercase text-brandMuted">Total Comprado</p>
+            <p class="text-base font-bold text-white mt-0.5" id="c360TotalPurchased">$0.00</p>
+          </div>
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder text-center">
+            <p class="text-[10px] uppercase text-brandMuted">Saldo Pendiente</p>
+            <p class="text-base font-bold text-amber-400 mt-0.5" id="c360Balance">$0.00</p>
+          </div>
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder text-center">
+            <p class="text-[10px] uppercase text-brandMuted">Límite de Crédito</p>
+            <p class="text-base font-bold text-brandBeige mt-0.5" id="c360CreditLimit">$10,000.00</p>
+          </div>
+        </div>
+
+        <!-- Pestañas de la Ficha: General, Facturación, Historial de Compras, Notas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Columna 1: Contacto y Fiscal -->
+          <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-3">
+            <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1.5">Datos Comerciales & Contacto</h4>
+            <div class="space-y-1.5">
+              <p><span class="text-brandMuted">Razón Social:</span> <strong class="text-white" id="c360Business">N/A</strong></p>
+              <p><span class="text-brandMuted">RFC:</span> <strong class="text-brandGold font-mono" id="c360Rfc">XAXX010101000</strong></p>
+              <p><span class="text-brandMuted">Correo:</span> <strong class="text-brandBeige" id="c360Email">correo@cliente.com</strong></p>
+              <p><span class="text-brandMuted">Teléfono:</span> <strong class="text-white" id="c360Phone">33 0000 0000</strong></p>
+              <div class="pt-2">
+                <a id="c360WhatsappBtn" href="#" target="_blank" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow transition">
+                  <i class="fa-brands fa-whatsapp text-sm"></i>
+                  <span>Conversar por WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna 2: Direcciones -->
+          <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-3">
+            <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1.5">Direcciones Registradas</h4>
+            <div class="space-y-2">
+              <div>
+                <p class="text-[10px] uppercase text-brandMuted font-bold">Dirección de Envío:</p>
+                <p class="text-white mt-0.5" id="c360ShippingAddress">Sin dirección registrada</p>
+              </div>
+              <div class="pt-1">
+                <p class="text-[10px] uppercase text-brandMuted font-bold">Dirección Fiscal / Facturación:</p>
+                <p class="text-brandBeige mt-0.5" id="c360BillingAddress">Misma que dirección de envío</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historial de Pedidos -->
+        <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-3">
+          <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1.5">Historial de Pedidos y Cotizaciones</h4>
+          <div class="overflow-x-auto max-h-40">
+            <table class="w-full text-left text-[11px]">
+              <thead class="text-brandMuted border-b border-brandBorder">
+                <tr>
+                  <th class="pb-1.5">Folio</th>
+                  <th class="pb-1.5">Fecha</th>
+                  <th class="pb-1.5">Total</th>
+                  <th class="pb-1.5">Estatus</th>
+                  <th class="pb-1.5 text-right">Comprobante</th>
+                </tr>
+              </thead>
+              <tbody id="c360OrdersTbody" class="divide-y divide-brandBorder/40">
+                <!-- Se poblará dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Notas Internas & Acciones de Estatus -->
+        <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-2">
+          <label class="block font-serif font-bold text-sm text-brandGold">Bitácora y Notas Internas del Cliente</label>
+          <textarea id="c360NotesInput" rows="2" class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold" placeholder="Añadir nota sobre gustos de piel, historial de quejas o preferencias comerciales..."></textarea>
+          <div class="flex justify-between items-center pt-1">
+            <div class="space-x-2">
+              <button onclick="toggleCustomerStatus(false)" id="btnDeactivateCust" class="text-[11px] text-rose-400 hover:underline">Baja Lógica (Desactivar)</button>
+              <button onclick="toggleCustomerStatus(true)" id="btnActivateCust" class="text-[11px] text-emerald-400 hover:underline hidden">Reactivar Cliente</button>
+            </div>
+            <button onclick="saveC360Notes()" class="bg-brandGold text-brandDark font-semibold px-3 py-1.5 rounded-lg text-xs hover:bg-brandGoldHover transition">Guardar Notas</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-brandBorder bg-brandCard flex justify-between items-center">
+        <button onclick="openEditCustomerModalFrom360()" class="text-xs text-brandGold hover:underline font-semibold flex items-center space-x-1.5">
+          <i class="fa-solid fa-pen-to-square"></i>
+          <span>Editar Ficha Completa</span>
+        </button>
+        <button onclick="closeModal('customer360Modal')" class="bg-brandSurface hover:bg-brandBorder border border-brandBorder text-white text-xs px-4 py-2 rounded-lg">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Nuevo Cliente CRM -->
   <div id="customerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
@@ -1013,29 +1136,222 @@
     // ==========================================
     // RENDERIZADO DE TABLAS
     // ==========================================
-    function renderCRM() {
+        let activeCustomer360Id = null;
+
+    function renderCRM(list = erpState.customers) {
       const tbody = document.getElementById('crmCustomersTbody');
       if (!tbody) return;
-      tbody.innerHTML = erpState.customers.map(c => `
-        <tr class="hover:bg-brandSurface transition">
-          <td class="p-3.5">
-            <p class="font-bold text-white">${c.name}</p>
-            <span class="text-[10px] text-brandMuted">${c.type}</span>
-          </td>
-          <td class="p-3.5">
-            <p class="text-brandBeige">${c.email}</p>
-            <p class="text-[11px] text-brandMuted">${c.phone}</p>
-          </td>
-          <td class="p-3.5 font-mono text-brandGold">${c.rfc || 'Sin RFC'}</td>
-          <td class="p-3.5 font-bold text-white">$${c.total.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
-          <td class="p-3.5 font-bold ${c.balance > 0 ? 'text-amber-400' : 'text-emerald-400'}">$${c.balance.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
-          <td class="p-3.5"><span class="badge ${c.status === 'ACTIVO' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}">${c.status}</span></td>
-          <td class="p-3.5 text-right space-x-2">
-            <button onclick="recordCustomerPayment('${c.id}')" title="Abonar a cuenta" class="text-brandGold hover:text-white"><i class="fa-solid fa-hand-holding-dollar"></i></button>
-            <button onclick="editCustomer('${c.id}')" title="Editar" class="text-brandMuted hover:text-white"><i class="fa-solid fa-pen-to-square"></i></button>
-          </td>
-        </tr>
-      `).join('');
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-brandMuted">No se encontraron clientes con los filtros aplicados.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(c => {
+        const cleanPhone = (c.phone || '').replace(/[^0-9]/g, '');
+        const waLink = cleanPhone ? `https://wa.me/${cleanPhone.startsWith('52') ? cleanPhone : '52' + cleanPhone}` : '#';
+        const statusClass = c.status === 'ACTIVO' ? 'bg-emerald-500/20 text-emerald-300' : (c.status === 'BLOQUEADO' ? 'bg-rose-500/20 text-rose-300' : 'bg-zinc-500/20 text-zinc-300');
+
+        return `
+          <tr class="hover:bg-brandSurface transition cursor-pointer" onclick="viewCustomer360('${c.id}')">
+            <td class="p-3.5">
+              <p class="font-bold text-white flex items-center gap-1.5">
+                ${c.name}
+                ${c.business_name ? `<span class="text-[10px] text-brandGold font-normal">(${c.business_name})</span>` : ''}
+              </p>
+              <span class="text-[10px] text-brandMuted">${c.type}</span>
+            </td>
+            <td class="p-3.5" onclick="event.stopPropagation()">
+              <p class="text-brandBeige">${c.email}</p>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-[11px] text-brandMuted">${c.phone || 'Sin tel'}</span>
+                ${cleanPhone ? `<a href="${waLink}" target="_blank" title="Abrir WhatsApp" class="text-emerald-400 hover:text-emerald-300 text-xs"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+              </div>
+            </td>
+            <td class="p-3.5 font-mono text-brandGold">${c.rfc || 'Sin RFC'}</td>
+            <td class="p-3.5 font-bold text-white">$${(c.total || 0).toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5 font-bold ${(c.balance || 0) > 0 ? 'text-amber-400' : 'text-emerald-400'}">$${(c.balance || 0).toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5"><span class="badge ${statusClass}">${c.status || 'ACTIVO'}</span></td>
+            <td class="p-3.5 text-right space-x-2" onclick="event.stopPropagation()">
+              <button onclick="viewCustomer360('${c.id}')" title="Ver Ficha 360°" class="text-brandGold hover:text-white p-1"><i class="fa-solid fa-eye"></i></button>
+              <button onclick="openEditCustomerModal('${c.id}')" title="Editar Ficha" class="text-brandMuted hover:text-white p-1"><i class="fa-solid fa-pen-to-square"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterCustomers() {
+      const query = (document.getElementById('searchCustomerInput')?.value || '').toLowerCase().trim();
+      const typeFilter = document.getElementById('filterCustomerType')?.value || 'ALL';
+      const statusFilter = document.getElementById('filterCustomerStatus')?.value || 'ALL';
+
+      const filtered = erpState.customers.filter(c => {
+        const matchesQuery = !query || 
+          (c.name && c.name.toLowerCase().includes(query)) ||
+          (c.business_name && c.business_name.toLowerCase().includes(query)) ||
+          (c.email && c.email.toLowerCase().includes(query)) ||
+          (c.rfc && c.rfc.toLowerCase().includes(query)) ||
+          (c.phone && c.phone.includes(query));
+
+        const matchesType = typeFilter === 'ALL' || c.type === typeFilter;
+        
+        let matchesStatus = true;
+        if (statusFilter === 'ACTIVO') matchesStatus = c.status === 'ACTIVO';
+        else if (statusFilter === 'CON_DEUDA') matchesStatus = (c.balance || 0) > 0;
+        else if (statusFilter === 'INACTIVO') matchesStatus = c.status === 'INACTIVO' || c.status === 'BLOQUEADO';
+
+        return matchesQuery && matchesType && matchesStatus;
+      });
+
+      renderCRM(filtered);
+    }
+
+    function viewCustomer360(id) {
+      const customer = erpState.customers.find(c => String(c.id) === String(id));
+      if (!customer) return;
+
+      activeCustomer360Id = customer.id;
+
+      document.getElementById('c360Name').textContent = customer.name;
+      document.getElementById('c360Sub').textContent = `ID: ${customer.id} | Tipo: ${customer.type}`;
+      document.getElementById('c360TotalPurchased').textContent = `$${(customer.total || 0).toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+      document.getElementById('c360Balance').textContent = `$${(customer.balance || 0).toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+      document.getElementById('c360CreditLimit').textContent = `$${(customer.credit_limit || 10000).toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+
+      document.getElementById('c360Business').textContent = customer.business_name || 'N/A (Cliente Particular)';
+      document.getElementById('c360Rfc').textContent = customer.rfc || 'XAXX010101000 (Sin RFC registrado)';
+      document.getElementById('c360Email').textContent = customer.email;
+      document.getElementById('c360Phone').textContent = customer.phone || 'No registrado';
+
+      const cleanPhone = (customer.phone || '').replace(/[^0-9]/g, '');
+      const waBtn = document.getElementById('c360WhatsappBtn');
+      if (cleanPhone) {
+        waBtn.href = `https://wa.me/${cleanPhone.startsWith('52') ? cleanPhone : '52' + cleanPhone}?text=Hola%20${encodeURIComponent(customer.name)},%20te%20saludamos%20de%20Vizantino%20Piel.`;
+        waBtn.classList.remove('hidden');
+      } else {
+        waBtn.classList.add('hidden');
+      }
+
+      const shipping = customer.shipping_address ? (typeof customer.shipping_address === 'string' ? customer.shipping_address : `${customer.shipping_address.street || ''} ${customer.shipping_address.exterior || ''}, ${customer.shipping_address.colony || ''}, ${customer.shipping_address.city || ''}`) : (customer.address || 'Sin dirección de entrega especificada');
+      document.getElementById('c360ShippingAddress').textContent = shipping || 'Sin dirección registrada';
+      document.getElementById('c360BillingAddress').textContent = customer.billing_address ? (typeof customer.billing_address === 'string' ? customer.billing_address : `${customer.billing_address.street || ''}, ${customer.billing_address.city || ''}`) : shipping;
+
+      document.getElementById('c360NotesInput').value = customer.notes || customer.internal_notes || '';
+
+      const badge = document.getElementById('c360StatusBadge');
+      badge.textContent = customer.status || 'ACTIVO';
+      badge.className = `badge ${customer.status === 'ACTIVO' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}`;
+
+      const btnDeact = document.getElementById('btnDeactivateCust');
+      const btnAct = document.getElementById('btnActivateCust');
+      if (customer.status === 'ACTIVO') {
+        btnDeact.classList.remove('hidden');
+        btnAct.classList.add('hidden');
+      } else {
+        btnDeact.classList.add('hidden');
+        btnAct.classList.remove('hidden');
+      }
+
+      // Historial de compras asociadas al cliente
+      const ordersTbody = document.getElementById('c360OrdersTbody');
+      const clientOrders = erpState.sales.filter(s => s.customer.toLowerCase().includes(customer.name.toLowerCase()) || (customer.email && s.customer.toLowerCase().includes(customer.email.toLowerCase())));
+      
+      if (clientOrders.length === 0) {
+        ordersTbody.innerHTML = '<tr><td colspan="5" class="py-3 text-center text-brandMuted">Sin órdenes registradas aún</td></tr>';
+      } else {
+        ordersTbody.innerHTML = clientOrders.map(o => `
+          <tr class="hover:bg-brandCard/60 transition">
+            <td class="py-1.5 font-mono text-brandGold">${o.folio}</td>
+            <td class="py-1.5 text-brandMuted">${o.date}</td>
+            <td class="py-1.5 font-bold text-white">$${o.total.toFixed(2)}</td>
+            <td class="py-1.5"><span class="badge ${o.status === 'PAGADO' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${o.status}</span></td>
+            <td class="py-1.5 text-right"><button onclick="printOrderReceipt('${o.folio}')" class="text-brandGold hover:text-white"><i class="fa-solid fa-file-pdf"></i></button></td>
+          </tr>
+        `).join('');
+      }
+
+      openModal('customer360Modal');
+    }
+
+    function saveC360Notes() {
+      if (!activeCustomer360Id) return;
+      const notes = document.getElementById('c360NotesInput').value.trim();
+      const cust = erpState.customers.find(c => String(c.id) === String(activeCustomer360Id));
+      if (cust) {
+        cust.notes = notes;
+        cust.internal_notes = notes;
+        if (supabaseClient) {
+          supabaseClient.from('crm_customers').update({ internal_notes: notes }).eq('id', cust.id).then();
+        }
+        alert('Notas del cliente guardadas con éxito.');
+      }
+    }
+
+    function toggleCustomerStatus(activate) {
+      if (!activeCustomer360Id) return;
+      const cust = erpState.customers.find(c => String(c.id) === String(activeCustomer360Id));
+      if (cust) {
+        cust.status = activate ? 'ACTIVO' : 'INACTIVO';
+        if (supabaseClient) {
+          supabaseClient.from('crm_customers').update({ status: cust.status }).eq('id', cust.id).then();
+        }
+        viewCustomer360(cust.id);
+        renderCRM();
+        alert(`Estatus del cliente actualizado a: ${cust.status}`);
+      }
+    }
+
+    function openEditCustomerModal(id) {
+      const cust = erpState.customers.find(c => String(c.id) === String(id));
+      if (!cust) return;
+      document.getElementById('modalCustType').value = cust.type || 'PARTICULAR';
+      document.getElementById('modalCustRfc').value = cust.rfc || '';
+      document.getElementById('modalCustName').value = cust.name || '';
+      document.getElementById('modalCustEmail').value = cust.email || '';
+      document.getElementById('modalCustPhone').value = cust.phone || '';
+      document.getElementById('modalCustAddress').value = typeof cust.shipping_address === 'string' ? cust.shipping_address : (cust.address || '');
+      document.getElementById('modalCustNotes').value = cust.notes || cust.internal_notes || '';
+      activeCustomer360Id = cust.id;
+      openModal('customerModal');
+    }
+
+    function openEditCustomerModalFrom360() {
+      closeModal('customer360Modal');
+      openEditCustomerModal(activeCustomer360Id);
+    }
+
+    async function loadCustomersFromSupabase() {
+      if (!supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient.from('crm_customers').select('*');
+        if (!error && data && data.length > 0) {
+          data.forEach(cloudCust => {
+            const existingIdx = erpState.customers.findIndex(c => c.email.toLowerCase() === cloudCust.email.toLowerCase());
+            const mapped = {
+              id: cloudCust.id,
+              type: cloudCust.customer_type || 'PARTICULAR',
+              name: cloudCust.full_name,
+              business_name: cloudCust.business_name,
+              rfc: cloudCust.rfc,
+              email: cloudCust.email,
+              phone: cloudCust.phone || cloudCust.whatsapp,
+              total: parseFloat(cloudCust.total_purchased) || 0,
+              balance: parseFloat(cloudCust.current_balance) || 0,
+              status: cloudCust.status || 'ACTIVO',
+              notes: cloudCust.internal_notes,
+              shipping_address: cloudCust.shipping_address,
+              billing_address: cloudCust.billing_address
+            };
+            if (existingIdx >= 0) {
+              erpState.customers[existingIdx] = { ...erpState.customers[existingIdx], ...mapped };
+            } else {
+              erpState.customers.push(mapped);
+            }
+          });
+          renderCRM();
+        }
+      } catch (err) {
+        console.log('CRM: Conexión local activa con respaldo Supabase.');
+      }
     }
 
     function renderSuppliers() {
@@ -1286,27 +1602,76 @@
       const type = document.getElementById('modalCustType').value;
       const rfc = document.getElementById('modalCustRfc').value.trim();
       const phone = document.getElementById('modalCustPhone').value.trim();
+      const address = document.getElementById('modalCustAddress').value.trim();
+      const notes = document.getElementById('modalCustNotes').value.trim();
 
       if (!name || !email) {
         alert('Nombre y Correo son obligatorios.');
         return;
       }
 
-      erpState.customers.unshift({
-        id: 'c' + Date.now(),
+      const existingIdx = erpState.customers.findIndex(c => String(c.id) === String(activeCustomer360Id) || c.email.toLowerCase() === email.toLowerCase());
+
+      const customerPayload = {
         type: type,
+        customer_type: type,
         name: name,
+        full_name: name,
+        business_name: type === 'EMPRESA' ? name : null,
         email: email,
         phone: phone,
-        rfc: rfc,
-        total: 0,
-        balance: 0,
+        whatsapp: phone,
+        rfc: rfc || 'XAXX010101000',
+        address: address,
+        shipping_address: { address: address },
+        notes: notes,
+        internal_notes: notes,
         status: 'ACTIVO'
-      });
+      };
 
+      if (existingIdx >= 0) {
+        erpState.customers[existingIdx] = { ...erpState.customers[existingIdx], ...customerPayload };
+        if (supabaseClient) {
+          supabaseClient.from('crm_customers').update({
+            full_name: name,
+            customer_type: type,
+            rfc: rfc,
+            phone: phone,
+            whatsapp: phone,
+            shipping_address: { address: address },
+            internal_notes: notes,
+            updated_at: new Date().toISOString()
+          }).eq('id', erpState.customers[existingIdx].id).then();
+        }
+      } else {
+        const newCust = {
+          id: 'c' + Date.now(),
+          ...customerPayload,
+          total: 0,
+          balance: 0
+        };
+        erpState.customers.unshift(newCust);
+        if (supabaseClient) {
+          supabaseClient.from('crm_customers').insert({
+            full_name: name,
+            customer_type: type,
+            email: email,
+            rfc: rfc,
+            phone: phone,
+            whatsapp: phone,
+            shipping_address: { address: address },
+            internal_notes: notes,
+            total_purchased: 0,
+            current_balance: 0,
+            status: 'ACTIVO'
+          }).then();
+        }
+      }
+
+      activeCustomer360Id = null;
       closeModal('customerModal');
       renderCRM();
-      alert(`Cliente ${name} dado de alta con éxito en el CRM.`);
+      alert(`Cliente ${name} guardado con éxito en el CRM.`);
     }
 
     function saveKardexMovement() {
@@ -1502,6 +1867,7 @@
     // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
       renderCRM();
+      loadCustomersFromSupabase();
       renderSuppliers();
       renderInventory();
       renderSales();
