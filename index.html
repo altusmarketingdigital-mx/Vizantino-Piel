@@ -570,13 +570,13 @@
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-          <a href="#catalogo" 
+          <a href="catalogo.html" 
              class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-gold-500 via-amber-400 to-gold-500 hover:from-gold-400 hover:to-gold-300 text-carbon font-bold text-xs sm:text-sm tracking-[0.2em] uppercase rounded-md transition-all duration-300 shadow-xl shadow-gold-500/20 transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
             <span>EXPLORAR COLECCIÓN</span>
             <i class="fa-solid fa-arrow-right text-xs"></i>
           </a>
           
-          <button onclick="openSimulatorModal()" 
+          <button type="button" onclick="openSimulatorModal()" class="cursor-pointer " 
              class="w-full sm:w-auto px-8 py-4 bg-[#231b15]/90 hover:bg-[#2e231b] border border-gold-400/50 hover:border-gold-300 text-zinc-100 font-semibold text-xs sm:text-sm tracking-[0.18em] uppercase rounded-md transition-all duration-300 shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2.5">
             <i class="fa-solid fa-pencil text-gold-400 text-xs"></i>
             <span>PERSONALIZA EL TUYO</span>
@@ -6780,6 +6780,169 @@
     </div>
   </div>
 
+  <!-- ========================================== -->
+  <!-- MODAL DE PERSONALIZACIÓN Y SIMULADOR EN VIVO (HERO CTA) -->
+  <!-- ========================================== -->
+  <div id="simulatorModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-6">
+    <div class="absolute inset-0 bg-black/85 modal-backdrop" onclick="closeSimulatorModal()"></div>
+    
+    <div class="relative bg-[#1a1410] border border-gold-500/50 rounded-2xl max-w-xl w-full p-6 sm:p-8 z-10 max-h-[92vh] overflow-y-auto shadow-2xl space-y-6 text-left">
+      <!-- Botón Cerrar -->
+      <button type="button" onclick="closeSimulatorModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <!-- Cabecera del Simulador -->
+      <div class="border-b border-cardBorder pb-4">
+        <div class="flex items-center gap-2 text-gold-400 text-xs font-semibold tracking-[0.25em] uppercase mb-1">
+          <i class="fa-solid fa-pencil"></i> Taller Artesanal Tlaquepaque
+        </div>
+        <h3 class="font-serif text-2xl sm:text-3xl text-white font-bold leading-tight">
+          Personaliza Tu Pieza
+        </h3>
+        <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+          Grabado artesanal a fuego con tus iniciales, nombre o frase sin costo adicional.
+        </p>
+      </div>
+
+      <!-- Simulador interactivo -->
+      <div class="space-y-4">
+        <div>
+          <label class="block text-zinc-300 text-xs uppercase tracking-wider font-semibold mb-1.5">
+            Texto a Grabar (Iniciales, Nombre o Frase)
+          </label>
+          <input type="text" id="simHeroText" maxlength="30" placeholder="Ej. A. Vizcaíno / M & R" 
+                 oninput="updateHeroCustomizerPreview()"
+                 class="w-full bg-[#120d0a] border border-gold-500/40 focus:border-gold-400 rounded-lg px-4 py-3 text-zinc-100 text-sm focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-zinc-300 text-xs uppercase tracking-wider font-semibold mb-1.5">
+              Tipografía de Grabado
+            </label>
+            <select id="simHeroFont" onchange="updateHeroCustomizerPreview()" 
+                    class="w-full bg-[#120d0a] border border-gold-500/40 focus:border-gold-400 rounded-lg px-3 py-2.5 text-zinc-100 text-xs focus:outline-none">
+              <option value="serif">Cormorant Garamond (Elegante Clásica)</option>
+              <option value="sans">Montserrat (Moderna Minimalista)</option>
+              <option value="cursive">Cursiva Artesanal (Caligráfica)</option>
+              <option value="mono">Monospace (Técnico / Industrial)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-zinc-300 text-xs uppercase tracking-wider font-semibold mb-1.5">
+              Ubicación Preferida
+            </label>
+            <select id="simHeroPlacement" onchange="updateHeroCustomizerPreview()" 
+                    class="w-full bg-[#120d0a] border border-gold-500/40 focus:border-gold-400 rounded-lg px-3 py-2.5 text-zinc-100 text-xs focus:outline-none">
+              <option value="Frente - Esquina Inferior Derecha">Frente (Esquina Inferior)</option>
+              <option value="Frente - Centrado Discreto">Frente (Centrado Discreto)</option>
+              <option value="Interior - Bolsillo">Interior Discreto</option>
+              <option value="Llavero o Colgante">Llavero / Placa Colgante</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Vista previa en vivo del grabado sobre piel vacuno -->
+        <div class="p-5 bg-[#0e0a08] rounded-xl border border-gold-500/40 relative overflow-hidden">
+          <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-gold-500/10 rounded-full blur-xl pointer-events-none"></div>
+          <div class="flex items-center justify-between text-[11px] text-zinc-400 mb-2">
+            <span class="tracking-widest uppercase font-semibold text-gold-400">Simulación en Piel Genuina:</span>
+            <span id="simHeroPlacementPreview" class="text-zinc-500">Frente - Esquina Inferior</span>
+          </div>
+          <div class="h-20 flex items-center justify-center bg-[#1e1510] border border-gold-500/20 rounded-lg p-3 shadow-inner">
+            <span id="simHeroPreviewOutput" class="text-xl sm:text-2xl text-gold-300 font-serif italic tracking-widest drop-shadow-md">
+              "Tu Grabado Aquí"
+            </span>
+          </div>
+          <div class="mt-2 text-right">
+            <span class="text-[10px] text-zinc-400">✨ Aplicado a fuego en nuestro taller de Tlaquepaque</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="pt-2 flex flex-col sm:flex-row gap-3">
+        <button type="button" onclick="sendHeroCustomizationWhatsApp()" 
+           class="flex-1 py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold text-xs tracking-wider uppercase rounded-lg transition text-center shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-brands fa-whatsapp text-base"></i>
+          <span>Solicitar por WhatsApp</span>
+        </button>
+
+        <a href="catalogo.html" 
+           class="flex-1 py-3.5 bg-gradient-to-r from-gold-500 to-amber-500 hover:from-gold-400 hover:to-amber-400 text-carbon font-bold text-xs tracking-wider uppercase rounded-lg transition text-center shadow-lg flex items-center justify-center gap-2">
+          <span>Ver Modelos para Personalizar</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openSimulatorModal() {
+      const modal = document.getElementById('simulatorModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+    }
+
+    function closeSimulatorModal() {
+      const modal = document.getElementById('simulatorModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    function updateHeroCustomizerPreview() {
+      const textInput = document.getElementById('simHeroText');
+      const fontSelect = document.getElementById('simHeroFont');
+      const placementSelect = document.getElementById('simHeroPlacement');
+      const previewOutput = document.getElementById('simHeroPreviewOutput');
+      const placementOutput = document.getElementById('simHeroPlacementPreview');
+
+      const text = textInput ? textInput.value.trim() : '';
+      const font = fontSelect ? fontSelect.value : 'serif';
+      const placement = placementSelect ? placementSelect.value : '';
+
+      if (previewOutput) {
+        previewOutput.innerText = text ? ('"' + text + '"') : '"Tu Grabado Aquí"';
+        
+        previewOutput.className = 'text-xl sm:text-2xl text-gold-300 tracking-widest drop-shadow-md transition-all duration-300';
+        if (font === 'serif') previewOutput.className += ' font-serif italic';
+        else if (font === 'sans') previewOutput.className += ' font-sans uppercase font-bold';
+        else if (font === 'cursive') previewOutput.className += ' font-serif italic';
+        else if (font === 'mono') previewOutput.className += ' font-mono';
+      }
+
+      if (placementOutput && placement) {
+        placementOutput.innerText = placement;
+      }
+    }
+
+    function sendHeroCustomizationWhatsApp() {
+      const textInput = document.getElementById('simHeroText');
+      const fontSelect = document.getElementById('simHeroFont');
+      const placementSelect = document.getElementById('simHeroPlacement');
+
+      const text = textInput ? textInput.value.trim() : 'Sin especificar';
+      const font = fontSelect ? fontSelect.options[fontSelect.selectedIndex].text : 'Clásica';
+      const placement = placementSelect ? placementSelect.value : 'Frente';
+
+      const waMsg = encodeURIComponent(
+        'Hola Vizantino Piel, deseo cotizar y personalizar una pieza de piel genuina con el siguiente grabado:\n\n' +
+        '• Texto / Iniciales: "' + text + '"\n' +
+        '• Tipografía: ' + font + '\n' +
+        '• Ubicación deseada: ' + placement + '\n\n' +
+        '¿Qué modelos tienen disponibles para entrega o fabricación?'
+      );
+
+      window.open('https://wa.me/523329089920?text=' + waMsg, '_blank');
+    }
+  </script>
+  
   <script src="welcome-preloader.js"></script>
 </body>
 </html>
