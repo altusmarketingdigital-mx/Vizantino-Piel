@@ -399,9 +399,18 @@
       <!-- ======================================================== -->
       <section id="tab-suppliers" class="hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div class="relative w-full sm:w-80">
-            <input type="text" id="searchSupplierInput" onkeyup="filterSuppliers()" placeholder="Buscar proveedor por empresa, contacto o RFC..." class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-2.5 outline-none focus:border-brandGold">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-brandMuted text-xs"></i>
+          <div class="flex items-center space-x-3 w-full sm:w-auto">
+            <div class="relative flex-1 sm:w-72">
+              <input type="text" id="searchSupplierInput" onkeyup="filterSuppliers()" placeholder="Buscar por empresa, contacto o RFC..." class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-2.5 outline-none focus:border-brandGold">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-brandMuted text-xs"></i>
+            </div>
+            <select id="filterSupplierCategory" onchange="filterSuppliers()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+              <option value="ALL">Todos los materiales</option>
+              <option value="Piel">Pieles y Cueros</option>
+              <option value="Herrajes">Herrajes y Cierres</option>
+              <option value="Hilo">Hilos y Costura</option>
+              <option value="Quimicos">Acabados y Químicos</option>
+            </select>
           </div>
           <button onclick="openModal('supplierModal')" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
             <i class="fa-solid fa-plus"></i>
@@ -981,6 +990,204 @@
     </div>
   </div>
 
+  
+  <!-- MODAL PROVEEDORES: FICHA 360° (FASE 3) -->
+  <div id="supplier360Modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-full bg-brandGold/10 border border-brandGold/30 flex items-center justify-center text-brandGold text-lg">
+            <i class="fa-solid fa-truck-ramp-box"></i>
+          </div>
+          <div>
+            <h3 class="font-serif font-bold text-lg text-white" id="s360Company">Razón Social del Proveedor</h3>
+            <p class="text-xs text-brandGold font-mono" id="s360Sub">ID: PROV-001 | Flor Entera & Curtiduría</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span id="s360StatusBadge" class="badge bg-emerald-500/20 text-emerald-300">ACTIVO</span>
+          <button onclick="closeModal('supplier360Modal')" class="text-brandMuted hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 text-xs">
+        <!-- Indicadores Financieros Rápidos -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder text-center">
+            <p class="text-[10px] uppercase text-brandMuted">Saldo por Pagar (CxP)</p>
+            <p class="text-base font-bold text-rose-400 mt-0.5" id="s360Balance">$0.00</p>
+          </div>
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder text-center">
+            <p class="text-[10px] uppercase text-brandMuted">Condición de Pago</p>
+            <p class="text-base font-bold text-brandBeige mt-0.5" id="s360Terms">30 Días</p>
+          </div>
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder text-center">
+            <p class="text-[10px] uppercase text-brandMuted">Evaluación de Calidad</p>
+            <p class="text-base font-bold text-amber-400 mt-0.5" id="s360Rating"><i class="fa-solid fa-star text-xs"></i> 5.0</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Datos Comerciales y Contacto -->
+          <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-3">
+            <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1.5">Datos Comerciales & Fiscales</h4>
+            <div class="space-y-1.5">
+              <p><span class="text-brandMuted">Contacto:</span> <strong class="text-white" id="s360Contact">Ing. Responsable</strong></p>
+              <p><span class="text-brandMuted">RFC:</span> <strong class="text-brandGold font-mono" id="s360Rfc">XAXX010101000</strong></p>
+              <p><span class="text-brandMuted">Correo:</span> <strong class="text-brandBeige" id="s360Email">proveedor@empresa.com</strong></p>
+              <p><span class="text-brandMuted">Teléfono:</span> <strong class="text-white" id="s360Phone">33 0000 0000</strong></p>
+              <p><span class="text-brandMuted">Plazo Entrega Promedio:</span> <strong class="text-brandGold" id="s360LeadTime">7 días hábiles</strong></p>
+              <div class="pt-2">
+                <a id="s360WhatsappBtn" href="#" target="_blank" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow transition">
+                  <i class="fa-brands fa-whatsapp text-sm"></i>
+                  <span>Contactar por WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Materiales y Cuentas Bancarias -->
+          <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-3">
+            <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1.5">Materiales & Datos Bancarios</h4>
+            <div class="space-y-2">
+              <div>
+                <p class="text-[10px] uppercase text-brandMuted font-bold">Materiales Suministrados:</p>
+                <p class="text-white mt-0.5" id="s360Categories">Piel Vacuno, Curtidos, Herrajes</p>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase text-brandMuted font-bold">Dirección / Taller:</p>
+                <p class="text-brandBeige mt-0.5" id="s360Address">León, Guanajuato</p>
+              </div>
+              <div class="pt-1">
+                <p class="text-[10px] uppercase text-brandMuted font-bold">Datos para Transferencias (CLABE):</p>
+                <p class="text-brandGold font-mono mt-0.5" id="s360BankDetails">BBVA • CLABE: 012320001234567890</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historial de Órdenes de Compra -->
+        <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-3">
+          <div class="flex justify-between items-center border-b border-brandBorder pb-1.5">
+            <h4 class="font-serif font-bold text-sm text-brandGold">Historial de Órdenes de Compra (OC)</h4>
+            <button onclick="triggerNewPurchaseOrderFrom360()" class="text-[11px] text-brandGold hover:underline font-semibold">+ Nueva Orden</button>
+          </div>
+          <div class="overflow-x-auto max-h-40">
+            <table class="w-full text-left text-[11px]">
+              <thead class="text-brandMuted border-b border-brandBorder">
+                <tr>
+                  <th class="pb-1.5">Folio OC</th>
+                  <th class="pb-1.5">Destino</th>
+                  <th class="pb-1.5">Total</th>
+                  <th class="pb-1.5">Saldo CxP</th>
+                  <th class="pb-1.5">Estatus</th>
+                </tr>
+              </thead>
+              <tbody id="s360PurchasesTbody" class="divide-y divide-brandBorder/40">
+                <!-- Se poblará dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Notas Internas y Evaluación -->
+        <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-2">
+          <label class="block font-serif font-bold text-sm text-brandGold">Historial y Notas de Evaluación del Proveedor</label>
+          <textarea id="s360NotesInput" rows="2" class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold" placeholder="Añadir observaciones sobre calidad del curtido, puntualidad en entregas..."></textarea>
+          <div class="flex justify-between items-center pt-1">
+            <button onclick="toggleSupplierStatus()" id="btnDeactivateSupp" class="text-[11px] text-rose-400 hover:underline">Desactivar Proveedor</button>
+            <button onclick="saveS360Notes()" class="bg-brandGold text-brandDark font-semibold px-3 py-1.5 rounded-lg text-xs hover:bg-brandGoldHover transition">Guardar Notas</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-brandBorder bg-brandCard flex justify-between items-center">
+        <button onclick="openEditSupplierModalFrom360()" class="text-xs text-brandGold hover:underline font-semibold flex items-center space-x-1.5">
+          <i class="fa-solid fa-pen-to-square"></i>
+          <span>Editar Ficha Proveedor</span>
+        </button>
+        <button onclick="closeModal('supplier360Modal')" class="bg-brandSurface hover:bg-brandBorder border border-brandBorder text-white text-xs px-4 py-2 rounded-lg">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PROVEEDORES: ALTA Y EDICIÓN (FASE 3) -->
+  <div id="supplierModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <h3 class="font-serif font-bold text-lg text-white" id="supplierModalTitle">Registro de Proveedor</h3>
+        <button onclick="closeModal('supplierModal')" class="text-brandMuted hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4">
+        <div>
+          <label class="block text-xs text-brandMuted mb-1 font-medium">Empresa / Razón Social *</label>
+          <input type="text" id="modalSuppCompany" placeholder="Ej. Curtidos Finos de León S.A. de C.V." class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-brandMuted mb-1 font-medium">Contacto Principal *</label>
+            <input type="text" id="modalSuppContact" placeholder="Ing. Roberto Lozano" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+          </div>
+          <div>
+            <label class="block text-xs text-brandMuted mb-1 font-medium">RFC</label>
+            <input type="text" id="modalSuppRfc" placeholder="CFL891012XX1" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold uppercase">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-brandMuted mb-1 font-medium">Correo Electrónico *</label>
+            <input type="email" id="modalSuppEmail" placeholder="ventas@curtidosleon.com" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+          </div>
+          <div>
+            <label class="block text-xs text-brandMuted mb-1 font-medium">WhatsApp / Teléfono</label>
+            <input type="tel" id="modalSuppPhone" placeholder="477 123 4567" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-brandMuted mb-1 font-medium">Materiales Suministrados</label>
+          <input type="text" id="modalSuppCategories" placeholder="Piel corte vacuno flor entera, acabados oscuros..." class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs text-brandMuted mb-1 font-medium">Términos Pago</label>
+            <select id="modalSuppTerms" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+              <option value="Contado">Contado</option>
+              <option value="15 Días">15 Días</option>
+              <option value="30 Días" selected>30 Días</option>
+              <option value="45 Días">45 Días</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-brandMuted mb-1 font-medium">Plazo Entrega</label>
+            <input type="number" id="modalSuppLeadDays" min="1" value="7" placeholder="Días" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold text-center">
+          </div>
+          <div>
+            <label class="block text-xs text-brandMuted mb-1 font-medium">Calificación</label>
+            <input type="number" id="modalSuppRating" min="1" max="5" step="0.1" value="5.0" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold text-center">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-brandMuted mb-1 font-medium">Dirección / Ubicación del Taller</label>
+          <input type="text" id="modalSuppAddress" placeholder="Zona Industrial de León, Guanajuato" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+        </div>
+
+        <div>
+          <label class="block text-xs text-brandMuted mb-1 font-medium">Notas y Condiciones Especiales</label>
+          <textarea id="modalSuppNotes" rows="2" placeholder="Pedido mínimo, descuentos por volumen, cuenta CLABE..." class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold"></textarea>
+        </div>
+      </div>
+      <div class="p-4 border-t border-brandBorder bg-brandCard flex justify-end space-x-3">
+        <button onclick="closeModal('supplierModal')" class="px-4 py-2 rounded-lg text-xs text-brandMuted hover:text-white">Cancelar</button>
+        <button onclick="saveSupplier()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-5 py-2 rounded-lg shadow">Guardar Proveedor</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Movimiento Kardex -->
   <div id="kardexMovementModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
@@ -1354,22 +1561,322 @@
       }
     }
 
-    function renderSuppliers() {
+        let activeSupplier360Id = null;
+
+    function renderSuppliers(list = erpState.suppliers) {
       const tbody = document.getElementById('suppliersTbody');
       if (!tbody) return;
-      tbody.innerHTML = erpState.suppliers.map(s => `
-        <tr class="hover:bg-brandSurface transition">
-          <td class="p-3.5 font-bold text-white">${s.company}</td>
-          <td class="p-3.5 text-brandBeige">${s.contact}</td>
-          <td class="p-3.5 text-brandMuted">${s.categories}</td>
-          <td class="p-3.5 text-brandGold font-semibold">${s.terms}</td>
-          <td class="p-3.5 font-bold ${s.balance > 0 ? 'text-rose-400' : 'text-emerald-400'}">$${s.balance.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
-          <td class="p-3.5 text-amber-400 font-semibold"><i class="fa-solid fa-star text-xs"></i> ${s.rating}</td>
-          <td class="p-3.5 text-right">
-            <button onclick="createPurchaseOrderForSupplier('${s.company}')" class="text-brandGold hover:underline text-xs">Crear OC</button>
-          </td>
-        </tr>
-      `).join('');
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-brandMuted">No se encontraron proveedores registrados con los filtros aplicados.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(s => {
+        const cleanPhone = (s.phone || '').replace(/[^0-9]/g, '');
+        const waLink = cleanPhone ? `https://wa.me/${cleanPhone.startsWith('52') ? cleanPhone : '52' + cleanPhone}` : '#';
+
+        return `
+          <tr class="hover:bg-brandSurface transition cursor-pointer" onclick="viewSupplier360('${s.id}')">
+            <td class="p-3.5">
+              <p class="font-bold text-white flex items-center gap-1.5">
+                ${s.company}
+                ${s.commercial_name ? `<span class="text-[10px] text-brandGold font-normal">(${s.commercial_name})</span>` : ''}
+              </p>
+              <span class="text-[10px] text-brandMuted font-mono">RFC: ${s.rfc || 'XAXX010101000'}</span>
+            </td>
+            <td class="p-3.5" onclick="event.stopPropagation()">
+              <p class="text-brandBeige font-medium">${s.contact}</p>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-[11px] text-brandMuted">${s.phone || 'Sin tel'}</span>
+                ${cleanPhone ? `<a href="${waLink}" target="_blank" title="Contactar por WhatsApp" class="text-emerald-400 hover:text-emerald-300 text-xs"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+              </div>
+            </td>
+            <td class="p-3.5 text-brandMuted">${s.categories || 'Pieles / Herrajes'}</td>
+            <td class="p-3.5 text-brandGold font-semibold">${s.terms || 'Contado'}</td>
+            <td class="p-3.5 font-bold ${(s.balance || 0) > 0 ? 'text-rose-400' : 'text-emerald-400'}">$${(s.balance || 0).toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5 text-amber-400 font-semibold"><i class="fa-solid fa-star text-xs"></i> ${s.rating || 5.0}</td>
+            <td class="p-3.5 text-right space-x-2" onclick="event.stopPropagation()">
+              <button onclick="viewSupplier360('${s.id}')" title="Ver Ficha 360°" class="text-brandGold hover:text-white p-1"><i class="fa-solid fa-eye"></i></button>
+              <button onclick="createPurchaseOrderForSupplier('${s.company}')" class="text-xs bg-brandSurface hover:bg-brandCard border border-brandGold/40 text-brandGold px-2 py-1 rounded transition" title="Emitir Orden de Compra"><i class="fa-solid fa-cart-plus mr-1"></i>OC</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterSuppliers() {
+      const query = (document.getElementById('searchSupplierInput')?.value || '').toLowerCase().trim();
+      const catFilter = document.getElementById('filterSupplierCategory')?.value || 'ALL';
+
+      const filtered = erpState.suppliers.filter(s => {
+        const matchesQuery = !query ||
+          (s.company && s.company.toLowerCase().includes(query)) ||
+          (s.contact && s.contact.toLowerCase().includes(query)) ||
+          (s.rfc && s.rfc.toLowerCase().includes(query)) ||
+          (s.email && s.email.toLowerCase().includes(query));
+
+        let matchesCat = true;
+        if (catFilter === 'Piel') matchesCat = (s.categories || '').toLowerCase().includes('piel') || (s.categories || '').toLowerCase().includes('corte');
+        else if (catFilter === 'Herrajes') matchesCat = (s.categories || '').toLowerCase().includes('herraje') || (s.categories || '').toLowerCase().includes('cierre') || (s.categories || '').toLowerCase().includes('metal');
+        else if (catFilter === 'Hilo') matchesCat = (s.categories || '').toLowerCase().includes('hilo') || (s.categories || '').toLowerCase().includes('costura');
+        else if (catFilter === 'Quimicos') matchesCat = (s.categories || '').toLowerCase().includes('quimico') || (s.categories || '').toLowerCase().includes('acabado') || (s.categories || '').toLowerCase().includes('tinte');
+
+        return matchesQuery && matchesCat;
+      });
+
+      renderSuppliers(filtered);
+    }
+
+    function viewSupplier360(id) {
+      const supp = erpState.suppliers.find(s => String(s.id) === String(id));
+      if (!supp) return;
+
+      activeSupplier360Id = supp.id;
+
+      document.getElementById('s360Company').textContent = supp.company;
+      document.getElementById('s360Sub').textContent = `ID: ${supp.id} | ${supp.categories || 'Insumos Marroquinería'}`;
+      document.getElementById('s360Balance').textContent = `$${(supp.balance || 0).toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+      document.getElementById('s360Terms').textContent = supp.terms || 'Contado';
+      document.getElementById('s360Rating').innerHTML = `<i class="fa-solid fa-star text-xs"></i> ${supp.rating || 5.0}`;
+
+      document.getElementById('s360Contact').textContent = supp.contact || 'No especificado';
+      document.getElementById('s360Rfc').textContent = supp.rfc || 'XAXX010101000';
+      document.getElementById('s360Email').textContent = supp.email || 'Sin correo registrado';
+      document.getElementById('s360Phone').textContent = supp.phone || 'Sin teléfono';
+      document.getElementById('s360LeadTime').textContent = `${supp.lead_time_days || 7} días hábiles`;
+
+      const cleanPhone = (supp.phone || '').replace(/[^0-9]/g, '');
+      const waBtn = document.getElementById('s360WhatsappBtn');
+      if (cleanPhone) {
+        waBtn.href = `https://wa.me/${cleanPhone.startsWith('52') ? cleanPhone : '52' + cleanPhone}?text=Hola%20${encodeURIComponent(supp.contact)},%20te%20saludamos%20del%20taller%20Vizantino%20Piel.`;
+        waBtn.classList.remove('hidden');
+      } else {
+        waBtn.classList.add('hidden');
+      }
+
+      document.getElementById('s360Categories').textContent = supp.categories || 'Piel vacuno, herrajes y forros';
+      document.getElementById('s360Address').textContent = supp.address || 'León, Gto. / Tlaquepaque, Jal.';
+      document.getElementById('s360BankDetails').textContent = supp.bank_details ? (typeof supp.bank_details === 'string' ? supp.bank_details : `${supp.bank_details.bank || 'Banco'} • CLABE: ${supp.bank_details.clabe || 'No registrada'}`) : 'BBVA • CLABE: 012320001234567890';
+
+      document.getElementById('s360NotesInput').value = supp.internal_notes || supp.notes || '';
+
+      const badge = document.getElementById('s360StatusBadge');
+      const isActive = supp.active !== false;
+      badge.textContent = isActive ? 'ACTIVO' : 'INACTIVO';
+      badge.className = `badge ${isActive ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}`;
+
+      // Historial de compras asociadas al proveedor
+      const purchasesTbody = document.getElementById('s360PurchasesTbody');
+      const supplierPurchases = erpState.purchases.filter(p => p.supplier.toLowerCase().includes(supp.company.toLowerCase()));
+
+      if (supplierPurchases.length === 0) {
+        purchasesTbody.innerHTML = '<tr><td colspan="5" class="py-3 text-center text-brandMuted">Sin órdenes de compra emitidas aún</td></tr>';
+      } else {
+        purchasesTbody.innerHTML = supplierPurchases.map(p => `
+          <tr class="hover:bg-brandCard/60 transition">
+            <td class="py-1.5 font-mono text-brandGold font-bold">${p.folio}</td>
+            <td class="py-1.5 text-brandMuted">${p.branch}</td>
+            <td class="py-1.5 font-bold text-white">$${p.total.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="py-1.5 font-bold text-rose-400">$${(p.balance || 0).toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="py-1.5"><span class="badge ${p.status === 'RECIBIDA_COMPLETA' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${p.status}</span></td>
+          </tr>
+        `).join('');
+      }
+
+      openModal('supplier360Modal');
+    }
+
+    function saveS360Notes() {
+      if (!activeSupplier360Id) return;
+      const notes = document.getElementById('s360NotesInput').value.trim();
+      const supp = erpState.suppliers.find(s => String(s.id) === String(activeSupplier360Id));
+      if (supp) {
+        supp.internal_notes = notes;
+        if (supabaseClient) {
+          supabaseClient.from('suppliers').update({ internal_notes: notes }).eq('id', supp.id).then();
+        }
+        alert('Notas del proveedor guardadas con éxito.');
+      }
+    }
+
+    function toggleSupplierStatus() {
+      if (!activeSupplier360Id) return;
+      const supp = erpState.suppliers.find(s => String(s.id) === String(activeSupplier360Id));
+      if (supp) {
+        supp.active = !supp.active;
+        if (supabaseClient) {
+          supabaseClient.from('suppliers').update({ active: supp.active }).eq('id', supp.id).then();
+        }
+        viewSupplier360(supp.id);
+        renderSuppliers();
+        alert(`Estatus de ${supp.company} actualizado a: ${supp.active ? 'ACTIVO' : 'INACTIVO'}`);
+      }
+    }
+
+    function openEditSupplierModal(id) {
+      const supp = erpState.suppliers.find(s => String(s.id) === String(id));
+      if (!supp) return;
+
+      document.getElementById('supplierModalTitle').textContent = 'Editar Proveedor';
+      document.getElementById('modalSuppCompany').value = supp.company || '';
+      document.getElementById('modalSuppContact').value = supp.contact || '';
+      document.getElementById('modalSuppRfc').value = supp.rfc || '';
+      document.getElementById('modalSuppEmail').value = supp.email || '';
+      document.getElementById('modalSuppPhone').value = supp.phone || '';
+      document.getElementById('modalSuppCategories').value = supp.categories || '';
+      document.getElementById('modalSuppTerms').value = supp.terms || '30 Días';
+      document.getElementById('modalSuppLeadDays').value = supp.lead_time_days || 7;
+      document.getElementById('modalSuppRating').value = supp.rating || 5.0;
+      document.getElementById('modalSuppAddress').value = supp.address || '';
+      document.getElementById('modalSuppNotes').value = supp.internal_notes || '';
+
+      activeSupplier360Id = supp.id;
+      openModal('supplierModal');
+    }
+
+    function openEditSupplierModalFrom360() {
+      closeModal('supplier360Modal');
+      openEditSupplierModal(activeSupplier360Id);
+    }
+
+    function triggerNewPurchaseOrderFrom360() {
+      closeModal('supplier360Modal');
+      const supp = erpState.suppliers.find(s => String(s.id) === String(activeSupplier360Id));
+      createPurchaseOrderForSupplier(supp ? supp.company : '');
+    }
+
+    function createPurchaseOrderForSupplier(companyName) {
+      switchTab('purchases');
+      openModal('purchaseOrderModal');
+      const supplierInput = document.getElementById('modalPurchaseSupplierName');
+      if (supplierInput) supplierInput.value = companyName;
+    }
+
+    function saveSupplier() {
+      const company = document.getElementById('modalSuppCompany').value.trim();
+      const contact = document.getElementById('modalSuppContact').value.trim();
+      const email = document.getElementById('modalSuppEmail').value.trim();
+      const rfc = document.getElementById('modalSuppRfc').value.trim();
+      const phone = document.getElementById('modalSuppPhone').value.trim();
+      const categories = document.getElementById('modalSuppCategories').value.trim();
+      const terms = document.getElementById('modalSuppTerms').value;
+      const leadDays = parseInt(document.getElementById('modalSuppLeadDays').value) || 7;
+      const rating = parseFloat(document.getElementById('modalSuppRating').value) || 5.0;
+      const address = document.getElementById('modalSuppAddress').value.trim();
+      const notes = document.getElementById('modalSuppNotes').value.trim();
+
+      if (!company || !contact) {
+        alert('La Empresa y el Contacto Principal son obligatorios.');
+        return;
+      }
+
+      const existingIdx = erpState.suppliers.findIndex(s => String(s.id) === String(activeSupplier360Id) || s.company.toLowerCase() === company.toLowerCase());
+
+      const payload = {
+        company: company,
+        company_name: company,
+        contact: contact,
+        contact_name: contact,
+        email: email,
+        rfc: rfc || 'XAXX010101000',
+        phone: phone,
+        whatsapp: phone,
+        categories: categories,
+        terms: terms,
+        payment_terms: terms,
+        lead_time_days: leadDays,
+        rating: rating,
+        address: address,
+        internal_notes: notes,
+        active: true
+      };
+
+      if (existingIdx >= 0) {
+        erpState.suppliers[existingIdx] = { ...erpState.suppliers[existingIdx], ...payload };
+        if (supabaseClient) {
+          supabaseClient.from('suppliers').update({
+            company_name: company,
+            contact_name: contact,
+            email: email,
+            rfc: rfc,
+            phone: phone,
+            whatsapp: phone,
+            supplied_categories: [categories],
+            payment_terms: terms,
+            lead_time_days: leadDays,
+            rating: rating,
+            address: address,
+            internal_notes: notes,
+            updated_at: new Date().toISOString()
+          }).eq('id', erpState.suppliers[existingIdx].id).then();
+        }
+      } else {
+        const newSupp = {
+          id: 's' + Date.now(),
+          ...payload,
+          balance: 0
+        };
+        erpState.suppliers.unshift(newSupp);
+        if (supabaseClient) {
+          supabaseClient.from('suppliers').insert({
+            company_name: company,
+            contact_name: contact,
+            email: email,
+            rfc: rfc,
+            phone: phone,
+            whatsapp: phone,
+            supplied_categories: [categories],
+            payment_terms: terms,
+            lead_time_days: leadDays,
+            rating: rating,
+            address: address,
+            internal_notes: notes,
+            current_balance: 0,
+            active: true
+          }).then();
+        }
+      }
+
+      activeSupplier360Id = null;
+      closeModal('supplierModal');
+      renderSuppliers();
+      alert(`Proveedor "${company}" guardado con éxito en el catálogo.`);
+    }
+
+    async function loadSuppliersFromSupabase() {
+      if (!supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient.from('suppliers').select('*');
+        if (!error && data && data.length > 0) {
+          data.forEach(cloudSupp => {
+            const existingIdx = erpState.suppliers.findIndex(s => s.company.toLowerCase() === cloudSupp.company_name.toLowerCase());
+            const mapped = {
+              id: cloudSupp.id,
+              company: cloudSupp.company_name,
+              commercial_name: cloudSupp.commercial_name,
+              contact: cloudSupp.contact_name,
+              email: cloudSupp.email,
+              phone: cloudSupp.phone || cloudSupp.whatsapp,
+              rfc: cloudSupp.rfc,
+              categories: Array.isArray(cloudSupp.supplied_categories) ? cloudSupp.supplied_categories.join(', ') : (cloudSupp.supplied_categories || 'Pieles'),
+              terms: cloudSupp.payment_terms || '30 Días',
+              lead_time_days: cloudSupp.lead_time_days || 7,
+              balance: parseFloat(cloudSupp.current_balance) || 0,
+              rating: parseFloat(cloudSupp.rating) || 5.0,
+              address: cloudSupp.address,
+              internal_notes: cloudSupp.internal_notes,
+              active: cloudSupp.active !== false
+            };
+            if (existingIdx >= 0) {
+              erpState.suppliers[existingIdx] = { ...erpState.suppliers[existingIdx], ...mapped };
+            } else {
+              erpState.suppliers.push(mapped);
+            }
+          });
+          renderSuppliers();
+        }
+      } catch (err) {
+        console.log('Proveedores: Respaldo local activo.');
+      }
     }
 
     function renderInventory() {
@@ -1868,6 +2375,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderCRM();
       loadCustomersFromSupabase();
+      loadSuppliersFromSupabase();
       renderSuppliers();
       renderInventory();
       renderSales();
