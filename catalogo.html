@@ -278,8 +278,66 @@
     }
   </style>
   <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <link rel="stylesheet" href="welcome-preloader.css">
 </head>
 <body class="selection:bg-gold-500 selection:text-black">
+
+  <aside id="welcomePreloader" aria-label="Introducción Vizantino Piel" role="dialog" aria-modal="true">
+    <!-- Escenario de Fotografía Cinematográfica -->
+    <div class="vp-cinematic-stage">
+      <!-- Diapositiva 1: Bolso Calidad Élite (Negro Ónix) -->
+      <div class="vp-cinematic-slide">
+        <img src="https://vizantinopiel.com/products/elite/elite-1.jpg" alt="Bolso de piel corte vacuno élite" loading="eager" fetchpriority="high">
+      </div>
+      <!-- Diapositiva 2: Bolsa Valentina + Strap Artesanal -->
+      <div class="vp-cinematic-slide">
+        <img src="https://vizantinopiel.com/products/bolsa-valentina/valentina-1.jpg" alt="Bolsa de piel con diseño artesanal" loading="eager">
+      </div>
+      <!-- Diapositiva 3: Mochila Rains Vacuno Argentino -->
+      <div class="vp-cinematic-slide">
+        <img src="https://vizantinopiel.com/products/mochila-rains/mochila-rains-studio-img-18.jpg" alt="Mochila de piel genuina vacuno" loading="eager">
+      </div>
+      <!-- Diapositiva 4: Tarjetero Minimalista Piel Vacuno -->
+      <div class="vp-cinematic-slide">
+        <img src="https://vizantinopiel.com/products/tarjetero-vacuno/tarjetero-vacuno-studio-img-07.jpg" alt="Tarjetero de piel corte vacuno" loading="eager">
+      </div>
+      <!-- Diapositiva 5: Crossbody Cesar con Herrajes Finos -->
+      <div class="vp-cinematic-slide">
+        <img src="https://vizantinopiel.com/products/crossbody-cesar/cesar-1.jpg" alt="Crossbody de piel corte vacuno" loading="eager">
+      </div>
+    </div>
+
+    <!-- Filtros de iluminación, viñeta y texturas -->
+    <div class="vp-cinematic-overlay"></div>
+    <div class="vp-cinematic-scanlines"></div>
+    <div class="vp-cinematic-glow"></div>
+
+    <!-- Mensaje Central de Bienvenida -->
+    <div class="vp-cinematic-content">
+      <img src="logo-gold.png" alt="Vizantino Piel" class="vp-preloader-logo">
+      <span class="vp-preloader-sub">Marroquinería Fina · Hecho en México</span>
+      <h1 class="vp-preloader-title">
+        BIENVENIDO A<br>
+        <span class="gold-accent">VIZANTINO PIEL</span>
+      </h1>
+      <div class="vp-preloader-divider"></div>
+      <p class="vp-preloader-tagline">
+        Tradición · Maestría Artesanal · Piel Genuina
+      </p>
+    </div>
+
+    <!-- Botón de Salto Accesible -->
+    <button type="button" class="vp-preloader-skip" aria-label="Omitir introducción e ingresar a la tienda">
+      <span>Entrar a la tienda</span>
+      <i class="fa-solid fa-arrow-right text-[10px]"></i>
+    </button>
+
+    <!-- Barra de progreso cinemático -->
+    <div class="vp-preloader-progress-track">
+      <div class="vp-preloader-progress-bar"></div>
+    </div>
+  </aside>
+
 
   <!-- ========================================== -->
   <!-- 1. TOP BANNER PROMOCIONAL -->
@@ -5092,7 +5150,7 @@
               <span style="font-size: 11px; color: #666;">Garantía de Taller por 5 Años</span>
             </div>
           </div>
-        </body>
+          </body>
         </html>
       `);
       printWin.document.close();
@@ -6609,5 +6667,6 @@
     </div>
   </div>
 
+  <script src="welcome-preloader.js"></script>
 </body>
 </html>

@@ -14,14 +14,27 @@
     return;
   }
 
-  // - Ya se visualizó en la misma sesión de navegación
+  // - Soporte de forzado o reset por URL (?intro=1 o ?reset_intro=1)
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('intro') === '1' || urlParams.get('reset_intro') === '1') {
+    try { sessionStorage.removeItem(PRELOADER_SESSION_KEY); } catch(e){}
+  }
+
+  // - Solo omitir si el usuario explícitamente ya la vio y NO estamos en la raíz principal visitada directamente
+  // Para que el cliente pueda probarla al refrescar, usaremos sessionStorage pero garantizando que no se bloquee.
   try {
-    if (sessionStorage.getItem(PRELOADER_SESSION_KEY)) {
-      dismissImmediately();
-      return;
+    if (sessionStorage.getItem(PRELOADER_SESSION_KEY) && !urlParams.get('replay')) {
+      // Si ya la vio en esta pestaña, permitimos verla con ?replay=1 o cuando pasa un tiempo
+      // pero para pruebas activas dejamos que se reproduzca si recarga la raíz
+      const lastShown = parseInt(sessionStorage.getItem(PRELOADER_SESSION_KEY + '_time') || '0', 10);
+      if (Date.now() - lastShown < 1000 * 60 * 10 && !window.location.hash) {
+        // Visto hace menos de 10 min
+        dismissImmediately();
+        return;
+      }
     }
   } catch (e) {
-    // Si sessionStorage no está disponible, continuar con precaución
+    // Si sessionStorage no está disponible, continuar
   }
 
   // - Parámetros de URL que indican flujo específico (ej. pago, admin directo, quick view)
@@ -144,6 +157,7 @@
       // Registrar que ya se mostró en esta sesión
       try {
         sessionStorage.setItem(PRELOADER_SESSION_KEY, 'true');
+      sessionStorage.setItem(PRELOADER_SESSION_KEY + '_time', Date.now().toString());
       } catch (err) {}
 
       // Desvanecer preloader suavemente
