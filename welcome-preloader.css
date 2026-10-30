@@ -1,0 +1,259 @@
+/* ==========================================================================
+   VIZANTINO PIEL — WELCOME PRELOADER (INTRO CINEMATOGRÁFICA)
+   Duración total: ~4 segundos.
+   Paleta: #251B16 (café oscuro), #3B2A20 (chocolate), #C6A477 (dorado)
+   ========================================================================== */
+
+#welcomePreloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999999;
+  background-color: #251B16;
+  background-image: radial-gradient(circle at 50% 50%, #3B2A20 0%, #251B16 65%, #16100c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.7s ease;
+  pointer-events: auto;
+  user-select: none;
+}
+
+#welcomePreloader.preloader-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Contenedor de diapositivas cinematográficas */
+.vp-cinematic-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.vp-cinematic-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 0.6s ease-in-out, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+}
+
+.vp-cinematic-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.68) contrast(1.15) saturate(1.08);
+}
+
+.vp-cinematic-slide.active {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+/* Superposición de viñeta y gradientes de lujo */
+.vp-cinematic-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(37, 27, 22, 0.45) 0%, rgba(22, 16, 12, 0.85) 70%, rgba(10, 7, 5, 0.96) 100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.vp-cinematic-scanlines {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(198, 164, 119, 0.04) 0%, transparent 50%, rgba(0, 0, 0, 0.35) 100%);
+  pointer-events: none;
+}
+
+/* Resplandor dorado central */
+.vp-cinematic-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(198, 164, 119, 0.18) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: vpPulseGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes vpPulseGlow {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.95; }
+}
+
+/* Contenido de Bienvenida Central */
+.vp-cinematic-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 1.5rem;
+  max-width: 680px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Logo Vizantino en Preloader */
+.vp-preloader-logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 1.25rem;
+  filter: drop-shadow(0 4px 12px rgba(198, 164, 119, 0.4));
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.vp-preloader-logo.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Subtítulo elegante */
+.vp-preloader-sub {
+  font-size: 0.68rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: #C6A477;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.7s ease-out 0.2s, transform 0.7s ease-out 0.2s;
+}
+
+.vp-preloader-sub.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Título Principal */
+.vp-preloader-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #FAF7F2;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.8s ease-out 0.3s, transform 0.8s ease-out 0.3s;
+}
+
+.vp-preloader-title.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.vp-preloader-title .gold-accent {
+  background: linear-gradient(135deg, #FFF3D1 0%, #DFB96C 50%, #C6A477 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: italic;
+  display: inline-block;
+}
+
+/* Línea divisoria dorada */
+.vp-preloader-divider {
+  width: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, #C6A477 50%, transparent 100%);
+  margin: 0.75rem auto 1rem auto;
+  transition: width 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+}
+
+.vp-preloader-divider.show {
+  width: 140px;
+}
+
+/* Lema inferior */
+.vp-preloader-tagline {
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #F2E6D8;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.7s ease-out 0.5s, transform 0.7s ease-out 0.5s;
+}
+
+.vp-preloader-tagline.show {
+  opacity: 0.85;
+  transform: translateY(0);
+}
+
+/* Barra de progreso sutil inferior */
+.vp-preloader-progress-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background: rgba(198, 164, 119, 0.15);
+}
+
+.vp-preloader-progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #3B2A20, #C6A477, #F2E6D8);
+  transition: width 3.6s linear;
+}
+
+/* Botón Omitir Introducción (Accesibilidad) */
+.vp-preloader-skip {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 20;
+  background: rgba(37, 27, 22, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(198, 164, 119, 0.4);
+  color: #F2E6D8;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.85;
+}
+
+.vp-preloader-skip:hover,
+.vp-preloader-skip:focus {
+  background: rgba(198, 164, 119, 0.25);
+  border-color: #C6A477;
+  color: #FFFFFF;
+  opacity: 1;
+  outline: none;
+  transform: translateY(-1px);
+}
+
+/* Respeto a usuarios con reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  #welcomePreloader {
+    display: none !important;
+  }
+}
