@@ -631,43 +631,127 @@
       <!-- TAB 5: VENTAS Y COTIZACIONES (FASE 5)                    -->
       <!-- ======================================================== -->
       <section id="tab-sales" class="hidden space-y-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div class="flex items-center space-x-3 w-full sm:w-auto">
-            <div class="relative flex-1 sm:w-72">
-              <input type="text" id="searchSalesInput" onkeyup="filterSales()" placeholder="Buscar por folio, cliente o tracking..." class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-2.5 outline-none focus:border-brandGold">
-              <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-brandMuted text-xs"></i>
-            </div>
-            <select id="filterSalesType" onchange="filterSales()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
-              <option value="ALL">Ventas y Cotizaciones</option>
-              <option value="VENTA">Ventas Confirmadas</option>
-              <option value="COTIZACION">Cotizaciones Abiertas</option>
-            </select>
+        <!-- Indicadores de Ventas Unificadas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Ventas Totales Facturadas</p>
+            <h4 class="text-xl font-bold font-serif text-white mt-1" id="salesTotalSum">$148,500.00</h4>
+            <p class="text-[11px] text-emerald-400 font-medium mt-1"><i class="fa-solid fa-circle-check mr-1"></i> Tienda Online + POS Mostrador</p>
           </div>
-          <button onclick="openModal('quickSaleModal')" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
-            <i class="fa-solid fa-plus"></i>
-            <span>Nueva Venta / Cotización</span>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Cotizaciones en Negociación</p>
+            <h4 class="text-xl font-bold font-serif text-amber-400 mt-1" id="salesQuotesSum">$18,400.00</h4>
+            <p class="text-[11px] text-amber-300 font-medium mt-1 cursor-pointer hover:underline" onclick="switchSalesSubtab('quotes')"><i class="fa-solid fa-clock mr-1"></i> Ver cotizaciones abiertas</p>
+          </div>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Cuentas por Cobrar (Saldos)</p>
+            <h4 class="text-xl font-bold font-serif text-amber-400 mt-1" id="salesPendingBalanceSum">$24,350.00</h4>
+            <p class="text-[11px] text-brandMuted mt-1">Anticipos y ventas a crédito</p>
+          </div>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Ticket Promedio</p>
+            <h4 class="text-xl font-bold font-serif text-brandGold mt-1" id="salesAvgTicket">$2,150.00</h4>
+            <p class="text-[11px] text-brandBeige mt-1">Valor medio por orden cerrada</p>
+          </div>
+        </div>
+
+        <!-- Sub-navegación de Ventas -->
+        <div class="flex border-b border-brandBorder space-x-4">
+          <button onclick="switchSalesSubtab('orders')" id="salesSubtabBtnOrders" class="pb-3 text-xs font-bold text-brandGold border-b-2 border-brandGold transition flex items-center space-x-2">
+            <i class="fa-solid fa-receipt"></i>
+            <span>Ventas & Pedidos Unificados</span>
+          </button>
+          <button onclick="switchSalesSubtab('quotes')" id="salesSubtabBtnQuotes" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2">
+            <i class="fa-solid fa-file-contract"></i>
+            <span>Cotizaciones Formales</span>
           </button>
         </div>
 
-        <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
-                <tr>
-                  <th class="p-3.5">Folio</th>
-                  <th class="p-3.5">Fecha</th>
-                  <th class="p-3.5">Cliente</th>
-                  <th class="p-3.5">Canal</th>
-                  <th class="p-3.5">Total</th>
-                  <th class="p-3.5">Pagado</th>
-                  <th class="p-3.5">Estatus</th>
-                  <th class="p-3.5 text-right">Comprobante / PDF</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-brandBorder/60" id="salesOrdersTbody">
-                <!-- Se poblará dinámicamente con JS -->
-              </tbody>
-            </table>
+        <!-- SUBTAB 1: TODAS LAS VENTAS -->
+        <div id="salesSubtabOrders" class="space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="flex items-center space-x-3 w-full sm:w-auto">
+              <div class="relative flex-1 sm:w-72">
+                <input type="text" id="searchSalesInput" onkeyup="filterSales()" placeholder="Buscar por folio, cliente o guía..." class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-2.5 outline-none focus:border-brandGold">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-brandMuted text-xs"></i>
+              </div>
+              <select id="filterSalesChannel" onchange="filterSales()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+                <option value="ALL">Todos los Canales</option>
+                <option value="Online">Tienda Online</option>
+                <option value="Independencia">Mostrador Independencia</option>
+                <option value="Alfareros">Mostrador Alfareros</option>
+                <option value="Tonalá">Mostrador Tonalá</option>
+                <option value="Mayoreo">Mayoreo / Empresas</option>
+              </select>
+              <select id="filterSalesStatus" onchange="filterSales()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+                <option value="ALL">Todos los Estados</option>
+                <option value="PAGADO">Pagadas</option>
+                <option value="PARCIAL">Con Saldo / Anticipo</option>
+                <option value="EN_PREPARACION">En Preparación</option>
+                <option value="ENVIADO">Enviadas</option>
+                <option value="ENTREGADO">Entregadas</option>
+              </select>
+            </div>
+            <button onclick="openModal('quickSaleModal')" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
+              <i class="fa-solid fa-plus"></i>
+              <span>Nueva Venta Mostrador (POS)</span>
+            </button>
+          </div>
+
+          <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                  <tr>
+                    <th class="p-3.5">Folio</th>
+                    <th class="p-3.5">Fecha</th>
+                    <th class="p-3.5">Cliente</th>
+                    <th class="p-3.5">Canal / Sucursal</th>
+                    <th class="p-3.5 text-right">Monto Total</th>
+                    <th class="p-3.5 text-right">Pagado</th>
+                    <th class="p-3.5 text-right">Saldo Pend.</th>
+                    <th class="p-3.5 text-center">Estatus Pago</th>
+                    <th class="p-3.5 text-center">Entrega / Envío</th>
+                    <th class="p-3.5 text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-brandBorder/60" id="salesOrdersTbody">
+                  <!-- Se poblará dinámicamente con JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBTAB 2: COTIZACIONES FORMALES -->
+        <div id="salesSubtabQuotes" class="hidden space-y-4">
+          <div class="flex justify-between items-center">
+            <p class="text-xs text-brandMuted">Cotizaciones activas emitidas para clientes corporativos y mayoristas. Haz clic en "Convertir a Venta" para confirmar el pedido y descontar inventario automáticamente.</p>
+            <button onclick="openNewQuoteModal()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
+              <i class="fa-solid fa-file-circle-plus"></i>
+              <span>Crear Nueva Cotización</span>
+            </button>
+          </div>
+
+          <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                  <tr>
+                    <th class="p-3.5">Folio Cotización</th>
+                    <th class="p-3.5">Fecha Emisión</th>
+                    <th class="p-3.5">Cliente / Razón Social</th>
+                    <th class="p-3.5">Canal / Sucursal</th>
+                    <th class="p-3.5 text-right">Monto Cotizado</th>
+                    <th class="p-3.5 text-center">Estatus</th>
+                    <th class="p-3.5 text-right">Convertir a Venta</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-brandBorder/60" id="quotesTbody">
+                  <!-- Se poblará dinámicamente con JS -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -872,6 +956,122 @@
   <!-- ======================================================== -->
   <!-- MODALES DE OPERACIÓN ERP                                 -->
   <!-- ======================================================== -->
+
+  
+  <!-- MODAL: FICHA 360° DE LA VENTA / PEDIDO (FASE 5) -->
+  <div id="saleDetailModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-full bg-brandGold/10 border border-brandGold/30 flex items-center justify-center text-brandGold text-lg">
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+          <div>
+            <h3 class="font-serif font-bold text-lg text-white" id="saleDetFolio">Folio: VEN-2026-0142</h3>
+            <p class="text-xs text-brandGold" id="saleDetSub">Canal: Tienda Online | Fecha: 2026-10-30</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span id="saleDetStatusBadge" class="badge bg-emerald-500/20 text-emerald-300">PAGADO</span>
+          <button onclick="closeModal('saleDetailModal')" class="text-brandMuted hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 text-xs">
+        <!-- Datos de Cliente y Entrega -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-2">
+            <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1">Cliente y Contacto</h4>
+            <p><span class="text-brandMuted">Cliente:</span> <strong class="text-white" id="saleDetCustName">Elena Morales</strong></p>
+            <p><span class="text-brandMuted">Teléfono / WhatsApp:</span> <strong class="text-brandBeige" id="saleDetCustPhone">33 1450 8821</strong></p>
+            <p><span class="text-brandMuted">Método de Pago:</span> <strong class="text-emerald-400" id="saleDetPayMethod">Mercado Pago (Validado)</strong></p>
+          </div>
+          <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-2">
+            <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1">Logística de Envío / Sucursal</h4>
+            <p><span class="text-brandMuted">Destino / Dirección:</span> <span class="text-white" id="saleDetAddress">Tlaquepaque Centro, Jal.</span></p>
+            <p><span class="text-brandMuted">Paquetería:</span> <strong class="text-white" id="saleDetCarrier">DHL Express</strong></p>
+            <p><span class="text-brandMuted">Guía de Rastreo:</span> <strong class="text-brandGold font-mono" id="saleDetTracking">DHL-8899123041</strong></p>
+          </div>
+        </div>
+
+        <!-- Partidas de la Orden -->
+        <div class="space-y-2">
+          <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1">Partidas y Productos</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="text-brandMuted border-b border-brandBorder">
+                <tr>
+                  <th class="pb-1.5">Producto</th>
+                  <th class="pb-1.5 text-center">Cant.</th>
+                  <th class="pb-1.5 text-right">Precio Unit.</th>
+                  <th class="pb-1.5 text-right font-bold text-white">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody id="saleDetItemsTbody" class="divide-y divide-brandBorder/40">
+                <!-- Se poblará dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Resumen Financiero y Saldos -->
+        <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-1.5 text-right font-mono">
+          <div class="flex justify-between text-brandMuted">
+            <span>Subtotal:</span>
+            <span class="text-white" id="saleDetSubtotal">$0.00</span>
+          </div>
+          <div class="flex justify-between text-brandMuted">
+            <span>Descuento Aplicado:</span>
+            <span class="text-rose-400" id="saleDetDiscount">-$0.00</span>
+          </div>
+          <div class="flex justify-between text-brandMuted">
+            <span>Costo de Envío:</span>
+            <span class="text-white" id="saleDetShipping">$0.00</span>
+          </div>
+          <div class="flex justify-between text-base font-bold text-brandGold pt-2 border-t border-brandBorder">
+            <span class="font-sans">Total de la Operación:</span>
+            <span id="saleDetTotal">$0.00</span>
+          </div>
+          <div class="flex justify-between text-xs text-emerald-400 font-semibold">
+            <span class="font-sans">Monto Pagado:</span>
+            <span id="saleDetPaid">$0.00</span>
+          </div>
+          <div class="flex justify-between text-xs text-amber-400 font-bold">
+            <span class="font-sans">Saldo Pendiente (CxC):</span>
+            <span id="saleDetBalance">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Acciones Operativas (Abono, Estatus de Entrega, Cancelación/Devolución) -->
+        <div class="p-4 bg-brandDark rounded-xl border border-brandBorder flex flex-wrap justify-between items-center gap-3">
+          <div class="flex items-center space-x-2">
+            <label class="text-brandMuted text-xs">Estatus Entrega:</label>
+            <select id="saleDetStatusSelect" onchange="updateSaleDeliveryStatus()" class="bg-brandCard border border-brandBorder text-xs text-white rounded-lg px-2.5 py-1.5 outline-none focus:border-brandGold">
+              <option value="EN_PREPARACION">En Preparación</option>
+              <option value="ENVIADO">Enviado (En Tránsito)</option>
+              <option value="ENTREGADO">Entregado al Cliente</option>
+            </select>
+          </div>
+          <div class="space-x-2">
+            <button onclick="registerSalePaymentPrompt()" class="bg-brandCard border border-brandGold/40 text-brandGold hover:bg-brandGold hover:text-brandDark px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+              <i class="fa-solid fa-money-bill-transfer mr-1"></i>Registrar Abono
+            </button>
+            <button onclick="cancelSaleOrder()" class="text-rose-400 hover:text-rose-300 text-xs hover:underline">
+              <i class="fa-solid fa-ban mr-1"></i>Cancelar / Devolución
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-brandBorder bg-brandCard flex justify-between items-center">
+        <button onclick="downloadSalePDF()" class="bg-brandGold text-brandDark font-semibold text-xs px-4 py-2 rounded-lg hover:bg-brandGoldHover transition shadow flex items-center space-x-1.5">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>Descargar Comprobante PDF Oficial</span>
+        </button>
+        <button onclick="closeModal('saleDetailModal')" class="bg-brandSurface hover:bg-brandBorder border border-brandBorder text-white text-xs px-4 py-2 rounded-lg">Cerrar</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal Venta / Cotización Rápida -->
   <div id="quickSaleModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -1506,9 +1706,82 @@
         { id: "k5", folio: "KAR-2026-0041", date: "2026-10-26", product_id: 2, sku: "VZ-BOL-002", product_name: "Bolsa Cherry Vizantino", branch: "Tonalá", type: "AJUSTE_MERMA", qty_in: 0, qty_out: 1, balance_after: 5, unit_cost: 1280, ref: "AJU-2026-0005", reason: "Detalle en herraje dorado enviado a reparación", authorized_by: "Control de Calidad" }
       ],
       sales: [
-        { folio: "VEN-2026-0142", date: "2026-10-30", customer: "Elena Morales García", channel: "Online", total: 3000, paid: 3000, status: "PAGADO", type: "VENTA" },
-        { folio: "COT-2026-0048", date: "2026-10-29", customer: "Corporativo Andares S.A.", channel: "Mayoreo", total: 18400, paid: 10000, status: "PARCIAL", type: "COTIZACION" },
-        { folio: "VEN-2026-0141", date: "2026-10-28", customer: "Carlos Mendoza Ramos", channel: "Independencia", total: 1800, paid: 1800, status: "PAGADO", type: "VENTA" }
+        {
+          folio: "VEN-2026-0142",
+          date: "2026-10-30",
+          customer: "Elena Morales García",
+          phone: "33 1450 8821",
+          email: "elena.morales@gmail.com",
+          channel: "Online",
+          branch: "Independencia",
+          items: [
+            { id: 1, name: "Bolso calidad élite", sku: "VZ-BOL-001", price: 3000, qty: 1, total: 3000 }
+          ],
+          subtotal: 3000,
+          discount: 0,
+          shipping: 0,
+          total: 3000,
+          paid: 3000,
+          balance: 0,
+          status: "PAGADO",
+          delivery_status: "ENVIADO",
+          payment_method: "Mercado Pago (Validado)",
+          carrier: "DHL Express",
+          tracking_number: "DHL-8899123041",
+          address: "Av. Chapultepec 450, Col. Americana, Guadalajara, Jal.",
+          type: "VENTA"
+        },
+        {
+          folio: "COT-2026-0048",
+          date: "2026-10-29",
+          customer: "Corporativo Andares S.A.",
+          phone: "33 3612 9900",
+          email: "compras@andares.com",
+          channel: "Mayoreo",
+          branch: "Almacén Central",
+          items: [
+            { id: 4, name: "Cartera Slim piel corte vacuno", sku: "VZ-CAR-002", price: 300, qty: 50, total: 15000 },
+            { id: 9, name: "Tarjetero en pieles exóticas", sku: "VZ-CAR-007", price: 500, qty: 10, total: 5000 }
+          ],
+          subtotal: 20000,
+          discount: 1600,
+          shipping: 0,
+          total: 18400,
+          paid: 10000,
+          balance: 8400,
+          status: "PARCIAL",
+          delivery_status: "EN_PREPARACION",
+          payment_method: "TRANSFERENCIA_SPEI",
+          carrier: "Transporte Propio Vizantino",
+          tracking_number: "ENT-INT-0048",
+          address: "Blvd. Puerta de Hierro 4965, Zapopan, Jal.",
+          type: "COTIZACION"
+        },
+        {
+          folio: "VEN-2026-0141",
+          date: "2026-10-28",
+          customer: "Carlos Mendoza Ramos",
+          phone: "33 2210 5541",
+          email: "carlos.mendoza@yahoo.com",
+          channel: "Independencia",
+          branch: "Independencia",
+          items: [
+            { id: 10, name: "Crossbody Piel Genuina", sku: "VZ-CRO-001", price: 1800, qty: 1, total: 1800 }
+          ],
+          subtotal: 1800,
+          discount: 0,
+          shipping: 0,
+          total: 1800,
+          paid: 1800,
+          balance: 0,
+          status: "PAGADO",
+          delivery_status: "ENTREGADO",
+          payment_method: "Terminal Bancaria (Visa)",
+          carrier: "Entrega Inmediata Mostrador",
+          tracking_number: "POS-IND-0141",
+          address: "Entregado en Sucursal Independencia (Tlaquepaque Centro)",
+          type: "VENTA"
+        }
       ],
       purchases: [
         { folio: "OC-2026-0021", supplier: "Curtidos Premium de León S.A.", branch: "Almacén Central", total: 25000, balance: 12500, status: "RECIBIDA_COMPLETA" },
@@ -2491,24 +2764,356 @@
       downloadCSV(csv, `Kardex_${prod.sku}.csv`);
     }
 
-    function renderSales() {
+        let activeSaleDetailFolio = null;
+
+    function switchSalesSubtab(subtab) {
+      const ordersDiv = document.getElementById('salesSubtabOrders');
+      const quotesDiv = document.getElementById('salesSubtabQuotes');
+      const btnOrders = document.getElementById('salesSubtabBtnOrders');
+      const btnQuotes = document.getElementById('salesSubtabBtnQuotes');
+
+      if (subtab === 'orders') {
+        if (ordersDiv) ordersDiv.classList.remove('hidden');
+        if (quotesDiv) quotesDiv.classList.add('hidden');
+        if (btnOrders) { btnOrders.classList.add('text-brandGold', 'border-brandGold', 'font-bold'); btnOrders.classList.remove('text-brandMuted', 'border-transparent'); }
+        if (btnQuotes) { btnQuotes.classList.remove('text-brandGold', 'border-brandGold', 'font-bold'); btnQuotes.classList.add('text-brandMuted', 'border-transparent'); }
+        renderSales();
+      } else {
+        if (ordersDiv) ordersDiv.classList.add('hidden');
+        if (quotesDiv) quotesDiv.classList.remove('hidden');
+        if (btnQuotes) { btnQuotes.classList.add('text-brandGold', 'border-brandGold', 'font-bold'); btnQuotes.classList.remove('text-brandMuted', 'border-transparent'); }
+        if (btnOrders) { btnOrders.classList.remove('text-brandGold', 'border-brandGold', 'font-bold'); btnOrders.classList.add('text-brandMuted', 'border-transparent'); }
+        renderQuotes();
+      }
+    }
+
+    function renderSales(list = null) {
+      // 1. Métricas de Ventas
+      let totalSales = 0;
+      let totalQuotes = 0;
+      let pendingBalance = 0;
+      let salesCount = 0;
+
+      erpState.sales.forEach(s => {
+        if (s.type === 'VENTA') {
+          totalSales += s.total;
+          pendingBalance += (s.balance || Math.max(0, s.total - s.paid));
+          salesCount++;
+        } else if (s.type === 'COTIZACION') {
+          totalQuotes += s.total;
+        }
+      });
+
+      const avgTicket = salesCount > 0 ? totalSales / salesCount : 0;
+
+      const totEl = document.getElementById('salesTotalSum');
+      const quotEl = document.getElementById('salesQuotesSum');
+      const balEl = document.getElementById('salesPendingBalanceSum');
+      const avgEl = document.getElementById('salesAvgTicket');
+
+      if (totEl) totEl.textContent = `$${totalSales.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+      if (quotEl) quotEl.textContent = `$${totalQuotes.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+      if (balEl) balEl.textContent = `$${pendingBalance.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+      if (avgEl) avgEl.textContent = `$${avgTicket.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+
+      // 2. Tabla de Ventas
       const tbody = document.getElementById('salesOrdersTbody');
       if (!tbody) return;
-      tbody.innerHTML = erpState.sales.map(s => `
+
+      const salesList = (list || erpState.sales).filter(s => s.type === 'VENTA');
+
+      if (salesList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center py-8 text-brandMuted">No se registraron ventas con los filtros aplicados.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = salesList.map(s => {
+        const bal = s.balance !== undefined ? s.balance : Math.max(0, s.total - s.paid);
+        const isPaid = bal === 0;
+
+        let payBadge = isPaid ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300';
+        let delivBadge = s.delivery_status === 'ENTREGADO' ? 'bg-blue-500/20 text-blue-300' : (s.delivery_status === 'ENVIADO' ? 'bg-purple-500/20 text-purple-300' : 'bg-zinc-500/20 text-zinc-300');
+
+        return `
+          <tr class="hover:bg-brandSurface transition cursor-pointer" onclick="viewSaleDetail('${s.folio}')">
+            <td class="p-3.5 font-bold text-brandGold font-mono">${s.folio}</td>
+            <td class="p-3.5 text-brandMuted">${s.date}</td>
+            <td class="p-3.5">
+              <p class="font-bold text-white">${s.customer}</p>
+              <span class="text-[10px] text-brandMuted">${s.phone || s.email || ''}</span>
+            </td>
+            <td class="p-3.5 text-brandBeige">${s.channel}</td>
+            <td class="p-3.5 text-right font-bold text-white font-mono">$${s.total.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5 text-right font-mono font-semibold text-emerald-400">$${s.paid.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5 text-right font-mono font-bold ${bal > 0 ? 'text-amber-400' : 'text-zinc-500'}">$${bal.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5 text-center"><span class="badge ${payBadge}">${s.status}</span></td>
+            <td class="p-3.5 text-center"><span class="badge ${delivBadge}">${s.delivery_status || 'EN_PREPARACION'}</span></td>
+            <td class="p-3.5 text-right space-x-2" onclick="event.stopPropagation()">
+              <button onclick="viewSaleDetail('${s.folio}')" class="text-brandGold hover:text-white p-1" title="Ver Detalle y Factura"><i class="fa-solid fa-eye"></i></button>
+              <button onclick="printOrderReceipt('${s.folio}')" class="text-brandGold hover:text-white p-1" title="Descargar Comprobante PDF"><i class="fa-solid fa-file-pdf"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderQuotes() {
+      const tbody = document.getElementById('quotesTbody');
+      if (!tbody) return;
+
+      const quotesList = erpState.sales.filter(s => s.type === 'COTIZACION');
+      if (quotesList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-brandMuted">No hay cotizaciones activas en este momento.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = quotesList.map(q => `
         <tr class="hover:bg-brandSurface transition">
-          <td class="p-3.5 font-bold text-brandGold font-mono">${s.folio}</td>
-          <td class="p-3.5 text-brandMuted">${s.date}</td>
-          <td class="p-3.5 font-semibold text-white">${s.customer}</td>
-          <td class="p-3.5 text-brandBeige">${s.channel}</td>
-          <td class="p-3.5 font-bold text-white">$${s.total.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
-          <td class="p-3.5 text-emerald-400 font-semibold">$${s.paid.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
-          <td class="p-3.5"><span class="badge ${s.status === 'PAGADO' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${s.status}</span></td>
+          <td class="p-3.5 font-bold text-brandGold font-mono">${q.folio}</td>
+          <td class="p-3.5 text-brandMuted">${q.date}</td>
+          <td class="p-3.5">
+            <p class="font-bold text-white">${q.customer}</p>
+            <span class="text-[10px] text-brandMuted">${q.phone || q.email || 'Mayoreo'}</span>
+          </td>
+          <td class="p-3.5 text-brandBeige">${q.channel}</td>
+          <td class="p-3.5 text-right font-bold text-white font-mono">$${q.total.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+          <td class="p-3.5 text-center"><span class="badge bg-amber-500/20 text-amber-300">COTIZACIÓN</span></td>
           <td class="p-3.5 text-right space-x-2">
-            ${s.type === 'COTIZACION' ? `<button onclick="convertQuoteToSale('${s.folio}')" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded shadow">Convertir a Venta</button>` : ''}
-            <button onclick="printOrderReceipt('${s.folio}')" class="text-brandGold hover:text-white" title="Descargar comprobante"><i class="fa-solid fa-file-pdf"></i></button>
+            <button onclick="convertQuoteToSale('${q.folio}')" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-3 py-1.5 rounded-lg shadow transition">
+              <i class="fa-solid fa-cart-arrow-down mr-1"></i>Convertir a Venta
+            </button>
+            <button onclick="printOrderReceipt('${q.folio}')" class="text-brandGold hover:text-white p-1" title="Imprimir Cotización"><i class="fa-solid fa-file-pdf"></i></button>
           </td>
         </tr>
       `).join('');
+    }
+
+    function filterSales() {
+      const query = (document.getElementById('searchSalesInput')?.value || '').toLowerCase().trim();
+      const channel = document.getElementById('filterSalesChannel')?.value || 'ALL';
+      const status = document.getElementById('filterSalesStatus')?.value || 'ALL';
+
+      const filtered = erpState.sales.filter(s => {
+        const matchesQuery = !query ||
+          s.folio.toLowerCase().includes(query) ||
+          s.customer.toLowerCase().includes(query) ||
+          (s.tracking_number && s.tracking_number.toLowerCase().includes(query));
+
+        const matchesChannel = channel === 'ALL' || s.channel === channel || s.branch === channel;
+
+        let matchesStatus = true;
+        if (status === 'PAGADO') matchesStatus = s.status === 'PAGADO' || (s.balance === 0);
+        else if (status === 'PARCIAL') matchesStatus = (s.balance > 0);
+        else if (status !== 'ALL') matchesStatus = s.delivery_status === status || s.status === status;
+
+        return matchesQuery && matchesChannel && matchesStatus;
+      });
+
+      renderSales(filtered);
+    }
+
+    function viewSaleDetail(folio) {
+      const sale = erpState.sales.find(s => s.folio === folio);
+      if (!sale) return;
+
+      activeSaleDetailFolio = sale.folio;
+
+      document.getElementById('saleDetFolio').textContent = `Folio: ${sale.folio}`;
+      document.getElementById('saleDetSub').textContent = `Canal: ${sale.channel} | Fecha: ${sale.date}`;
+      document.getElementById('saleDetStatusBadge').textContent = sale.status;
+      document.getElementById('saleDetCustName').textContent = sale.customer;
+      document.getElementById('saleDetCustPhone').textContent = sale.phone || 'No registrado';
+      document.getElementById('saleDetPayMethod').textContent = sale.payment_method || 'Mercado Pago (Validado)';
+
+      document.getElementById('saleDetAddress').textContent = sale.address || 'Mostrador / Entrega local';
+      document.getElementById('saleDetCarrier').textContent = sale.carrier || 'DHL Express';
+      document.getElementById('saleDetTracking').textContent = sale.tracking_number || 'Pendiente de generación';
+
+      const tbody = document.getElementById('saleDetItemsTbody');
+      const items = sale.items || [{ name: 'Bolso calidad élite', sku: 'VZ-BOL-001', price: sale.total, qty: 1, total: sale.total }];
+
+      tbody.innerHTML = items.map(it => `
+        <tr class="hover:bg-brandCard/60 transition">
+          <td class="py-2 text-white font-medium">
+            ${it.name}
+            ${it.sku ? `<span class="block text-[10px] text-brandGold font-mono">${it.sku}</span>` : ''}
+          </td>
+          <td class="py-2 text-center text-brandMuted font-mono">${it.qty}</td>
+          <td class="py-2 text-right text-brandBeige font-mono">$${it.price.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+          <td class="py-2 text-right font-bold text-white font-mono">$${it.total.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('saleDetSubtotal').textContent = `$${(sale.subtotal || sale.total).toFixed(2)}`;
+      document.getElementById('saleDetDiscount').textContent = `-$${(sale.discount || 0).toFixed(2)}`;
+      document.getElementById('saleDetShipping').textContent = `$${(sale.shipping || 0).toFixed(2)}`;
+      document.getElementById('saleDetTotal').textContent = `$${sale.total.toFixed(2)}`;
+      document.getElementById('saleDetPaid').textContent = `$${sale.paid.toFixed(2)}`;
+      document.getElementById('saleDetBalance').textContent = `$${(sale.balance || Math.max(0, sale.total - sale.paid)).toFixed(2)}`;
+
+      const selStatus = document.getElementById('saleDetStatusSelect');
+      if (selStatus) selStatus.value = sale.delivery_status || 'EN_PREPARACION';
+
+      openModal('saleDetailModal');
+    }
+
+    function updateSaleDeliveryStatus() {
+      if (!activeSaleDetailFolio) return;
+      const sale = erpState.sales.find(s => s.folio === activeSaleDetailFolio);
+      if (sale) {
+        const newStatus = document.getElementById('saleDetStatusSelect').value;
+        sale.delivery_status = newStatus;
+        if (supabaseClient) {
+          supabaseClient.from('orders').update({ status: newStatus }).eq('folio', sale.folio).then();
+          supabaseClient.from('sales_orders').update({ order_status: newStatus }).eq('folio', sale.folio).then();
+        }
+        renderSales();
+        alert(`Estatus logístico de ${sale.folio} actualizado a: ${newStatus}`);
+      }
+    }
+
+    function registerSalePaymentPrompt() {
+      if (!activeSaleDetailFolio) return;
+      const sale = erpState.sales.find(s => s.folio === activeSaleDetailFolio);
+      if (!sale) return;
+
+      const remaining = sale.balance || Math.max(0, sale.total - sale.paid);
+      if (remaining <= 0) {
+        alert('Esta orden ya se encuentra pagada en su totalidad.');
+        return;
+      }
+
+      const input = prompt(`Registrar cobro para la orden ${sale.folio}. Saldo pendiente: $${remaining.toFixed(2)}\n\nIngresa el monto a cobrar:`, remaining);
+      if (input !== null) {
+        const amount = parseFloat(input);
+        if (isNaN(amount) || amount <= 0) {
+          alert('Monto inválido.');
+          return;
+        }
+
+        sale.paid += amount;
+        sale.balance = Math.max(0, sale.total - sale.paid);
+        if (sale.balance === 0) sale.status = 'PAGADO';
+
+        // Asentar cobro en el libro financiero
+        erpState.payments.unshift({
+          folio: 'REC-2026-' + String(Math.floor(Math.random() * 900) + 100),
+          type: 'COBRO_CLIENTE',
+          entity: sale.customer,
+          method: 'TRANSFERENCIA_SPEI',
+          ref: 'ABONO-' + sale.folio,
+          amount: amount,
+          date: new Date().toISOString().split('T')[0]
+        });
+
+        viewSaleDetail(sale.folio);
+        renderSales();
+        renderPaymentLedger();
+        alert(`Cobro de $${amount.toFixed(2)} registrado con éxito. Nuevo saldo: $${sale.balance.toFixed(2)}`);
+      }
+    }
+
+    function cancelSaleOrder() {
+      if (!activeSaleDetailFolio) return;
+      if (!confirm(`¿Confirmas la cancelación y devolución de la venta ${activeSaleDetailFolio}?\n\nEl inventario de las piezas vendidas será restituido al Kardex automáticamente.`)) return;
+
+      const sale = erpState.sales.find(s => s.folio === activeSaleDetailFolio);
+      if (sale) {
+        sale.status = 'CANCELADO';
+        sale.delivery_status = 'CANCELADO';
+
+        // Reingreso de stock a almacén
+        if (sale.items && sale.items.length > 0) {
+          sale.items.forEach(it => {
+            const prod = erpState.products.find(p => p.id === it.id || p.sku === it.sku);
+            if (prod) {
+              prod.stock += it.qty;
+              erpState.kardex.unshift({
+                id: 'k' + Date.now(),
+                folio: 'KAR-2026-' + String(Math.floor(Math.random() * 9000) + 1000),
+                date: new Date().toISOString().split('T')[0],
+                product_id: prod.id,
+                sku: prod.sku,
+                product_name: prod.name,
+                branch: sale.branch || 'Independencia',
+                type: 'DEVOLUCION_CLIENTE',
+                qty_in: it.qty,
+                qty_out: 0,
+                balance_after: prod.stock,
+                unit_cost: prod.cost || prod.price * 0.45,
+                ref: sale.folio,
+                reason: 'Cancelación de venta / Reingreso de mercancía',
+                authorized_by: 'Administrador General'
+              });
+            }
+          });
+        }
+
+        closeModal('saleDetailModal');
+        renderSales();
+        renderInventory();
+        renderKardexTable();
+        alert(`Venta ${sale.folio} cancelada. Mercancía reincorporada al inventario con éxito.`);
+      }
+    }
+
+    function convertQuoteToSale(folio) {
+      const quote = erpState.sales.find(s => s.folio === folio);
+      if (!quote) return;
+
+      if (!confirm(`¿Deseas autorizar y convertir la cotización ${folio} a Venta Oficial?\n\nSe confirmará el pedido y se reservará o descontará el stock en el inventario.`)) return;
+
+      quote.type = 'VENTA';
+      quote.folio = folio.replace('COT-', 'VEN-');
+      quote.status = 'PAGADO';
+      quote.paid = quote.total;
+      quote.balance = 0;
+      quote.delivery_status = 'EN_PREPARACION';
+
+      // Descuento de stock en Kardex
+      if (quote.items && quote.items.length > 0) {
+        quote.items.forEach(it => {
+          const prod = erpState.products.find(p => p.id === it.id || p.sku === it.sku);
+          if (prod) {
+            prod.stock = Math.max(0, prod.stock - it.qty);
+            erpState.kardex.unshift({
+              id: 'k' + Date.now(),
+              folio: 'KAR-2026-' + String(Math.floor(Math.random() * 9000) + 1000),
+              date: new Date().toISOString().split('T')[0],
+              product_id: prod.id,
+              sku: prod.sku,
+              product_name: prod.name,
+              branch: quote.branch || 'Independencia',
+              type: 'SALIDA_VENTA',
+              qty_in: 0,
+              qty_out: it.qty,
+              balance_after: prod.stock,
+              unit_cost: prod.cost || prod.price * 0.45,
+              ref: quote.folio,
+              reason: 'Venta cerrada desde Cotización ' + folio,
+              authorized_by: 'Dirección Comercial'
+            });
+          }
+        });
+      }
+
+      switchSalesSubtab('orders');
+      renderSales();
+      renderInventory();
+      renderKardexTable();
+      alert(`¡Cotización ${folio} convertida a Venta Oficial con folio: ${quote.folio}!`);
+    }
+
+    function openNewQuoteModal() {
+      const typeSel = document.getElementById('modalSaleType');
+      if (typeSel) typeSel.value = 'COTIZACION';
+      openModal('quickSaleModal');
+    }
+
+    function downloadSalePDF() {
+      if (activeSaleDetailFolio) {
+        printOrderReceipt(activeSaleDetailFolio);
+      }
     }
 
     function renderPurchases() {
