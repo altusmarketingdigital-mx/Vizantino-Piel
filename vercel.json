@@ -1,0 +1,10 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/system", "destination": "/system/index.html" },
+    { "source": "/system/", "destination": "/system/index.html" },
+    { "source": "/system/:path*", "destination": "/system/index.html" },
+    { "source": "/admin", "destination": "/system/index.html" },
+    { "source": "/admin.html", "destination": "/system/index.html" }
+  ]
+}

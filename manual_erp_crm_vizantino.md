@@ -4,8 +4,8 @@
 ---
 
 ### 1. Acceso a la Plataforma
-- **URL Directa**: `https://www.vizantinopiel.com/admin.html` (o `admin.html` en el servidor local/Vercel).
-- **Desde la Tienda Pública**: En [index.html](file:///d:/Pagina%20Web%20Vizantino%20Piel/index.html), abre el modal de administración con tus credenciales y haz clic en el botón dorado **"Suite ERP & CRM"**.
+- **URL Directa Oficial**: `https://www.vizantinopiel.com/system` (o `vizantinopiel.com/system`).
+- **Desde la Tienda Pública**: En [index.html](file:///d:/Pagina%20Web%20Vizantino%20Piel/index.html), abre el modal de administración con tus credenciales y haz clic en el botón dorado **"Suite ERP & CRM"** (te redirige de inmediato a `/system`).
 - **Credenciales Maestras Iniciales**:
   - **Usuario**: `direccion@vizantinopiel.com`
   - **Contraseña**: `Vizantino2026Master!`
