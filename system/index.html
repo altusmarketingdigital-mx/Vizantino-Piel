@@ -1432,33 +1432,187 @@
       <!-- ======================================================== -->
       <!-- TAB 10: USUARIOS, ROLES & SEGURIDAD (FASE 10)            -->
       <!-- ======================================================== -->
+            <!-- ======================================================== -->
+      <!-- TAB 10: USUARIOS, ROLES & SEGURIDAD RLS (FASE 10)        -->
+      <!-- ======================================================== -->
       <section id="tab-users" class="hidden space-y-6">
-        <div class="flex justify-between items-center">
+        <!-- Sub-navegación / Encabezado -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h3 class="font-serif font-bold text-xl text-white">Usuarios y Permisos de Sistema</h3>
-            <p class="text-xs text-brandMuted">Roles con acceso restringido del lado del servidor y control de sesiones.</p>
+            <h3 class="font-serif font-bold text-xl text-white flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-brandGold"></i>
+              <span>Administración de Usuarios, Roles y Seguridad</span>
+            </h3>
+            <p class="text-xs text-brandMuted">Autenticación robusta, sesiones seguras, matriz de permisos por módulo y registro auditable de acciones.</p>
           </div>
-          <button onclick="openModal('userModal')" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
-            <i class="fa-solid fa-user-shield"></i>
-            <span>Alta de Usuario ERP</span>
-          </button>
+          <div class="flex items-center gap-2">
+            <button onclick="openModal('customRoleModal')" class="bg-brandSurface hover:bg-brandBorder border border-brandGold/40 text-brandGold font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition">
+              <i class="fa-solid fa-key"></i>
+              <span>Matriz de Roles</span>
+            </button>
+            <button onclick="openNewUserModal()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
+              <i class="fa-solid fa-user-plus"></i>
+              <span>Alta de Usuario ERP</span>
+            </button>
+          </div>
         </div>
 
+        <!-- Banner de Seguridad & RLS Activo -->
+        <div class="bg-brandCard border border-brandGold/30 p-4 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-lg">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white">Row Level Security (RLS) & Principio de Mínimo Privilegio</h4>
+              <p class="text-xs text-brandMuted">Las operaciones sensibles (eliminación, cambios de precio, reversos financieros) están protegidas en el backend de Supabase.</p>
+            </div>
+          </div>
+          <span class="badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 text-xs">
+            <i class="fa-solid fa-circle-check mr-1.5"></i>Protección Activa
+          </span>
+        </div>
+
+        <!-- Tabla de Cuentas de Usuarios -->
         <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
+          <div class="p-4 border-b border-brandBorder flex justify-between items-center bg-brandSurface/50">
+            <h4 class="font-serif font-bold text-sm text-white">Cuentas con Acceso al Sistema</h4>
+            <span class="text-xs text-brandMuted" id="usersCountBadge">3 usuarios registrados</span>
+          </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
               <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
                 <tr>
-                  <th class="p-3.5">Nombre / Usuario</th>
+                  <th class="p-3.5">Nombre / Colaborador</th>
                   <th class="p-3.5">Correo Electrónico</th>
-                  <th class="p-3.5">Rol Asignado</th>
-                  <th class="p-3.5">Sucursal Asignada</th>
-                  <th class="p-3.5">Estatus</th>
-                  <th class="p-3.5 text-right">Permisos</th>
+                  <th class="p-3.5">Rol de Seguridad</th>
+                  <th class="p-3.5">Sucursal / Almacén</th>
+                  <th class="p-3.5 text-center">Estatus</th>
+                  <th class="p-3.5 text-center">Último Acceso</th>
+                  <th class="p-3.5 text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-brandBorder/60" id="erpUsersTbody">
-                <!-- Se poblará dinámicamente con JS -->
+                <!-- Se puebla dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Matriz de Roles y Permisos por Módulo -->
+        <div class="bg-brandCard border border-brandBorder p-5 rounded-xl space-y-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <h4 class="font-serif font-bold text-base text-white flex items-center gap-2">
+                <i class="fa-solid fa-table-cells text-brandGold"></i>
+                <span>Matriz de Autorización por Módulo</span>
+              </h4>
+              <p class="text-xs text-brandMuted">Permisos granulares aplicados por rol: Ver (R), Crear (C), Editar (U), Eliminar (D), Autorizar (A), Exportar (X).</p>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                <tr>
+                  <th class="p-3">Módulo Funcional</th>
+                  <th class="p-3 text-center">Administrador General</th>
+                  <th class="p-3 text-center">Ventas & POS</th>
+                  <th class="p-3 text-center">Inventario & Almacén</th>
+                  <th class="p-3 text-center">Compras & Suministro</th>
+                  <th class="p-3 text-center">Contabilidad & Finanzas</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-brandBorder/60">
+                <tr class="hover:bg-brandSurface/40">
+                  <td class="p-3 font-semibold text-white">CRM Clientes</td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Total (R,C,U,D,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Operativo (R,C,U)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-brandMuted/20 text-brandMuted">Solo Lectura (R)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-rose-500/20 text-rose-400">Sin Acceso</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-blue-500/20 text-blue-300">Cartera (R,X)</span></td>
+                </tr>
+                <tr class="hover:bg-brandSurface/40">
+                  <td class="p-3 font-semibold text-white">Inventario & Kardex</td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Total (R,C,U,D,A,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-brandMuted/20 text-brandMuted">Consulta Stock (R)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Operativo (R,C,U,A,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-blue-500/20 text-blue-300">Recepción (R,C)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-brandMuted/20 text-brandMuted">Valuación (R,X)</span></td>
+                </tr>
+                <tr class="hover:bg-brandSurface/40">
+                  <td class="p-3 font-semibold text-white">Ventas & Cotizaciones</td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Total (R,C,U,D,A,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Operativo (R,C,U,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-rose-500/20 text-rose-400">Sin Acceso</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-rose-500/20 text-rose-400">Sin Acceso</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-blue-500/20 text-blue-300">Auditoría (R,X)</span></td>
+                </tr>
+                <tr class="hover:bg-brandSurface/40">
+                  <td class="p-3 font-semibold text-white">Compras & Proveedores</td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Total (R,C,U,D,A,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-rose-500/20 text-rose-400">Sin Acceso</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-blue-500/20 text-blue-300">Recepción OC (R)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Operativo (R,C,U,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-blue-500/20 text-blue-300">Pasivos (R,X)</span></td>
+                </tr>
+                <tr class="hover:bg-brandSurface/40">
+                  <td class="p-3 font-semibold text-white">Control de Pagos & Finanzas</td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Total (R,C,U,D,A,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-amber-500/20 text-amber-300">Cobro Mostrador (C)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-rose-500/20 text-rose-400">Sin Acceso</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-rose-500/20 text-rose-400">Sin Acceso</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Total Finanzas (R,C,U,A,X)</span></td>
+                </tr>
+                <tr class="hover:bg-brandSurface/40">
+                  <td class="p-3 font-semibold text-white">Facturación Administrativa</td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Total (R,C,U,D,A,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-blue-500/20 text-blue-300">Emisión (R,C)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-rose-500/20 text-rose-400">Sin Acceso</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-rose-500/20 text-rose-400">Sin Acceso</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Total (R,C,U,D,X)</span></td>
+                </tr>
+                <tr class="hover:bg-brandSurface/40">
+                  <td class="p-3 font-semibold text-white">Reportes & Dashboard</td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Total BI (R,X)</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-brandMuted/20 text-brandMuted">Metas Ventas</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-brandMuted/20 text-brandMuted">Rotación Stock</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-brandMuted/20 text-brandMuted">Historial Costos</span></td>
+                  <td class="p-3 text-center"><span class="badge bg-emerald-500/20 text-emerald-300">Reportes Financieros (R,X)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Registro de Auditoría en Tiempo Real (Log de Actividad Crítica) -->
+        <div class="bg-brandCard border border-brandBorder p-5 rounded-xl space-y-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <h4 class="font-serif font-bold text-base text-white flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-brandGold"></i>
+                <span>Bitácora de Auditoría y Trazabilidad</span>
+              </h4>
+              <p class="text-xs text-brandMuted">Historial cronológico inmutable de movimientos críticos realizados por los operadores del sistema.</p>
+            </div>
+            <button onclick="exportAuditLogCSV()" class="text-brandGold hover:underline text-xs font-semibold flex items-center gap-1">
+              <i class="fa-solid fa-download"></i> Descargar Bitácora (.CSV)
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                <tr>
+                  <th class="p-3">Fecha / Hora</th>
+                  <th class="p-3">Operador / Usuario</th>
+                  <th class="p-3">Acción Crítica</th>
+                  <th class="p-3">Módulo</th>
+                  <th class="p-3">Folio / Documento</th>
+                  <th class="p-3">Detalles</th>
+                  <th class="p-3 text-center">Nivel</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-brandBorder/60" id="erpAuditLogsTbody">
+                <!-- Se puebla dinámicamente -->
               </tbody>
             </table>
           </div>
@@ -2891,11 +3045,17 @@
           notes: "Venta liquidada con tarjeta de crédito vía Mercado Pago."
         }
       ],
+      auditLogs: [
+        { id: "log-1", date: "2026-10-30 19:45", user: "direccion@vizantinopiel.com", action: "AUTORIZACION_VENTA", module: "Ventas", folio: "VEN-2026-0142", details: "Venta liquidada y confirmada en mostrador", level: "INFO" },
+        { id: "log-2", date: "2026-10-30 18:30", user: "almacen@vizantinopiel.com", action: "RECEPCION_OC", module: "Compras", folio: "OC-2026-0031", details: "Recepción de 15 piezas de Piel Vacuno de Curtidos León", level: "SUCCESS" },
+        { id: "log-3", date: "2026-10-30 17:10", user: "ventas@vizantinopiel.com", action: "EMISION_PROFORMA", module: "Facturación", folio: "FAC-ADM-2026-0001", details: "Emisión de comprobante administrativo proforma sin timbrado", level: "INFO" },
+        { id: "log-4", date: "2026-10-30 15:20", user: "almacen@vizantinopiel.com", action: "TRASPASO_STOCK", module: "Inventario", folio: "KDX-004", details: "Traspaso de 2 Mochilas Vacuno de Tonalá a Independencia", level: "WARN" }
+      ],
       users: [
-        { name: "Dirección General Vizantino", email: "direccion@vizantinopiel.com", role: "Administrador General", branch: "Todas", status: "Activo" },
-        { name: "Ventas Mostrador", email: "ventas@vizantinopiel.com", role: "Ventas", branch: "Independencia", status: "Activo" },
-        { name: "Almacén Central", email: "almacen@vizantinopiel.com", role: "Inventario", branch: "Todas", status: "Activo" }
-      ]
+        { id: "u1", name: "Dirección General Vizantino", email: "direccion@vizantinopiel.com", role: "Administrador General", branch: "Todas", status: "Activo", lastLogin: "Hoy, 08:30 AM" },
+        { id: "u2", name: "Ventas Mostrador", email: "ventas@vizantinopiel.com", role: "Ventas", branch: "Independencia", status: "Activo", lastLogin: "Hoy, 09:12 AM" },
+        { id: "u3", name: "Almacén Central", email: "almacen@vizantinopiel.com", role: "Inventario", branch: "Todas", status: "Activo", lastLogin: "Ayer, 06:45 PM" }
+      ],
     };
 
     // Modal Cart State
@@ -5368,19 +5528,194 @@
       }
     }
 
+    // ==========================================
+    // FASE 10: GESTIÓN DE USUARIOS, ROLES & SEGURIDAD
+    // ==========================================
     function renderUsers() {
       const tbody = document.getElementById('erpUsersTbody');
+      const badge = document.getElementById('usersCountBadge');
       if (!tbody) return;
+
+      if (badge) badge.textContent = `${erpState.users.length} usuarios registrados`;
+
       tbody.innerHTML = erpState.users.map(u => `
         <tr class="hover:bg-brandSurface transition">
-          <td class="p-3.5 font-bold text-white">${u.name}</td>
-          <td class="p-3.5 text-brandBeige">${u.email}</td>
-          <td class="p-3.5 font-semibold text-brandGold">${u.role}</td>
+          <td class="p-3.5">
+            <div class="flex items-center space-x-2">
+              <div class="w-7 h-7 rounded-full bg-brandGold/20 border border-brandGold/40 text-brandGold flex items-center justify-center font-bold text-xs">
+                ${u.name.charAt(0)}
+              </div>
+              <div>
+                <p class="font-bold text-white">${u.name}</p>
+                <span class="text-[10px] text-brandMuted">ID: ${u.id || 'usr'}</span>
+              </div>
+            </div>
+          </td>
+          <td class="p-3.5 text-brandBeige font-mono text-[11px]">${u.email}</td>
+          <td class="p-3.5 font-semibold text-brandGold">
+            <span class="badge bg-brandGold/10 text-brandGold border border-brandGold/30">${u.role}</span>
+          </td>
           <td class="p-3.5 text-brandMuted">${u.branch}</td>
-          <td class="p-3.5"><span class="badge bg-emerald-500/20 text-emerald-300">${u.status}</span></td>
-          <td class="p-3.5 text-right text-brandGold font-mono text-xs">RLS Verificado</td>
+          <td class="p-3.5 text-center">
+            <span class="badge ${u.status === 'Activo' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}">${u.status}</span>
+          </td>
+          <td class="p-3.5 text-center text-brandMuted text-[11px]">${u.lastLogin || 'Reciente'}</td>
+          <td class="p-3.5 text-right space-x-2">
+            <button onclick="editUserERP('${u.email}')" class="text-brandGold hover:underline text-xs" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="toggleUserStatus('${u.email}')" class="text-xs ${u.status === 'Activo' ? 'text-amber-400 hover:text-amber-300' : 'text-emerald-400 hover:text-emerald-300'}" title="${u.status === 'Activo' ? 'Desactivar' : 'Activar'}">
+              <i class="fa-solid ${u.status === 'Activo' ? 'fa-ban' : 'fa-check'}"></i>
+            </button>
+          </td>
         </tr>
       `).join('');
+
+      renderAuditLogs();
+    }
+
+    function renderAuditLogs() {
+      const tbody = document.getElementById('erpAuditLogsTbody');
+      if (!tbody) return;
+
+      const logs = erpState.auditLogs || [];
+      if (logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-brandMuted">Sin registros en la bitácora de auditoría.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = logs.map(l => {
+        let levelBadge = 'bg-brandSurface text-brandMuted';
+        if (l.level === 'SUCCESS') levelBadge = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        if (l.level === 'WARN') levelBadge = 'bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        if (l.level === 'INFO') levelBadge = 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
+        if (l.level === 'DANGER') levelBadge = 'bg-rose-500/20 text-rose-300 border border-rose-500/30';
+
+        return `
+          <tr class="hover:bg-brandSurface/40 transition">
+            <td class="p-3 font-mono text-[10px] text-brandMuted">${l.date}</td>
+            <td class="p-3 font-semibold text-white text-[11px]">${l.user}</td>
+            <td class="p-3 font-mono font-bold text-brandGold text-[11px]">${l.action}</td>
+            <td class="p-3 text-brandBeige">${l.module}</td>
+            <td class="p-3 font-mono text-brandGold">${l.folio || 'N/A'}</td>
+            <td class="p-3 text-brandMuted text-[11px] max-w-xs truncate" title="${l.details}">${l.details}</td>
+            <td class="p-3 text-center"><span class="badge ${levelBadge}">${l.level}</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function recordAuditLog(action, moduleName, folio, details, level = 'INFO') {
+      const newLog = {
+        id: 'log-' + Date.now(),
+        date: new Date().toLocaleString('es-MX'),
+        user: 'direccion@vizantinopiel.com', // Operador en sesión activa
+        action: action,
+        module: moduleName,
+        folio: folio || 'N/A',
+        details: details,
+        level: level
+      };
+      if (!erpState.auditLogs) erpState.auditLogs = [];
+      erpState.auditLogs.unshift(newLog);
+      renderAuditLogs();
+    }
+
+    function openNewUserModal() {
+      document.getElementById('userModalTitle').textContent = 'Alta de Usuario del Sistema';
+      document.getElementById('modalUserId').value = '';
+      document.getElementById('modalUserName').value = '';
+      document.getElementById('modalUserEmail').value = '';
+      document.getElementById('modalUserEmail').disabled = false;
+      document.getElementById('modalUserPassword').value = '';
+      document.getElementById('modalUserRole').value = 'Ventas';
+      document.getElementById('modalUserBranch').value = 'Independencia';
+      document.getElementById('modalUserStatus').value = 'Activo';
+      openModal('userModal');
+    }
+
+    function editUserERP(email) {
+      const user = erpState.users.find(u => u.email === email);
+      if (!user) return;
+
+      document.getElementById('userModalTitle').textContent = 'Edición de Usuario y Permisos';
+      document.getElementById('modalUserId').value = user.id || '';
+      document.getElementById('modalUserName').value = user.name;
+      document.getElementById('modalUserEmail').value = user.email;
+      document.getElementById('modalUserEmail').disabled = true; // Email es identificador único
+      document.getElementById('modalUserPassword').value = '';
+      document.getElementById('modalUserRole').value = user.role;
+      document.getElementById('modalUserBranch').value = user.branch;
+      document.getElementById('modalUserStatus').value = user.status;
+
+      openModal('userModal');
+    }
+
+    function saveUserERP() {
+      const name = document.getElementById('modalUserName').value.trim();
+      const email = document.getElementById('modalUserEmail').value.trim();
+      const role = document.getElementById('modalUserRole').value;
+      const branch = document.getElementById('modalUserBranch').value;
+      const status = document.getElementById('modalUserStatus').value;
+      const pass = document.getElementById('modalUserPassword').value;
+
+      if (!name || !email) {
+        alert('Por favor completa el nombre y el correo electrónico.');
+        return;
+      }
+
+      const existingIndex = erpState.users.findIndex(u => u.email === email);
+      if (existingIndex !== -1) {
+        // Actualizar usuario existente
+        erpState.users[existingIndex].name = name;
+        erpState.users[existingIndex].role = role;
+        erpState.users[existingIndex].branch = branch;
+        erpState.users[existingIndex].status = status;
+        recordAuditLog('EDICION_USUARIO', 'Seguridad', email, `Actualización de rol a ${role} y sucursal a ${branch}`, 'WARN');
+        alert(`Usuario ${name} actualizado correctamente.`);
+      } else {
+        // Alta de nuevo usuario
+        const newUser = {
+          id: 'u' + (erpState.users.length + 1),
+          name: name,
+          email: email,
+          role: role,
+          branch: branch,
+          status: status,
+          lastLogin: 'Pendiente de primer ingreso'
+        };
+        erpState.users.push(newUser);
+        recordAuditLog('ALTA_USUARIO', 'Seguridad', email, `Alta de cuenta con rol ${role} asignada a ${branch}`, 'SUCCESS');
+        alert(`Nuevo usuario ${name} registrado con éxito.`);
+      }
+
+      closeModal('userModal');
+      renderUsers();
+    }
+
+    function toggleUserStatus(email) {
+      const user = erpState.users.find(u => u.email === email);
+      if (!user) return;
+
+      if (user.role === 'Administrador General' && user.status === 'Activo') {
+        alert('Por seguridad no puedes desactivar la cuenta del Administrador General.');
+        return;
+      }
+
+      user.status = user.status === 'Activo' ? 'Inactivo' : 'Activo';
+      recordAuditLog('CAMBIO_ESTATUS_USUARIO', 'Seguridad', email, `Cuenta modificada a estatus: ${user.status}`, 'WARN');
+      renderUsers();
+    }
+
+    function exportAuditLogCSV() {
+      let csv = "﻿";
+      csv += "BITÁCORA DE AUDITORÍA Y TRAZABILIDAD - VIZANTINO PIEL ERP\n";
+      csv += `Fecha de Extracción,"${new Date().toLocaleString('es-MX')}"\n\n`;
+      csv += "ID,Fecha_Hora,Operador,Accion_Critica,Modulo,Folio_Documento,Detalles,Nivel\n";
+
+      (erpState.auditLogs || []).forEach(l => {
+        csv += `"${l.id}","${l.date}","${l.user}","${l.action}","${l.module}","${l.folio || 'N/A'}","${(l.details || '').replace(/"/g, '""')}","${l.level}"\n`;
+      });
+
+      downloadCSV(csv, "Bitacora_Auditoria_Vizantino_Piel.csv");
     }
 
     // ==========================================
@@ -6266,5 +6601,120 @@ function exportFinancialSummary() {
       }
     });
   </script>
+
+  <!-- MODAL: ALTA Y EDICIÓN DE USUARIO ERP (FASE 10) -->
+  <div id="userModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <div>
+          <h3 class="font-serif font-bold text-lg text-white" id="userModalTitle">Alta de Usuario del Sistema</h3>
+          <p class="text-xs text-brandMuted">Asignación de credenciales, rol y sucursal autorizada.</p>
+        </div>
+        <button onclick="closeModal('userModal')" class="text-brandMuted hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="modalUserId">
+        <div>
+          <label class="text-brandBeige uppercase tracking-wider text-[10px] block mb-1">Nombre Completo *</label>
+          <input type="text" id="modalUserName" placeholder="Ej. Roberto Salcedo Ruiz" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg px-3.5 py-2.5 outline-none focus:border-brandGold">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-brandBeige uppercase tracking-wider text-[10px] block mb-1">Correo Electrónico *</label>
+            <input type="email" id="modalUserEmail" placeholder="usuario@vizantinopiel.com" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg px-3.5 py-2.5 outline-none focus:border-brandGold">
+          </div>
+          <div>
+            <label class="text-brandBeige uppercase tracking-wider text-[10px] block mb-1">Contraseña de Acceso</label>
+            <input type="password" id="modalUserPassword" placeholder="••••••••" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg px-3.5 py-2.5 outline-none focus:border-brandGold">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-brandBeige uppercase tracking-wider text-[10px] block mb-1">Rol Asignado *</label>
+            <select id="modalUserRole" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+              <option value="Administrador General">Administrador General</option>
+              <option value="Ventas">Ventas & Mostrador</option>
+              <option value="Inventario">Inventario & Almacén</option>
+              <option value="Compras">Compras & Proveedores</option>
+              <option value="Contabilidad">Contabilidad & Finanzas</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-brandBeige uppercase tracking-wider text-[10px] block mb-1">Sucursal Asignada</label>
+            <select id="modalUserBranch" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+              <option value="Todas">Todas las Sucursales</option>
+              <option value="Independencia">Sucursal Independencia</option>
+              <option value="Alfareros">Sucursal Alfareros</option>
+              <option value="Tonalá">Almacén Tonalá</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="text-brandBeige uppercase tracking-wider text-[10px] block mb-1">Estado de la Cuenta</label>
+          <select id="modalUserStatus" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+            <option value="Activo">Activo (Acceso Permitido)</option>
+            <option value="Inactivo">Inactivo / Desactivado</option>
+          </select>
+        </div>
+      </div>
+      <div class="p-5 border-t border-brandBorder bg-brandCard/40 flex justify-end space-x-3">
+        <button onclick="closeModal('userModal')" class="px-4 py-2 text-xs font-semibold text-brandMuted hover:text-white transition">Cancelar</button>
+        <button onclick="saveUserERP()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-5 py-2.5 rounded-lg transition shadow">Guardar Usuario</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALLES DE ROLES & PERMISOS (FASE 10) -->
+  <div id="customRoleModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <div>
+          <h3 class="font-serif font-bold text-lg text-white">Configuración de Políticas de Roles</h3>
+          <p class="text-xs text-brandMuted">Descripción y reglas de acceso por perfil de usuario.</p>
+        </div>
+        <button onclick="closeModal('customRoleModal')" class="text-brandMuted hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="p-6 space-y-4 text-xs max-h-[70vh] overflow-y-auto">
+        <div class="p-3 rounded-lg bg-brandDark border border-brandBorder">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-brandGold text-sm">Administrador General</span>
+            <span class="badge bg-emerald-500/20 text-emerald-300">Nivel Máximo</span>
+          </div>
+          <p class="text-brandMuted">Acceso total a todos los módulos: CRM, Inventario, Ventas, Compras, Finanzas, Facturación, Reportes y Administración de Usuarios.</p>
+        </div>
+        <div class="p-3 rounded-lg bg-brandDark border border-brandBorder">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-white text-sm">Ventas & POS</span>
+            <span class="badge bg-blue-500/20 text-blue-300">Front Desk</span>
+          </div>
+          <p class="text-brandMuted">Registro de clientes, emisión de ventas de mostrador, cotizaciones, cobro de anticipos y consulta de stock.</p>
+        </div>
+        <div class="p-3 rounded-lg bg-brandDark border border-brandBorder">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-white text-sm">Inventario & Almacén</span>
+            <span class="badge bg-amber-500/20 text-amber-300">Logística</span>
+          </div>
+          <p class="text-brandMuted">Control de catálogo, entradas por compras, salidas por ventas, traspasos entre sucursales y registro de mermas.</p>
+        </div>
+        <div class="p-3 rounded-lg bg-brandDark border border-brandBorder">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-white text-sm">Compras & Proveedores</span>
+            <span class="badge bg-sky-500/20 text-sky-300">Cadena de Suministro</span>
+          </div>
+          <p class="text-brandMuted">Alta y gestión de proveedores de piel/herrajes, generación de órdenes de compra y recepción de insumos.</p>
+        </div>
+        <div class="p-3 rounded-lg bg-brandDark border border-brandBorder">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-white text-sm">Contabilidad & Finanzas</span>
+            <span class="badge bg-purple-500/20 text-purple-300">Finanzas</span>
+          </div>
+          <p class="text-brandMuted">Gestión de cuentas por cobrar (CxC), cuentas por pagar (CxP), facturas administrativas, conciliaciones bancarias y reportes ejecutivos.</p>
+        </div>
+      </div>
+      <div class="p-5 border-t border-brandBorder bg-brandCard/40 flex justify-end">
+        <button onclick="closeModal('customRoleModal')" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-5 py-2.5 rounded-lg transition">Entendido</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
