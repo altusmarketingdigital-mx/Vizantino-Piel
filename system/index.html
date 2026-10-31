@@ -444,51 +444,185 @@
       <!-- TAB 4: INVENTARIO & KARDEX (FASE 4)                      -->
       <!-- ======================================================== -->
       <section id="tab-inventory" class="hidden space-y-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div class="flex items-center space-x-3 w-full sm:w-auto">
-            <div class="relative flex-1 sm:w-72">
-              <input type="text" id="searchInventoryInput" onkeyup="filterInventory()" placeholder="Buscar producto por SKU o nombre..." class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-2.5 outline-none focus:border-brandGold">
-              <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-brandMuted text-xs"></i>
-            </div>
-            <select id="filterCategorySelect" onchange="filterInventory()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
-              <option value="ALL">Todas las Categorías</option>
-              <option value="Bolsos">Bolsos</option>
-              <option value="Carteras">Carteras</option>
-              <option value="Crossbody">Crossbody</option>
-              <option value="Mochilas">Mochilas</option>
-            </select>
+        <!-- Tarjetas de Métricas de Inventario y Valoración -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Valor a Precio Venta</p>
+            <h4 class="text-xl font-bold font-serif text-white mt-1" id="invTotalRetailVal">$312,400.00</h4>
+            <p class="text-[11px] text-brandGold mt-1">Precio de catálogo público</p>
           </div>
-          <div class="flex items-center space-x-2">
-            <button onclick="openModal('kardexMovementModal')" class="bg-brandCard hover:bg-brandBorder border border-brandBorder text-brandBeige font-semibold text-xs px-3.5 py-2.5 rounded-lg flex items-center space-x-2 transition">
-              <i class="fa-solid fa-arrow-right-arrow-left text-brandGold"></i>
-              <span>Movimiento Kardex</span>
-            </button>
-            <button onclick="exportInventoryReport()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-3.5 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
-              <i class="fa-solid fa-file-csv"></i>
-              <span>Exportar Kardex</span>
-            </button>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Valor al Costo de Adquisición</p>
+            <h4 class="text-xl font-bold font-serif text-brandBeige mt-1" id="invTotalCostVal">$134,250.00</h4>
+            <p class="text-[11px] text-brandMuted mt-1">Costo directo de curtido y confección</p>
+          </div>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Margen Bruto Proyectado</p>
+            <h4 class="text-xl font-bold font-serif text-emerald-400 mt-1" id="invGrossProfitVal">$178,150.00</h4>
+            <p class="text-[11px] text-emerald-400 font-medium mt-1"><i class="fa-solid fa-arrow-trend-up mr-1"></i> 57.0% margen sobre venta</p>
+          </div>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Alertas de Stock Crítico</p>
+            <h4 class="text-xl font-bold font-serif text-rose-400 mt-1" id="invCriticalCount">3 Productos</h4>
+            <p class="text-[11px] text-rose-400 font-medium mt-1 cursor-pointer hover:underline" onclick="switchInventorySubtab('alerts')"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Ver sugerencias de compra</p>
           </div>
         </div>
 
-        <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
-                <tr>
-                  <th class="p-3.5">SKU / Producto</th>
-                  <th class="p-3.5">Categoría</th>
-                  <th class="p-3.5">Precio Venta</th>
-                  <th class="p-3.5 text-center">Independencia</th>
-                  <th class="p-3.5 text-center">Alfareros</th>
-                  <th class="p-3.5 text-center">Tonalá</th>
-                  <th class="p-3.5 text-center font-bold text-white">Stock Total</th>
-                  <th class="p-3.5 text-right">Acciones</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-brandBorder/60" id="inventoryProductsTbody">
-                <!-- Se poblará dinámicamente con JS -->
-              </tbody>
-            </table>
+        <!-- Sub-navegación de Inventario (Existencias, Libro Mayor Kardex, Alertas de Rotación) -->
+        <div class="flex border-b border-brandBorder space-x-4">
+          <button onclick="switchInventorySubtab('stocks')" id="subtabBtnStocks" class="pb-3 text-xs font-bold text-brandGold border-b-2 border-brandGold transition flex items-center space-x-2">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            <span>Existencias Multi-sucursal</span>
+          </button>
+          <button onclick="switchInventorySubtab('kardex')" id="subtabBtnKardex" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2">
+            <i class="fa-solid fa-book-bookmark"></i>
+            <span>Libro Mayor Kardex Transaccional</span>
+          </button>
+          <button onclick="switchInventorySubtab('alerts')" id="subtabBtnAlerts" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2">
+            <i class="fa-solid fa-bell"></i>
+            <span>Alertas de Stock & Rotación</span>
+          </button>
+        </div>
+
+        <!-- SUBTAB 1: EXISTENCIAS MULTI-SUCURSAL -->
+        <div id="invSubtabStocks" class="space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="flex items-center space-x-3 w-full sm:w-auto">
+              <div class="relative flex-1 sm:w-72">
+                <input type="text" id="searchInventoryInput" onkeyup="filterInventory()" placeholder="Buscar producto por SKU, nombre o código..." class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-2.5 outline-none focus:border-brandGold">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-brandMuted text-xs"></i>
+              </div>
+              <select id="filterCategorySelect" onchange="filterInventory()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+                <option value="ALL">Todas las Categorías</option>
+                <option value="Bolsos">Bolsos</option>
+                <option value="Carteras">Carteras</option>
+                <option value="Crossbody">Crossbody</option>
+                <option value="Mochilas">Mochilas</option>
+              </select>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="openKardexModal()" class="bg-brandCard hover:bg-brandBorder border border-brandGold/40 text-brandGold font-semibold text-xs px-3.5 py-2.5 rounded-lg flex items-center space-x-2 transition">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                <span>Registrar Movimiento</span>
+              </button>
+              <button onclick="exportInventoryReport()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-3.5 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
+                <i class="fa-solid fa-file-csv"></i>
+                <span>Exportar Existencias</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                  <tr>
+                    <th class="p-3.5">SKU / Producto</th>
+                    <th class="p-3.5">Categoría</th>
+                    <th class="p-3.5 text-right">Costo Unit.</th>
+                    <th class="p-3.5 text-right">Precio Venta</th>
+                    <th class="p-3.5 text-center">Independencia</th>
+                    <th class="p-3.5 text-center">Alfareros</th>
+                    <th class="p-3.5 text-center">Tonalá</th>
+                    <th class="p-3.5 text-center text-amber-400" title="Apartado para compras en línea no despachadas">Reservado</th>
+                    <th class="p-3.5 text-center font-bold text-white">Disponible Total</th>
+                    <th class="p-3.5 text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-brandBorder/60" id="inventoryProductsTbody">
+                  <!-- Se poblará dinámicamente con JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBTAB 2: LIBRO MAYOR KARDEX TRANSACCIONAL -->
+        <div id="invSubtabKardex" class="hidden space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="flex items-center space-x-3 w-full sm:w-auto">
+              <select id="filterKardexType" onchange="filterKardexTable()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+                <option value="ALL">Todos los Movimientos</option>
+                <option value="ENTRADA_COMPRA">Entradas por Compra (+)</option>
+                <option value="SALIDA_VENTA">Salidas por Venta (-)</option>
+                <option value="TRASPASO">Traspasos entre Sucursales</option>
+                <option value="AJUSTE_POSITIVO">Ajustes Positivos (+)</option>
+                <option value="AJUSTE_MERMA">Ajustes por Merma (-)</option>
+                <option value="DEVOLUCION_CLIENTE">Devoluciones de Clientes (+)</option>
+              </select>
+              <select id="filterKardexBranch" onchange="filterKardexTable()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+                <option value="ALL">Todas las Sucursales</option>
+                <option value="Independencia">Independencia</option>
+                <option value="Alfareros">Alfareros</option>
+                <option value="Tonalá">Tonalá</option>
+              </select>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="openKardexModal()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-3.5 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
+                <i class="fa-solid fa-plus"></i>
+                <span>Nuevo Asiento Kardex</span>
+              </button>
+              <button onclick="exportKardexLedgerCSV()" class="bg-brandCard hover:bg-brandBorder border border-brandBorder text-brandBeige font-semibold text-xs px-3.5 py-2.5 rounded-lg flex items-center space-x-2 transition">
+                <i class="fa-solid fa-file-csv"></i>
+                <span>Exportar Kardex (.CSV)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                  <tr>
+                    <th class="p-3.5">Folio Movimiento</th>
+                    <th class="p-3.5">Fecha</th>
+                    <th class="p-3.5">Producto & SKU</th>
+                    <th class="p-3.5">Sucursal</th>
+                    <th class="p-3.5">Tipo Movimiento</th>
+                    <th class="p-3.5 text-center text-emerald-400">Entrada</th>
+                    <th class="p-3.5 text-center text-rose-400">Salida</th>
+                    <th class="p-3.5 text-center font-bold text-white">Saldo Después</th>
+                    <th class="p-3.5">Motivo / Folio Ref.</th>
+                    <th class="p-3.5 text-right">Autorizó</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-brandBorder/60" id="kardexLedgerTbody">
+                  <!-- Se poblará dinámicamente con JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBTAB 3: ALERTAS DE STOCK CRÍTICO & ROTACIÓN -->
+        <div id="invSubtabAlerts" class="hidden space-y-4">
+          <div class="bg-amber-500/10 border border-amber-500/30 p-4 rounded-xl flex items-center space-x-3 text-xs text-amber-200">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-lg"></i>
+            <div>
+              <p class="font-bold text-amber-300">Monitoreo Predictivo de Quiebre de Inventario</p>
+              <p class="text-amber-200/80">Los siguientes artículos se encuentran por debajo del stock mínimo de seguridad (4 unidades). Se recomienda emitir una Orden de Compra de inmediato a los proveedores respectivos.</p>
+            </div>
+          </div>
+
+          <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                  <tr>
+                    <th class="p-3.5">SKU / Producto</th>
+                    <th class="p-3.5">Stock Mínimo</th>
+                    <th class="p-3.5">Stock Actual Total</th>
+                    <th class="p-3.5">Déficit</th>
+                    <th class="p-3.5">Proveedor Sugerido</th>
+                    <th class="p-3.5">Plazo Entrega</th>
+                    <th class="p-3.5 text-right">Acción de Reorden</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-brandBorder/60" id="invCriticalAlertsTbody">
+                  <!-- Se poblará dinámicamente con JS -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -1188,6 +1322,97 @@
     </div>
   </div>
 
+  
+  <!-- MODAL: FICHA 360° DE PRODUCTO Y KARDEX INDIVIDUAL (FASE 4) -->
+  <div id="productKardexModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-full bg-brandGold/10 border border-brandGold/30 flex items-center justify-center text-brandGold text-lg">
+            <i class="fa-solid fa-boxes-stacked"></i>
+          </div>
+          <div>
+            <h3 class="font-serif font-bold text-lg text-white" id="p360Name">Nombre del Producto</h3>
+            <p class="text-xs text-brandGold font-mono" id="p360Sku">SKU: VZ-BOL-001 | Cód. Barras: 750123456789</p>
+          </div>
+        </div>
+        <button onclick="closeModal('productKardexModal')" class="text-brandMuted hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 text-xs">
+        <!-- Existencias por Sucursal -->
+        <div class="grid grid-cols-4 gap-3 text-center">
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder">
+            <p class="text-[10px] uppercase text-brandMuted">Independencia</p>
+            <p class="text-base font-bold text-white mt-0.5" id="p360Independencia">0 u.</p>
+          </div>
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder">
+            <p class="text-[10px] uppercase text-brandMuted">Alfareros</p>
+            <p class="text-base font-bold text-white mt-0.5" id="p360Alfareros">0 u.</p>
+          </div>
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder">
+            <p class="text-[10px] uppercase text-brandMuted">Tonalá</p>
+            <p class="text-base font-bold text-white mt-0.5" id="p360Tonala">0 u.</p>
+          </div>
+          <div class="p-3 bg-brandDark rounded-lg border border-brandBorder">
+            <p class="text-[10px] uppercase text-brandGold">Disponible Total</p>
+            <p class="text-base font-bold text-brandGold mt-0.5" id="p360Total">0 u.</p>
+          </div>
+        </div>
+
+        <!-- Precios y Costos -->
+        <div class="grid grid-cols-3 gap-3 p-3 bg-brandDark rounded-xl border border-brandBorder">
+          <div>
+            <span class="text-brandMuted">Costo Adquisición:</span>
+            <p class="text-sm font-bold text-white mt-0.5" id="p360Cost">$0.00</p>
+          </div>
+          <div>
+            <span class="text-brandMuted">Precio Venta Público:</span>
+            <p class="text-sm font-bold text-brandGold mt-0.5" id="p360Price">$0.00</p>
+          </div>
+          <div>
+            <span class="text-brandMuted">Margen Bruto Unitario:</span>
+            <p class="text-sm font-bold text-emerald-400 mt-0.5" id="p360Margin">$0.00</p>
+          </div>
+        </div>
+
+        <!-- Historial Kardex de este Producto -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center border-b border-brandBorder pb-1">
+            <h4 class="font-serif font-bold text-sm text-brandGold">Movimientos Kardex del Producto</h4>
+            <button onclick="exportSingleProductKardexCSV()" class="text-[11px] text-brandGold hover:underline"><i class="fa-solid fa-file-csv mr-1"></i>Descargar Kardex Individual</button>
+          </div>
+          <div class="overflow-x-auto max-h-48">
+            <table class="w-full text-left text-[11px]">
+              <thead class="text-brandMuted border-b border-brandBorder">
+                <tr>
+                  <th class="pb-1.5">Folio</th>
+                  <th class="pb-1.5">Fecha</th>
+                  <th class="pb-1.5">Tipo</th>
+                  <th class="pb-1.5">Sucursal</th>
+                  <th class="pb-1.5 text-center text-emerald-400">Entrada</th>
+                  <th class="pb-1.5 text-center text-rose-400">Salida</th>
+                  <th class="pb-1.5 text-center font-bold text-white">Saldo</th>
+                  <th class="pb-1.5">Motivo</th>
+                </tr>
+              </thead>
+              <tbody id="p360KardexTbody" class="divide-y divide-brandBorder/40">
+                <!-- Se poblará dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-brandBorder bg-brandCard flex justify-between items-center">
+        <button onclick="openKardexForCurrentProduct()" class="bg-brandGold text-brandDark font-semibold text-xs px-4 py-2 rounded-lg hover:bg-brandGoldHover transition">
+          <i class="fa-solid fa-arrow-right-arrow-left mr-1"></i>Nuevo Movimiento
+        </button>
+        <button onclick="closeModal('productKardexModal')" class="bg-brandSurface hover:bg-brandBorder border border-brandBorder text-white text-xs px-4 py-2 rounded-lg">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Movimiento Kardex -->
   <div id="kardexMovementModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
@@ -1261,17 +1486,24 @@
         { id: "s3", company: "Hilos Encerados San Juan", contact: "Martha Esquivel", categories: "Hilo Encerado 1mm", terms: "Contado", balance: 0, rating: 5.0 }
       ],
       products: [
-        { id: 1, sku: 'VZ-BOL-001', name: 'Bolso calidad élite', category: 'Bolsos', price: 3000, stock_independencia: 3, stock_alfareros: 3, stock_tonala: 2, stock: 8 },
-        { id: 2, sku: 'VZ-BOL-002', name: 'Bolsa Cherry Vizantino', category: 'Bolsos', price: 3000, stock_independencia: 2, stock_alfareros: 2, stock_tonala: 1, stock: 5 },
-        { id: 3, sku: 'VZ-CAR-001', name: 'Tarjetero de piel corte vacuno', category: 'Carteras', price: 280, stock_independencia: 10, stock_alfareros: 10, stock_tonala: 5, stock: 25 },
-        { id: 4, sku: 'VZ-CAR-002', name: 'Cartera Slim piel corte vacuno', category: 'Carteras', price: 300, stock_independencia: 7, stock_alfareros: 7, stock_tonala: 4, stock: 18 },
-        { id: 5, sku: 'VZ-CAR-003', name: 'Cartera Slim large corte vacuno', category: 'Carteras', price: 400, stock_independencia: 5, stock_alfareros: 5, stock_tonala: 2, stock: 12 },
-        { id: 6, sku: 'VZ-CAR-004', name: 'Tarjetero con apartado billete', category: 'Carteras', price: 350, stock_independencia: 8, stock_alfareros: 8, stock_tonala: 4, stock: 20 },
-        { id: 7, sku: 'VZ-CAR-005', name: 'Carteras piel corte vacuno', category: 'Carteras', price: 300, stock_independencia: 6, stock_alfareros: 6, stock_tonala: 3, stock: 15 },
-        { id: 8, sku: 'VZ-CAR-006', name: 'Cartera en piel exótica', category: 'Carteras', price: 350, stock_independencia: 4, stock_alfareros: 4, stock_tonala: 2, stock: 10 },
-        { id: 9, sku: 'VZ-CAR-007', name: 'Tarjetero en pieles exóticas', category: 'Carteras', price: 500, stock_independencia: 3, stock_alfareros: 3, stock_tonala: 2, stock: 8 },
-        { id: 10, sku: 'VZ-CRO-001', name: 'Crossbody Piel Genuina', category: 'Crossbody', price: 1800, stock_independencia: 2, stock_alfareros: 2, stock_tonala: 2, stock: 6 },
-        { id: 11, sku: 'VZ-MOC-001', name: 'Mochila Piel Corte Vacuno', category: 'Mochilas', price: 2200, stock_independencia: 2, stock_alfareros: 1, stock_tonala: 1, stock: 4 }
+        { id: 1, sku: 'VZ-BOL-001', barcode: '7501001000018', name: 'Bolso calidad élite', category: 'Bolsos', cost: 1250, price: 3000, stock_independencia: 3, stock_alfareros: 3, stock_tonala: 2, stock_reserved: 1, stock: 8, min_stock: 4 },
+        { id: 2, sku: 'VZ-BOL-002', barcode: '7501001000025', name: 'Bolsa Cherry Vizantino', category: 'Bolsos', cost: 1280, price: 3000, stock_independencia: 2, stock_alfareros: 2, stock_tonala: 1, stock_reserved: 0, stock: 5, min_stock: 5 },
+        { id: 3, sku: 'VZ-CAR-001', barcode: '7501001000032', name: 'Tarjetero piel corte vacuno', category: 'Carteras', cost: 110, price: 280, stock_independencia: 10, stock_alfareros: 10, stock_tonala: 5, stock_reserved: 2, stock: 25, min_stock: 8 },
+        { id: 4, sku: 'VZ-CAR-002', barcode: '7501001000049', name: 'Cartera Slim piel corte vacuno', category: 'Carteras', cost: 125, price: 300, stock_independencia: 7, stock_alfareros: 7, stock_tonala: 4, stock_reserved: 0, stock: 18, min_stock: 6 },
+        { id: 5, sku: 'VZ-CAR-003', barcode: '7501001000056', name: 'Cartera Slim large corte vacuno', category: 'Carteras', cost: 165, price: 400, stock_independencia: 5, stock_alfareros: 5, stock_tonala: 2, stock_reserved: 1, stock: 12, min_stock: 5 },
+        { id: 6, sku: 'VZ-CAR-004', barcode: '7501001000063', name: 'Tarjetero apartado billete', category: 'Carteras', cost: 140, price: 350, stock_independencia: 8, stock_alfareros: 8, stock_tonala: 4, stock_reserved: 0, stock: 20, min_stock: 6 },
+        { id: 7, sku: 'VZ-CAR-005', barcode: '7501001000070', name: 'Carteras piel corte vacuno', category: 'Carteras', cost: 120, price: 300, stock_independencia: 6, stock_alfareros: 6, stock_tonala: 3, stock_reserved: 0, stock: 15, min_stock: 5 },
+        { id: 8, sku: 'VZ-CAR-006', barcode: '7501001000087', name: 'Cartera en piel exótica', category: 'Carteras', cost: 150, price: 350, stock_independencia: 4, stock_alfareros: 4, stock_tonala: 2, stock_reserved: 1, stock: 10, min_stock: 5 },
+        { id: 9, sku: 'VZ-CAR-007', barcode: '7501001000094', name: 'Tarjetero en pieles exóticas', category: 'Carteras', cost: 210, price: 500, stock_independencia: 3, stock_alfareros: 3, stock_tonala: 2, stock_reserved: 0, stock: 8, min_stock: 4 },
+        { id: 10, sku: 'VZ-CRO-001', barcode: '7501001000100', name: 'Crossbody Piel Genuina', category: 'Crossbody', cost: 750, price: 1800, stock_independencia: 2, stock_alfareros: 2, stock_tonala: 2, stock_reserved: 0, stock: 6, min_stock: 6 },
+        { id: 11, sku: 'VZ-MOC-001', barcode: '7501001000117', name: 'Mochila Piel Corte Vacuno', category: 'Mochilas', cost: 950, price: 2200, stock_independencia: 2, stock_alfareros: 1, stock_tonala: 1, stock_reserved: 0, stock: 4, min_stock: 5 }
+      ],
+      kardex: [
+        { id: "k1", folio: "KAR-2026-0045", date: "2026-10-30", product_id: 1, sku: "VZ-BOL-001", product_name: "Bolso calidad élite", branch: "Independencia", type: "SALIDA_VENTA", qty_in: 0, qty_out: 1, balance_after: 8, unit_cost: 1250, ref: "VEN-2026-0142", reason: "Venta en línea despachada", authorized_by: "Ventas E-Commerce" },
+        { id: "k2", folio: "KAR-2026-0044", date: "2026-10-29", product_id: 11, sku: "VZ-MOC-001", product_name: "Mochila Piel Corte Vacuno", branch: "Almacén Central", type: "ENTRADA_COMPRA", qty_in: 5, qty_out: 0, balance_after: 4, unit_cost: 950, ref: "OC-2026-0021", reason: "Recepción de taller marroquinero", authorized_by: "Compras Taller" },
+        { id: "k3", folio: "KAR-2026-0043", date: "2026-10-28", product_id: 3, sku: "VZ-CAR-001", product_name: "Tarjetero piel corte vacuno", branch: "Independencia", type: "SALIDA_VENTA", qty_in: 0, qty_out: 2, balance_after: 25, unit_cost: 110, ref: "VEN-2026-0141", reason: "Venta mostrador Tlaquepaque", authorized_by: "Caja Independencia" },
+        { id: "k4", folio: "KAR-2026-0042", date: "2026-10-27", product_id: 4, sku: "VZ-CAR-002", product_name: "Cartera Slim piel corte vacuno", branch: "Alfareros", type: "TRASPASO", qty_in: 3, qty_out: 0, balance_after: 18, unit_cost: 125, ref: "TRA-2026-0012", reason: "Traspaso logístico entre sucursales", authorized_by: "Logística Vizantino" },
+        { id: "k5", folio: "KAR-2026-0041", date: "2026-10-26", product_id: 2, sku: "VZ-BOL-002", product_name: "Bolsa Cherry Vizantino", branch: "Tonalá", type: "AJUSTE_MERMA", qty_in: 0, qty_out: 1, balance_after: 5, unit_cost: 1280, ref: "AJU-2026-0005", reason: "Detalle en herraje dorado enviado a reparación", authorized_by: "Control de Calidad" }
       ],
       sales: [
         { folio: "VEN-2026-0142", date: "2026-10-30", customer: "Elena Morales García", channel: "Online", total: 3000, paid: 3000, status: "PAGADO", type: "VENTA" },
@@ -1879,26 +2111,384 @@
       }
     }
 
-    function renderInventory() {
+        let activeProduct360Id = null;
+
+    function switchInventorySubtab(subtab) {
+      ['stocks', 'kardex', 'alerts'].forEach(s => {
+        const el = document.getElementById('invSubtab' + s.charAt(0).toUpperCase() + s.slice(1));
+        const btn = document.getElementById('subtabBtn' + s.charAt(0).toUpperCase() + s.slice(1));
+        if (el) el.classList.add('hidden');
+        if (btn) {
+          btn.classList.remove('text-brandGold', 'border-brandGold', 'font-bold');
+          btn.classList.add('text-brandMuted', 'border-transparent');
+        }
+      });
+
+      const activeEl = document.getElementById('invSubtab' + subtab.charAt(0).toUpperCase() + subtab.slice(1));
+      const activeBtn = document.getElementById('subtabBtn' + subtab.charAt(0).toUpperCase() + subtab.slice(1));
+      if (activeEl) activeEl.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.classList.add('text-brandGold', 'border-brandGold', 'font-bold');
+        activeBtn.classList.remove('text-brandMuted', 'border-transparent');
+      }
+
+      if (subtab === 'kardex') renderKardexTable();
+      if (subtab === 'alerts') renderCriticalAlerts();
+    }
+
+    function renderInventory(list = erpState.products) {
+      // 1. Actualizar KPIs de Valoración de Inventario
+      let totalRetail = 0;
+      let totalCost = 0;
+      let criticalCount = 0;
+
+      erpState.products.forEach(p => {
+        totalRetail += (p.stock || 0) * (p.price || 0);
+        totalCost += (p.stock || 0) * (p.cost || p.price * 0.45);
+        if (p.stock <= (p.min_stock || 4)) criticalCount++;
+      });
+
+      const grossMargin = totalRetail - totalCost;
+      const marginPct = totalRetail > 0 ? ((grossMargin / totalRetail) * 100).toFixed(1) : '0';
+
+      const retEl = document.getElementById('invTotalRetailVal');
+      const costEl = document.getElementById('invTotalCostVal');
+      const marginEl = document.getElementById('invGrossProfitVal');
+      const critEl = document.getElementById('invCriticalCount');
+
+      if (retEl) retEl.textContent = `$${totalRetail.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+      if (costEl) costEl.textContent = `$${totalCost.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+      if (marginEl) marginEl.innerHTML = `$${grossMargin.toLocaleString('es-MX', {minimumFractionDigits: 2})} <span class="text-xs text-emerald-400 font-sans block mt-0.5">(${marginPct}% proyectado)</span>`;
+      if (critEl) critEl.textContent = `${criticalCount} Productos`;
+
+      // 2. Renderizar Tabla de Existencias
       const tbody = document.getElementById('inventoryProductsTbody');
       if (!tbody) return;
-      tbody.innerHTML = erpState.products.map(p => `
-        <tr class="hover:bg-brandSurface transition">
-          <td class="p-3.5">
-            <p class="font-bold text-white">${p.name}</p>
-            <span class="text-[10px] text-brandGold font-mono">${p.sku}</span>
-          </td>
-          <td class="p-3.5 text-brandMuted">${p.category}</td>
-          <td class="p-3.5 font-semibold text-brandGold">$${p.price.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
-          <td class="p-3.5 text-center text-white">${p.stock_independencia}</td>
-          <td class="p-3.5 text-center text-white">${p.stock_alfareros}</td>
-          <td class="p-3.5 text-center text-white">${p.stock_tonala}</td>
-          <td class="p-3.5 text-center font-bold ${p.stock <= 4 ? 'text-rose-400' : 'text-emerald-400'}">${p.stock} u.</td>
-          <td class="p-3.5 text-right">
-            <button onclick="openKardexForProduct(${p.id})" class="text-xs text-brandGold hover:underline"><i class="fa-solid fa-clock-rotate-left mr-1"></i>Kardex</button>
-          </td>
-        </tr>
-      `).join('');
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center py-8 text-brandMuted">No se encontraron artículos con los filtros indicados.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(p => {
+        const isLow = p.stock <= (p.min_stock || 4);
+        const marginUnit = p.price - (p.cost || p.price * 0.45);
+
+        return `
+          <tr class="hover:bg-brandSurface transition cursor-pointer" onclick="viewProductKardex(${p.id})">
+            <td class="p-3.5">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full ${isLow ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'}"></span>
+                <div>
+                  <p class="font-bold text-white">${p.name}</p>
+                  <p class="text-[10px] text-brandGold font-mono">${p.sku} ${p.barcode ? `| EAN: ${p.barcode}` : ''}</p>
+                </div>
+              </div>
+            </td>
+            <td class="p-3.5 text-brandMuted">${p.category}</td>
+            <td class="p-3.5 text-right font-mono text-brandMuted">$${(p.cost || p.price * 0.45).toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5 text-right font-mono font-bold text-brandGold">$${p.price.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5 text-center text-white font-mono">${p.stock_independencia || 0}</td>
+            <td class="p-3.5 text-center text-white font-mono">${p.stock_alfareros || 0}</td>
+            <td class="p-3.5 text-center text-white font-mono">${p.stock_tonala || 0}</td>
+            <td class="p-3.5 text-center font-mono text-amber-400 font-semibold">${p.stock_reserved || 0} u.</td>
+            <td class="p-3.5 text-center font-mono font-bold ${isLow ? 'text-rose-400' : 'text-emerald-400'}">
+              ${p.stock} u.
+              ${isLow ? '<span class="block text-[9px] text-rose-400 font-sans uppercase font-bold">¡Stock Bajo!</span>' : ''}
+            </td>
+            <td class="p-3.5 text-right space-x-2" onclick="event.stopPropagation()">
+              <button onclick="viewProductKardex(${p.id})" class="text-xs text-brandGold hover:text-white p-1" title="Ficha y Kardex"><i class="fa-solid fa-clock-rotate-left mr-1"></i>Kardex</button>
+              <button onclick="openKardexModal(${p.id})" class="text-xs bg-brandSurface hover:bg-brandCard border border-brandGold/40 text-brandGold px-2 py-1 rounded" title="Nuevo Movimiento"><i class="fa-solid fa-plus"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterInventory() {
+      const query = (document.getElementById('searchInventoryInput')?.value || '').toLowerCase().trim();
+      const cat = document.getElementById('filterCategorySelect')?.value || 'ALL';
+
+      const filtered = erpState.products.filter(p => {
+        const matchesQuery = !query ||
+          (p.name && p.name.toLowerCase().includes(query)) ||
+          (p.sku && p.sku.toLowerCase().includes(query)) ||
+          (p.barcode && p.barcode.includes(query));
+
+        const matchesCat = cat === 'ALL' || p.category === cat;
+        return matchesQuery && matchesCat;
+      });
+
+      renderInventory(filtered);
+    }
+
+    function renderKardexTable(list = erpState.kardex) {
+      const tbody = document.getElementById('kardexLedgerTbody');
+      if (!tbody) return;
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center py-8 text-brandMuted">No se registran movimientos en el libro mayor con estos filtros.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(k => {
+        let badgeColor = 'bg-zinc-500/20 text-zinc-300';
+        if (k.type === 'ENTRADA_COMPRA' || k.type === 'DEVOLUCION_CLIENTE' || k.type === 'AJUSTE_POSITIVO') badgeColor = 'bg-emerald-500/20 text-emerald-300';
+        else if (k.type === 'SALIDA_VENTA' || k.type === 'AJUSTE_MERMA') badgeColor = 'bg-rose-500/20 text-rose-300';
+        else if (k.type === 'TRASPASO') badgeColor = 'bg-blue-500/20 text-blue-300';
+
+        return `
+          <tr class="hover:bg-brandSurface transition">
+            <td class="p-3.5 font-mono font-bold text-brandGold">${k.folio}</td>
+            <td class="p-3.5 text-brandMuted">${k.date}</td>
+            <td class="p-3.5">
+              <p class="font-bold text-white">${k.product_name}</p>
+              <span class="text-[10px] text-brandMuted font-mono">${k.sku}</span>
+            </td>
+            <td class="p-3.5 text-brandBeige">${k.branch}</td>
+            <td class="p-3.5"><span class="badge ${badgeColor}">${k.type}</span></td>
+            <td class="p-3.5 text-center font-mono font-bold text-emerald-400">${k.qty_in > 0 ? `+${k.qty_in}` : '-'}</td>
+            <td class="p-3.5 text-center font-mono font-bold text-rose-400">${k.qty_out > 0 ? `-${k.qty_out}` : '-'}</td>
+            <td class="p-3.5 text-center font-mono font-bold text-white">${k.balance_after} u.</td>
+            <td class="p-3.5 text-brandMuted">
+              <span class="text-white block font-medium">${k.reason || 'Sin justificación'}</span>
+              ${k.ref ? `<span class="text-[10px] text-brandGold font-mono">Ref: ${k.ref}</span>` : ''}
+            </td>
+            <td class="p-3.5 text-right text-brandBeige font-mono text-[11px]">${k.authorized_by || 'Dirección'}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterKardexTable() {
+      const type = document.getElementById('filterKardexType')?.value || 'ALL';
+      const branch = document.getElementById('filterKardexBranch')?.value || 'ALL';
+
+      const filtered = erpState.kardex.filter(k => {
+        const matchesType = type === 'ALL' || k.type === type;
+        const matchesBranch = branch === 'ALL' || k.branch === branch;
+        return matchesType && matchesBranch;
+      });
+
+      renderKardexTable(filtered);
+    }
+
+    function renderCriticalAlerts() {
+      const tbody = document.getElementById('invCriticalAlertsTbody');
+      if (!tbody) return;
+
+      const critical = erpState.products.filter(p => p.stock <= (p.min_stock || 4));
+      if (critical.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-2"></i>Todos los productos cuentan con existencias superiores al stock mínimo.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = critical.map(p => {
+        const deficit = (p.min_stock || 4) - p.stock;
+        const suggestedSupplier = p.category === 'Bolsos' || p.category === 'Mochilas' ? 'Curtidos Premium de León S.A.' : 'Herrajes y Metales Finos Tonalá';
+
+        return `
+          <tr class="hover:bg-brandSurface transition">
+            <td class="p-3.5">
+              <p class="font-bold text-white">${p.name}</p>
+              <span class="text-[10px] text-brandGold font-mono">${p.sku}</span>
+            </td>
+            <td class="p-3.5 font-mono text-white">${p.min_stock || 4} u.</td>
+            <td class="p-3.5 font-mono font-bold text-rose-400">${p.stock} u.</td>
+            <td class="p-3.5 font-mono font-bold text-amber-400">+${deficit > 0 ? deficit : 1} u. recomendadas</td>
+            <td class="p-3.5 text-brandBeige font-medium">${suggestedSupplier}</td>
+            <td class="p-3.5 text-brandGold font-mono">7 días hábiles</td>
+            <td class="p-3.5 text-right">
+              <button onclick="createPurchaseOrderForSupplier('${suggestedSupplier}')" class="text-xs bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold px-3 py-1.5 rounded-lg shadow transition">
+                <i class="fa-solid fa-cart-shopping mr-1"></i>Generar OC
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function viewProductKardex(productId) {
+      const prod = erpState.products.find(p => p.id === productId);
+      if (!prod) return;
+
+      activeProduct360Id = prod.id;
+
+      document.getElementById('p360Name').textContent = prod.name;
+      document.getElementById('p360Sku').textContent = `SKU: ${prod.sku} | Código de Barras: ${prod.barcode || '75010010000' + prod.id}`;
+      document.getElementById('p360Independencia').textContent = `${prod.stock_independencia || 0} u.`;
+      document.getElementById('p360Alfareros').textContent = `${prod.stock_alfareros || 0} u.`;
+      document.getElementById('p360Tonala').textContent = `${prod.stock_tonala || 0} u.`;
+      document.getElementById('p360Total').textContent = `${prod.stock} u.`;
+
+      const unitCost = prod.cost || prod.price * 0.45;
+      const unitMargin = prod.price - unitCost;
+
+      document.getElementById('p360Cost').textContent = `$${unitCost.toFixed(2)}`;
+      document.getElementById('p360Price').textContent = `$${prod.price.toFixed(2)}`;
+      document.getElementById('p360Margin').textContent = `+$${unitMargin.toFixed(2)} (${((unitMargin / prod.price) * 100).toFixed(1)}%)`;
+
+      const prodKardex = erpState.kardex.filter(k => k.product_id === prod.id || k.sku === prod.sku);
+      const tbody = document.getElementById('p360KardexTbody');
+
+      if (prodKardex.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-brandMuted">Sin movimientos históricos registrados para este producto</td></tr>';
+      } else {
+        tbody.innerHTML = prodKardex.map(k => `
+          <tr class="hover:bg-brandCard/60 transition">
+            <td class="py-1.5 font-mono text-brandGold">${k.folio}</td>
+            <td class="py-1.5 text-brandMuted">${k.date}</td>
+            <td class="py-1.5 text-white">${k.type}</td>
+            <td class="py-1.5 text-brandBeige">${k.branch}</td>
+            <td class="py-1.5 text-center text-emerald-400 font-mono">${k.qty_in > 0 ? `+${k.qty_in}` : '-'}</td>
+            <td class="py-1.5 text-center text-rose-400 font-mono">${k.qty_out > 0 ? `-${k.qty_out}` : '-'}</td>
+            <td class="py-1.5 text-center text-white font-mono font-bold">${k.balance_after}</td>
+            <td class="py-1.5 text-brandMuted">${k.reason}</td>
+          </tr>
+        `).join('');
+      }
+
+      openModal('productKardexModal');
+    }
+
+    function openKardexModal(productId) {
+      populateProductDropdown();
+      if (productId) {
+        const sel = document.getElementById('kardexProductSelect');
+        if (sel) sel.value = productId;
+      }
+      openModal('kardexMovementModal');
+    }
+
+    function openKardexForCurrentProduct() {
+      closeModal('productKardexModal');
+      openKardexModal(activeProduct360Id);
+    }
+
+    function saveKardexMovement() {
+      const prodId = parseInt(document.getElementById('kardexProductSelect').value);
+      const type = document.getElementById('kardexTypeSelect').value;
+      const qty = parseInt(document.getElementById('kardexQty').value) || 0;
+      const branch = document.getElementById('kardexBranchSelect').value;
+      const reason = document.getElementById('kardexReason').value.trim() || 'Ajuste operativo autorizado';
+
+      if (qty <= 0) {
+        alert('La cantidad debe ser mayor a 0.');
+        return;
+      }
+
+      const prod = erpState.products.find(p => p.id === prodId);
+      if (!prod) {
+        alert('Producto no encontrado.');
+        return;
+      }
+
+      // REGLA CRÍTICA FASE 4: NO PERMITIR EXISTENCIAS NEGATIVAS SIN AUTORIZACIÓN EXPLÍCITA
+      let currentBranchStock = branch === 'Independencia' ? prod.stock_independencia : (branch === 'Alfareros' ? prod.stock_alfareros : prod.stock_tonala);
+      
+      const isReduction = (type === 'SALIDA_VENTA' || type === 'AJUSTE_MERMA' || type === 'TRASPASO');
+      if (isReduction && qty > currentBranchStock) {
+        alert(`OPERACIÓN BLOQUEADA POR EL SISTEMA:\n\nLa sucursal "${branch}" solo cuenta con ${currentBranchStock} piezas disponibles del producto "${prod.name}".\n\nNo se permiten existencias negativas según la política del sistema ERP.`);
+        return;
+      }
+
+      // Aplicar movimiento de manera idempotente
+      let qtyIn = 0;
+      let qtyOut = 0;
+
+      if (type === 'ENTRADA_COMPRA' || type === 'AJUSTE_POSITIVO' || type === 'DEVOLUCION_CLIENTE') {
+        qtyIn = qty;
+        if (branch === 'Independencia') prod.stock_independencia += qty;
+        else if (branch === 'Alfareros') prod.stock_alfareros += qty;
+        else if (branch === 'Tonalá') prod.stock_tonala += qty;
+        prod.stock += qty;
+      } else if (type === 'SALIDA_VENTA' || type === 'AJUSTE_MERMA') {
+        qtyOut = qty;
+        if (branch === 'Independencia') prod.stock_independencia -= qty;
+        else if (branch === 'Alfareros') prod.stock_alfareros -= qty;
+        else if (branch === 'Tonalá') prod.stock_tonala -= qty;
+        prod.stock = Math.max(0, prod.stock - qty);
+      } else if (type === 'TRASPASO') {
+        qtyOut = qty;
+        // Traspaso descuenta de la sucursal actual
+        if (branch === 'Independencia') { prod.stock_independencia -= qty; prod.stock_alfareros += qty; }
+        else if (branch === 'Alfareros') { prod.stock_alfareros -= qty; prod.stock_tonala += qty; }
+        else { prod.stock_tonala -= qty; prod.stock_independencia += qty; }
+      }
+
+      // Registrar movimiento inmutable en Kardex
+      const folioKardex = 'KAR-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
+      const newMovement = {
+        id: 'k' + Date.now(),
+        folio: folioKardex,
+        date: new Date().toISOString().split('T')[0],
+        product_id: prod.id,
+        sku: prod.sku,
+        product_name: prod.name,
+        branch: branch,
+        type: type,
+        qty_in: qtyIn,
+        qty_out: qtyOut,
+        balance_after: prod.stock,
+        unit_cost: prod.cost || prod.price * 0.45,
+        ref: 'ERP-MANUAL',
+        reason: reason,
+        authorized_by: 'Administrador General'
+      };
+
+      erpState.kardex.unshift(newMovement);
+
+      // Sincronizar con Supabase
+      if (supabaseClient) {
+        supabaseClient.from('inventory_kardex').insert({
+          folio: folioKardex,
+          product_id: prod.id,
+          product_name: prod.name,
+          branch: branch,
+          movement_type: type,
+          quantity_in: qtyIn,
+          quantity_out: qtyOut,
+          balance_after: prod.stock,
+          unit_cost: prod.cost || prod.price * 0.45,
+          reason: reason,
+          authorized_by: 'Administrador General'
+        }).then();
+
+        supabaseClient.from('products').update({
+          stock: prod.stock,
+          stock_independencia: prod.stock_independencia,
+          stock_alfareros: prod.stock_alfareros,
+          stock_tonala: prod.stock_tonala
+        }).eq('id', prod.id).then();
+      }
+
+      closeModal('kardexMovementModal');
+      renderInventory();
+      renderKardexTable();
+      alert(`Movimiento ${folioKardex} aplicado con éxito. Existencia resultante: ${prod.stock} u.`);
+    }
+
+    function exportKardexLedgerCSV() {
+      let csv = "Folio,Fecha,SKU,Producto,Sucursal,Tipo_Movimiento,Entrada,Salida,Saldo_Despues,Costo_Unitario,Motivo,Autorizo
+";
+      erpState.kardex.forEach(k => {
+        csv += `"${k.folio}","${k.date}","${k.sku}","${k.product_name}","${k.branch}","${k.type}",${k.qty_in},${k.qty_out},${k.balance_after},${k.unit_cost},"${k.reason}","${k.authorized_by}"
+`;
+      });
+      downloadCSV(csv, "Libro_Mayor_Kardex_Vizantino.csv");
+    }
+
+    function exportSingleProductKardexCSV() {
+      const prod = erpState.products.find(p => p.id === activeProduct360Id);
+      if (!prod) return;
+      const movements = erpState.kardex.filter(k => k.product_id === prod.id || k.sku === prod.sku);
+      let csv = "Folio,Fecha,Producto,Sucursal,Tipo,Entrada,Salida,Saldo,Motivo
+";
+      movements.forEach(k => {
+        csv += `"${k.folio}","${k.date}","${k.product_name}","${k.branch}","${k.type}",${k.qty_in},${k.qty_out},${k.balance_after},"${k.reason}"
+`;
+      });
+      downloadCSV(csv, `Kardex_${prod.sku}.csv`);
     }
 
     function renderSales() {
