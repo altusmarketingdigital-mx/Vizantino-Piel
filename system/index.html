@@ -3998,8 +3998,7 @@
     }
 
     function exportKardexLedgerCSV() {
-      let csv = "Folio,Fecha,SKU,Producto,Sucursal,Tipo_Movimiento,Entrada,Salida,Saldo_Despues,Costo_Unitario,Motivo,Autorizo
-";
+      let csv = "Folio,Fecha,SKU,Producto,Sucursal,Tipo_Movimiento,Entrada,Salida,Saldo_Despues,Costo_Unitario,Motivo,Autorizo\n";
       erpState.kardex.forEach(k => {
         csv += `"${k.folio}","${k.date}","${k.sku}","${k.product_name}","${k.branch}","${k.type}",${k.qty_in},${k.qty_out},${k.balance_after},${k.unit_cost},"${k.reason}","${k.authorized_by}"
 `;
@@ -4011,8 +4010,7 @@
       const prod = erpState.products.find(p => p.id === activeProduct360Id);
       if (!prod) return;
       const movements = erpState.kardex.filter(k => k.product_id === prod.id || k.sku === prod.sku);
-      let csv = "Folio,Fecha,Producto,Sucursal,Tipo,Entrada,Salida,Saldo,Motivo
-";
+      let csv = "Folio,Fecha,Producto,Sucursal,Tipo,Entrada,Salida,Saldo,Motivo\n";
       movements.forEach(k => {
         csv += `"${k.folio}","${k.date}","${k.product_name}","${k.branch}","${k.type}",${k.qty_in},${k.qty_out},${k.balance_after},"${k.reason}"
 `;
@@ -5138,8 +5136,7 @@
     }
 
     function exportCxPReport() {
-      let csv = "Folio_OC,Proveedor,Fecha,Terminos,Total_MXN,Pagado_MXN,Saldo_Pendiente_MXN
-";
+      let csv = "Folio_OC,Proveedor,Fecha,Terminos,Total_MXN,Pagado_MXN,Saldo_Pendiente_MXN\n";
       erpState.purchases.forEach(p => {
         csv += `"${p.folio}","${p.supplier}","${p.date || '2026-10-30'}","${p.terms || '30 Días'}",${p.total},${p.paid || 0},${p.balance || 0}
 `;
@@ -6377,14 +6374,12 @@
     function exportFullAnalyticsCSV() {
       const metrics = calculateReportMetrics();
       let csv = "﻿"; // BOM para compatibilidad con Microsoft Excel UTF-8
-      csv += "REPORTE EJECUTIVO INTEGRAL - VIZANTINO PIEL ERP
-";
+      csv += "REPORTE EJECUTIVO INTEGRAL - VIZANTINO PIEL ERP\n";
       csv += `Fecha de Emisión,"${new Date().toLocaleString('es-MX')}"
 
 `;
 
-      csv += "INDICADORES CLAVE DE RENDIMIENTO (KPI),MONTO (MXN),DETALLES
-";
+      csv += "INDICADORES CLAVE DE RENDIMIENTO (KPI),MONTO (MXN),DETALLES\n";
       csv += `"Ventas Totales Registradas",${metrics.totalSales},${metrics.ordersCount} pedidos válidos
 `;
       csv += `"Total Cobrado en Firme",${metrics.paidSales},"Efectivo / Transferencia / Tarjeta"
@@ -6405,26 +6400,19 @@
 
 `;
 
-      csv += "CRITERIO Y FÓRMULAS OFICIALES
-";
-      csv += '"Ingresos Netos","Suma de ventas en status PAGADO o ENTREGADO"
-';
-      csv += '"Margen Bruto Proyectado","(Precio de Venta - Costo de Adquisición) / Precio de Venta * 100"
-';
-      csv += '"Saldos CxC y CxP","Importe del Documento original menos suma de abonos conciliados"
-';
-      csv += '"Flujo Neto","Total de cobros entrantes menos pagos realizados a proveedores"
-';
+      csv += "CRITERIO Y FÓRMULAS OFICIALES\n";
+      csv += '"Ingresos Netos","Suma de ventas en status PAGADO o ENTREGADO"\n';
+      csv += '"Margen Bruto Proyectado","(Precio de Venta - Costo de Adquisición) / Precio de Venta * 100"\n';
+      csv += '"Saldos CxC y CxP","Importe del Documento original menos suma de abonos conciliados"\n';
+      csv += '"Flujo Neto","Total de cobros entrantes menos pagos realizados a proveedores"\n';
 
       downloadCSV(csv, "Reporte_Ejecutivo_Vizantino_Piel.csv");
     }
 
     function exportTopProductsCSV() {
       let csv = "﻿";
-      csv += "RANKING DE PRODUCTOS Y ROTACIÓN - VIZANTINO PIEL
-";
-      csv += "SKU,Producto,Categoría,Precio_Unitario_MXN,Costo_Estimado_MXN,Stock_Actual,Estatus_Existencia
-";
+      csv += "RANKING DE PRODUCTOS Y ROTACIÓN - VIZANTINO PIEL\n";
+      csv += "SKU,Producto,Categoría,Precio_Unitario_MXN,Costo_Estimado_MXN,Stock_Actual,Estatus_Existencia\n";
       (erpState.products || []).forEach(p => {
         const cost = p.cost || (p.price * 0.45);
         const min = p.min_stock || 6;
@@ -6437,10 +6425,8 @@
 
     function exportTopCustomersCSV() {
       let csv = "﻿";
-      csv += "CARTERA DE CLIENTES Y FACTURACIÓN ACUMULADA - VIZANTINO PIEL CRM
-";
-      csv += "ID,Cliente,Tipo,Email,Teléfono,RFC,Compras_Acumuladas_MXN,Saldo_Pendiente_MXN,Estatus
-";
+      csv += "CARTERA DE CLIENTES Y FACTURACIÓN ACUMULADA - VIZANTINO PIEL CRM\n";
+      csv += "ID,Cliente,Tipo,Email,Teléfono,RFC,Compras_Acumuladas_MXN,Saldo_Pendiente_MXN,Estatus\n";
       (erpState.customers || []).forEach(c => {
         csv += `"${c.id}","${c.name}","${c.type}","${c.email}","${c.phone || ''}","${c.rfc || ''}",${c.total || 0},${c.balance || 0},"${c.status}"
 `;
