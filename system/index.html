@@ -760,12 +760,44 @@
       <!-- TAB 6: COMPRAS & RECEPCIÓN (FASE 6)                      -->
       <!-- ======================================================== -->
       <section id="tab-purchases" class="hidden space-y-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div class="relative w-full sm:w-80">
-            <input type="text" id="searchPurchaseInput" onkeyup="filterPurchases()" placeholder="Buscar por folio u orden de compra..." class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-2.5 outline-none focus:border-brandGold">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-brandMuted text-xs"></i>
+        <!-- Indicadores de Compras y Suministros -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Compras Totales del Periodo</p>
+            <h4 class="text-xl font-bold font-serif text-white mt-1" id="purchasesTotalSum">$33,500.00</h4>
+            <p class="text-[11px] text-brandGold mt-1">Inversión en piel, herrajes y talleres</p>
           </div>
-          <button onclick="openModal('purchaseOrderModal')" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Órdenes en Tránsito / Pendientes</p>
+            <h4 class="text-xl font-bold font-serif text-amber-400 mt-1" id="purchasesPendingCount">1 Orden</h4>
+            <p class="text-[11px] text-amber-300 font-medium mt-1"><i class="fa-solid fa-truck mr-1"></i> Por recibir en almacén</p>
+          </div>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Cuentas por Pagar a Proveedores (CxP)</p>
+            <h4 class="text-xl font-bold font-serif text-rose-400 mt-1" id="purchasesDebtSum">$18,200.00</h4>
+            <p class="text-[11px] text-rose-300 font-medium mt-1">Facturas con crédito pendiente</p>
+          </div>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Cumplimiento en Plazos</p>
+            <h4 class="text-xl font-bold font-serif text-emerald-400 mt-1">98.4%</h4>
+            <p class="text-[11px] text-emerald-400 font-medium mt-1"><i class="fa-solid fa-check-double mr-1"></i> Entregas a tiempo</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div class="flex items-center space-x-3 w-full sm:w-auto">
+            <div class="relative flex-1 sm:w-72">
+              <input type="text" id="searchPurchaseInput" onkeyup="filterPurchases()" placeholder="Buscar por folio OC o proveedor..." class="w-full bg-brandCard border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-2.5 outline-none focus:border-brandGold">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-brandMuted text-xs"></i>
+            </div>
+            <select id="filterPurchaseStatus" onchange="filterPurchases()" class="bg-brandCard border border-brandBorder text-xs text-brandBeige rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+              <option value="ALL">Todos los Estados</option>
+              <option value="ORDENADA">Ordenadas (En Tránsito)</option>
+              <option value="RECEPCION_PARCIAL">Recepción Parcial</option>
+              <option value="RECIBIDA_COMPLETA">Recibidas Completas</option>
+            </select>
+          </div>
+          <button onclick="openNewPurchaseModal()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
             <i class="fa-solid fa-cart-flatbed"></i>
             <span>Nueva Orden de Compra</span>
           </button>
@@ -777,11 +809,13 @@
               <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
                 <tr>
                   <th class="p-3.5">Folio OC</th>
+                  <th class="p-3.5">Fecha</th>
                   <th class="p-3.5">Proveedor</th>
                   <th class="p-3.5">Destino</th>
-                  <th class="p-3.5">Monto Total</th>
-                  <th class="p-3.5">Saldo Pendiente</th>
-                  <th class="p-3.5">Estatus Mercancía</th>
+                  <th class="p-3.5 text-right">Monto Total</th>
+                  <th class="p-3.5 text-right">Saldo CxP</th>
+                  <th class="p-3.5 text-center">Estatus Mercancía</th>
+                  <th class="p-3.5 text-center">Entrega Estimada</th>
                   <th class="p-3.5 text-right">Recepción & Kardex</th>
                 </tr>
               </thead>
@@ -1069,6 +1103,195 @@
           <span>Descargar Comprobante PDF Oficial</span>
         </button>
         <button onclick="closeModal('saleDetailModal')" class="bg-brandSurface hover:bg-brandBorder border border-brandBorder text-white text-xs px-4 py-2 rounded-lg">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- MODAL: DETALLE 360° DE ORDEN DE COMPRA Y RECEPCIÓN (FASE 6) -->
+  <div id="purchaseDetailModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-full bg-brandGold/10 border border-brandGold/30 flex items-center justify-center text-brandGold text-lg">
+            <i class="fa-solid fa-cart-flatbed"></i>
+          </div>
+          <div>
+            <h3 class="font-serif font-bold text-lg text-white" id="poDetFolio">Folio: OC-2026-0021</h3>
+            <p class="text-xs text-brandGold" id="poDetSub">Proveedor: Curtidos Premium de León | Destino: Almacén Central</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span id="poDetStatusBadge" class="badge bg-emerald-500/20 text-emerald-300">RECIBIDA_COMPLETA</span>
+          <button onclick="closeModal('purchaseDetailModal')" class="text-brandMuted hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-2">
+            <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1">Datos del Proveedor</h4>
+            <p><span class="text-brandMuted">Empresa:</span> <strong class="text-white" id="poDetSupplier">Curtidos Premium de León S.A.</strong></p>
+            <p><span class="text-brandMuted">Condición Pago:</span> <strong class="text-brandBeige" id="poDetTerms">30 Días</strong></p>
+            <p><span class="text-brandMuted">Entrega Prometida:</span> <strong class="text-white" id="poDetExpected">2026-11-05</strong></p>
+          </div>
+          <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-2">
+            <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1">Destino & Almacenaje</h4>
+            <p><span class="text-brandMuted">Sucursal Destino:</span> <strong class="text-brandGold" id="poDetBranch">Almacén Central (Taller Tlaquepaque)</strong></p>
+            <p><span class="text-brandMuted">Fecha de Recepción:</span> <strong class="text-emerald-400" id="poDetReceivedAt">2026-10-30 14:15</strong></p>
+            <p><span class="text-brandMuted">Responsable de Compra:</span> <span class="text-white" id="poDetCreatedBy">Dirección de Producción</span></p>
+          </div>
+        </div>
+
+        <!-- Partidas de Compra -->
+        <div class="space-y-2">
+          <h4 class="font-serif font-bold text-sm text-brandGold border-b border-brandBorder pb-1">Materiales y Productos Suministrados</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="text-brandMuted border-b border-brandBorder">
+                <tr>
+                  <th class="pb-1.5">Descripción del Material</th>
+                  <th class="pb-1.5 text-center">Cant. Pedida</th>
+                  <th class="pb-1.5 text-center">Cant. Recibida</th>
+                  <th class="pb-1.5 text-right">Costo Unit.</th>
+                  <th class="pb-1.5 text-right font-bold text-white">Total</th>
+                </tr>
+              </thead>
+              <tbody id="poDetItemsTbody" class="divide-y divide-brandBorder/40">
+                <!-- Se poblará dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Resumen Financiero -->
+        <div class="p-4 bg-brandDark rounded-xl border border-brandBorder space-y-1.5 text-right font-mono">
+          <div class="flex justify-between text-brandMuted">
+            <span>Subtotal Materiales:</span>
+            <span class="text-white" id="poDetSubtotal">$0.00</span>
+          </div>
+          <div class="flex justify-between text-brandMuted">
+            <span>IVA Trasladado (16%):</span>
+            <span class="text-white" id="poDetTax">$0.00</span>
+          </div>
+          <div class="flex justify-between text-base font-bold text-brandGold pt-2 border-t border-brandBorder">
+            <span class="font-sans">Total Orden de Compra:</span>
+            <span id="poDetTotal">$0.00</span>
+          </div>
+          <div class="flex justify-between text-xs text-rose-400 font-bold">
+            <span class="font-sans">Saldo Pendiente por Pagar (CxP):</span>
+            <span id="poDetBalance">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Botón de Recepción de Mercancía en Almacén -->
+        <div id="poReceiveActionBox" class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
+          <div>
+            <p class="font-bold text-amber-300">Recepción de Mercancía en Almacén</p>
+            <p class="text-amber-200/80 text-[11px]">Al confirmar la recepción, el stock ingresará inmediatamente a la sucursal de destino y se generará el asiento oficial en Kardex.</p>
+          </div>
+          <button onclick="confirmReceiveActivePO()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-bold px-4 py-2 rounded-lg text-xs shadow transition">
+            <i class="fa-solid fa-boxes-packing mr-1"></i>Confirmar Recepción
+          </button>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-brandBorder bg-brandCard flex justify-between items-center">
+        <button onclick="downloadPurchaseOrderPDF()" class="bg-brandCard border border-brandGold/40 text-brandGold hover:bg-brandGold hover:text-brandDark font-semibold text-xs px-4 py-2 rounded-lg transition shadow flex items-center space-x-1.5">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>Descargar Orden de Compra (PDF)</span>
+        </button>
+        <button onclick="closeModal('purchaseDetailModal')" class="bg-brandSurface hover:bg-brandBorder border border-brandBorder text-white text-xs px-4 py-2 rounded-lg">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ALTA DE NUEVA ORDEN DE COMPRA (FASE 6) -->
+  <div id="purchaseOrderModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <h3 class="font-serif font-bold text-lg text-white">Generar Orden de Compra (OC)</h3>
+        <button onclick="closeModal('purchaseOrderModal')" class="text-brandMuted hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-brandMuted mb-1 font-medium">Proveedor *</label>
+            <select id="modalPurchaseSupplierSelect" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+              <!-- Se poblará con proveedores -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-brandMuted mb-1 font-medium">Sucursal Destino *</label>
+            <select id="modalPurchaseBranchSelect" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+              <option value="Almacén Central">Almacén Central (Taller)</option>
+              <option value="Independencia">Independencia (Tlaquepaque)</option>
+              <option value="Alfareros">Alfareros</option>
+              <option value="Tonalá">Tonalá</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-brandMuted mb-1 font-medium">Fecha Entrega Esperada</label>
+            <input type="date" id="modalPurchaseExpectedDate" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+          </div>
+          <div>
+            <label class="block text-brandMuted mb-1 font-medium">Término de Pago</label>
+            <select id="modalPurchaseTerms" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+              <option value="Contado">Contado</option>
+              <option value="15 Días">15 Días</option>
+              <option value="30 Días" selected>30 Días</option>
+              <option value="45 Días">45 Días</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Partidas de Compra -->
+        <div class="border-t border-brandBorder pt-3">
+          <label class="block text-brandMuted mb-2 font-medium">Agregar Material / Producto al Pedido</label>
+          <div class="flex items-center space-x-2">
+            <select id="modalPurchaseProductSelect" class="flex-1 bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+              <!-- Se poblará con catálogo de productos o insumos -->
+            </select>
+            <input type="number" id="modalPurchaseCost" placeholder="Costo Unit." class="w-24 bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold text-right">
+            <input type="number" id="modalPurchaseQty" min="1" value="5" placeholder="Cant." class="w-20 bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold text-center">
+            <button onclick="addModalPurchaseItem()" class="bg-brandGold text-brandDark px-3 py-2.5 rounded-lg text-xs font-bold hover:bg-brandGoldHover">Agregar</button>
+          </div>
+        </div>
+
+        <!-- Tabla de partidas agregadas -->
+        <div class="bg-brandDark rounded-lg p-3 border border-brandBorder">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr class="text-brandMuted border-b border-brandBorder">
+                <th class="pb-1.5">Material</th>
+                <th class="pb-1.5 text-center">Cant.</th>
+                <th class="pb-1.5 text-right">Costo Unit.</th>
+                <th class="pb-1.5 text-right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody id="modalPurchaseItemsTbody">
+              <tr>
+                <td colspan="4" class="text-center py-4 text-brandMuted">Sin materiales agregados aún</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="border-t border-brandBorder mt-3 pt-3 flex justify-between items-center text-sm font-bold">
+            <span class="text-white">Monto Total Estimado:</span>
+            <span class="text-brandGold text-base" id="modalPurchaseTotalText">$0.00</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-brandMuted mb-1 font-medium">Instrucciones y Especificaciones de Curtido / Acabado</label>
+          <textarea id="modalPurchaseNotes" rows="2" placeholder="Especificaciones de grosor de cuero, calibre de herrajes, tonalidad exacta..." class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold"></textarea>
+        </div>
+      </div>
+      <div class="p-4 border-t border-brandBorder bg-brandCard flex justify-end space-x-3">
+        <button onclick="closeModal('purchaseOrderModal')" class="px-4 py-2 rounded-lg text-xs text-brandMuted hover:text-white">Cancelar</button>
+        <button onclick="savePurchaseOrder()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-5 py-2 rounded-lg shadow">Emitir Orden de Compra</button>
       </div>
     </div>
   </div>
@@ -1784,8 +2007,51 @@
         }
       ],
       purchases: [
-        { folio: "OC-2026-0021", supplier: "Curtidos Premium de León S.A.", branch: "Almacén Central", total: 25000, balance: 12500, status: "RECIBIDA_COMPLETA" },
-        { folio: "OC-2026-0022", supplier: "Herrajes y Metales Finos Tonalá", branch: "Independencia", total: 8500, balance: 5700, status: "RECEPCION_PARCIAL" }
+        {
+          folio: "OC-2026-0021",
+          date: "2026-10-25",
+          supplier: "Curtidos Premium de León S.A.",
+          supplier_id: "s1",
+          branch: "Almacén Central",
+          expected_date: "2026-10-29",
+          received_at: "2026-10-29 16:30",
+          items: [
+            { product_id: 11, name: "Piel Vacuno Flor Entera (Mochila VZ-MOC)", qty_ordered: 5, qty_received: 5, unit_cost: 950, total: 4750 },
+            { product_id: 1, name: "Cuero Genuino Premium (Bolso VZ-BOL)", qty_ordered: 10, qty_received: 10, unit_cost: 1250, total: 12500 },
+            { product_id: 2, name: "Piel Acabado Cherry Satinado", qty_ordered: 6, qty_received: 6, unit_cost: 1280, total: 7680 }
+          ],
+          subtotal: 24930,
+          tax: 70,
+          total: 25000,
+          paid: 12500,
+          balance: 12500,
+          status: "RECIBIDA_COMPLETA",
+          terms: "30 Días",
+          created_by: "Dirección de Producción",
+          notes: "Lote de curtido vegetal de alta resistencia para temporada navideña."
+        },
+        {
+          folio: "OC-2026-0022",
+          date: "2026-10-29",
+          supplier: "Herrajes y Metales Finos Tonalá",
+          supplier_id: "s2",
+          branch: "Independencia",
+          expected_date: "2026-11-04",
+          received_at: null,
+          items: [
+            { product_id: 3, name: "Broches de presión dorados inoxidables", qty_ordered: 50, qty_received: 20, unit_cost: 70, total: 3500 },
+            { product_id: 10, name: "Cierres metálicos reforzados 35cm", qty_ordered: 50, qty_received: 20, unit_cost: 100, total: 5000 }
+          ],
+          subtotal: 8500,
+          tax: 0,
+          total: 8500,
+          paid: 2800,
+          balance: 5700,
+          status: "ORDENADA",
+          terms: "15 Días",
+          created_by: "Taller Independencia",
+          notes: "Herrajes con triple baño dorado resistente al desgaste por fricción."
+        }
       ],
       payments: [
         { folio: "REC-2026-0198", type: "COBRO_CLIENTE", entity: "Corporativo Andares S.A.", method: "TRANSFERENCIA_SPEI", ref: "SPEI-78192301", amount: 10000, date: "2026-10-29" },
@@ -3116,22 +3382,390 @@
       }
     }
 
-    function renderPurchases() {
+        let activePODetailFolio = null;
+    let currentPurchaseItems = [];
+
+    function renderPurchases(list = erpState.purchases) {
+      // 1. Actualizar KPIs de Compras
+      let totalPurchases = 0;
+      let pendingCount = 0;
+      let debtSum = 0;
+
+      erpState.purchases.forEach(p => {
+        totalPurchases += p.total;
+        debtSum += (p.balance || 0);
+        if (p.status !== 'RECIBIDA_COMPLETA' && p.status !== 'CANCELADA') {
+          pendingCount++;
+        }
+      });
+
+      const totEl = document.getElementById('purchasesTotalSum');
+      const penEl = document.getElementById('purchasesPendingCount');
+      const debEl = document.getElementById('purchasesDebtSum');
+
+      if (totEl) totEl.textContent = `$${totalPurchases.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+      if (penEl) penEl.textContent = `${pendingCount} ${pendingCount === 1 ? 'Orden' : 'Órdenes'}`;
+      if (debEl) debEl.textContent = `$${debtSum.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+
+      // 2. Renderizar Tabla de Órdenes de Compra
       const tbody = document.getElementById('purchasesTbody');
       if (!tbody) return;
-      tbody.innerHTML = erpState.purchases.map(p => `
-        <tr class="hover:bg-brandSurface transition">
-          <td class="p-3.5 font-bold text-brandGold font-mono">${p.folio}</td>
-          <td class="p-3.5 font-semibold text-white">${p.supplier}</td>
-          <td class="p-3.5 text-brandBeige">${p.branch}</td>
-          <td class="p-3.5 font-bold text-white">$${p.total.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
-          <td class="p-3.5 font-bold ${p.balance > 0 ? 'text-rose-400' : 'text-emerald-400'}">$${p.balance.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
-          <td class="p-3.5"><span class="badge ${p.status === 'RECIBIDA_COMPLETA' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${p.status}</span></td>
-          <td class="p-3.5 text-right">
-            <button onclick="receivePurchaseMerchandise('${p.folio}')" class="text-xs bg-brandCard border border-brandGold/40 text-brandGold hover:bg-brandGold hover:text-brandDark px-2.5 py-1 rounded transition"><i class="fa-solid fa-dolly mr-1"></i>Recibir</button>
-          </td>
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-brandMuted">No se encontraron órdenes de compra registradas.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(p => {
+        const isReceived = p.status === 'RECIBIDA_COMPLETA';
+        const badgeColor = isReceived ? 'bg-emerald-500/20 text-emerald-300' : (p.status === 'RECEPCION_PARCIAL' ? 'bg-blue-500/20 text-blue-300' : 'bg-amber-500/20 text-amber-300');
+
+        return `
+          <tr class="hover:bg-brandSurface transition cursor-pointer" onclick="viewPurchaseDetail('${p.folio}')">
+            <td class="p-3.5 font-bold text-brandGold font-mono">${p.folio}</td>
+            <td class="p-3.5 text-brandMuted">${p.date || '2026-10-30'}</td>
+            <td class="p-3.5 font-semibold text-white">${p.supplier}</td>
+            <td class="p-3.5 text-brandBeige">${p.branch}</td>
+            <td class="p-3.5 text-right font-bold text-white font-mono">$${p.total.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5 text-right font-mono font-bold ${(p.balance || 0) > 0 ? 'text-rose-400' : 'text-emerald-400'}">$${(p.balance || 0).toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+            <td class="p-3.5 text-center"><span class="badge ${badgeColor}">${p.status}</span></td>
+            <td class="p-3.5 text-center text-brandBeige font-mono">${p.expected_date || 'Inmediata'}</td>
+            <td class="p-3.5 text-right space-x-2" onclick="event.stopPropagation()">
+              ${!isReceived ? `<button onclick="receivePurchaseMerchandise('${p.folio}')" class="text-xs bg-brandGold hover:bg-brandGoldHover text-brandDark font-bold px-2.5 py-1 rounded shadow transition" title="Recibir en Almacén e Ingresar a Kardex"><i class="fa-solid fa-boxes-packing mr-1"></i>Recibir</button>` : `<span class="text-xs text-emerald-400 font-bold"><i class="fa-solid fa-check mr-1"></i>En Kardex</span>`}
+              <button onclick="viewPurchaseDetail('${p.folio}')" class="text-brandGold hover:text-white p-1" title="Ver Detalle"><i class="fa-solid fa-eye"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterPurchases() {
+      const query = (document.getElementById('searchPurchaseInput')?.value || '').toLowerCase().trim();
+      const status = document.getElementById('filterPurchaseStatus')?.value || 'ALL';
+
+      const filtered = erpState.purchases.filter(p => {
+        const matchesQuery = !query ||
+          p.folio.toLowerCase().includes(query) ||
+          p.supplier.toLowerCase().includes(query) ||
+          p.branch.toLowerCase().includes(query);
+
+        const matchesStatus = status === 'ALL' || p.status === status;
+        return matchesQuery && matchesStatus;
+      });
+
+      renderPurchases(filtered);
+    }
+
+    function viewPurchaseDetail(folio) {
+      const po = erpState.purchases.find(p => p.folio === folio);
+      if (!po) return;
+
+      activePODetailFolio = po.folio;
+
+      document.getElementById('poDetFolio').textContent = `Folio: ${po.folio}`;
+      document.getElementById('poDetSub').textContent = `Proveedor: ${po.supplier} | Destino: ${po.branch}`;
+      document.getElementById('poDetStatusBadge').textContent = po.status;
+      document.getElementById('poDetSupplier').textContent = po.supplier;
+      document.getElementById('poDetTerms').textContent = po.terms || '30 Días';
+      document.getElementById('poDetExpected').textContent = po.expected_date || '2026-11-05';
+      document.getElementById('poDetBranch').textContent = po.branch;
+      document.getElementById('poDetReceivedAt').textContent = po.received_at || 'Pendiente de entrega';
+      document.getElementById('poDetCreatedBy').textContent = po.created_by || 'Administrador de Compras';
+
+      const tbody = document.getElementById('poDetItemsTbody');
+      const items = po.items || [{ name: 'Material Marroquinero', qty_ordered: 10, qty_received: 10, unit_cost: po.total / 10, total: po.total }];
+
+      tbody.innerHTML = items.map(it => `
+        <tr class="hover:bg-brandCard/60 transition">
+          <td class="py-2 text-white font-medium">${it.name}</td>
+          <td class="py-2 text-center text-brandMuted font-mono">${it.qty_ordered}</td>
+          <td class="py-2 text-center text-emerald-400 font-mono font-bold">${it.qty_received}</td>
+          <td class="py-2 text-right text-brandBeige font-mono">$${it.unit_cost.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
+          <td class="py-2 text-right font-bold text-white font-mono">$${it.total.toLocaleString('es-MX', {minimumFractionDigits: 2})}</td>
         </tr>
       `).join('');
+
+      document.getElementById('poDetSubtotal').textContent = `$${(po.subtotal || po.total).toFixed(2)}`;
+      document.getElementById('poDetTax').textContent = `$${(po.tax || 0).toFixed(2)}`;
+      document.getElementById('poDetTotal').textContent = `$${po.total.toFixed(2)}`;
+      document.getElementById('poDetBalance').textContent = `$${(po.balance || 0).toFixed(2)}`;
+
+      const receiveBox = document.getElementById('poReceiveActionBox');
+      if (receiveBox) {
+        if (po.status === 'RECIBIDA_COMPLETA') {
+          receiveBox.classList.add('hidden');
+        } else {
+          receiveBox.classList.remove('hidden');
+        }
+      }
+
+      openModal('purchaseDetailModal');
+    }
+
+    function openNewPurchaseModal() {
+      // Poblar selector de proveedores
+      const suppSel = document.getElementById('modalPurchaseSupplierSelect');
+      if (suppSel) {
+        suppSel.innerHTML = erpState.suppliers.map(s => `<option value="${s.company}">${s.company} (${s.categories || 'Insumos'})`).join('');
+      }
+
+      // Poblar selector de productos/materiales
+      const prodSel = document.getElementById('modalPurchaseProductSelect');
+      if (prodSel) {
+        prodSel.innerHTML = erpState.products.map(p => `<option value="${p.id}" data-cost="${p.cost || p.price * 0.45}">${p.sku} - ${p.name}`).join('');
+        const firstCost = erpState.products[0]?.cost || 1250;
+        document.getElementById('modalPurchaseCost').value = firstCost;
+        prodSel.onchange = (e) => {
+          const opt = prodSel.options[prodSel.selectedIndex];
+          document.getElementById('modalPurchaseCost').value = opt.getAttribute('data-cost') || 1000;
+        };
+      }
+
+      // Fecha esperada: hoy + 7 días
+      const d = new Date();
+      d.setDate(d.getDate() + 7);
+      document.getElementById('modalPurchaseExpectedDate').value = d.toISOString().split('T')[0];
+
+      currentPurchaseItems = [];
+      renderModalPurchaseCart();
+      openModal('purchaseOrderModal');
+    }
+
+    function addModalPurchaseItem() {
+      const prodSel = document.getElementById('modalPurchaseProductSelect');
+      const costInput = document.getElementById('modalPurchaseCost');
+      const qtyInput = document.getElementById('modalPurchaseQty');
+
+      const prodId = parseInt(prodSel.value);
+      const cost = parseFloat(costInput.value) || 0;
+      const qty = parseInt(qtyInput.value) || 1;
+      const prod = erpState.products.find(p => p.id === prodId);
+
+      if (cost <= 0) {
+        alert('Ingresa un costo unitario válido.');
+        return;
+      }
+
+      currentPurchaseItems.push({
+        product_id: prod ? prod.id : null,
+        name: prod ? `Piel / Material para ${prod.name}` : 'Material Suministrado',
+        sku: prod ? prod.sku : '',
+        qty_ordered: qty,
+        qty_received: 0,
+        unit_cost: cost,
+        total: cost * qty
+      });
+
+      renderModalPurchaseCart();
+    }
+
+    function renderModalPurchaseCart() {
+      const tbody = document.getElementById('modalPurchaseItemsTbody');
+      const totalText = document.getElementById('modalPurchaseTotalText');
+
+      if (currentPurchaseItems.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-brandMuted">Sin materiales agregados aún</td></tr>';
+        totalText.textContent = '$0.00';
+        return;
+      }
+
+      let grandTotal = 0;
+      tbody.innerHTML = currentPurchaseItems.map(it => {
+        grandTotal += it.total;
+        return `
+          <tr class="border-b border-brandBorder/40">
+            <td class="py-2 text-white">${it.name}</td>
+            <td class="py-2 text-center text-brandMuted">${it.qty_ordered}</td>
+            <td class="py-2 text-right text-brandBeige font-mono">$${it.unit_cost.toFixed(2)}</td>
+            <td class="py-2 text-right font-bold text-brandGold font-mono">$${it.total.toFixed(2)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      totalText.textContent = `$${grandTotal.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+    }
+
+    function savePurchaseOrder() {
+      const supplierName = document.getElementById('modalPurchaseSupplierSelect').value;
+      const branch = document.getElementById('modalPurchaseBranchSelect').value;
+      const expDate = document.getElementById('modalPurchaseExpectedDate').value;
+      const terms = document.getElementById('modalPurchaseTerms').value;
+      const notes = document.getElementById('modalPurchaseNotes').value.trim();
+
+      if (currentPurchaseItems.length === 0) {
+        alert('Por favor agrega al menos un material o producto a la orden de compra.');
+        return;
+      }
+
+      const total = currentPurchaseItems.reduce((acc, cur) => acc + cur.total, 0);
+      const folio = 'OC-2026-' + String(Math.floor(Math.random() * 900) + 100);
+
+      const newPO = {
+        folio: folio,
+        date: new Date().toISOString().split('T')[0],
+        supplier: supplierName,
+        branch: branch,
+        expected_date: expDate,
+        received_at: null,
+        items: [...currentPurchaseItems],
+        subtotal: total,
+        tax: 0,
+        total: total,
+        paid: 0,
+        balance: total,
+        status: 'ORDENADA',
+        terms: terms,
+        created_by: 'Administrador de Compras',
+        notes: notes
+      };
+
+      erpState.purchases.unshift(newPO);
+
+      // Incrementar cuentas por pagar del proveedor
+      const supp = erpState.suppliers.find(s => s.company === supplierName);
+      if (supp) {
+        supp.balance = (supp.balance || 0) + total;
+      }
+
+      // Sincronizar en Supabase si está disponible
+      if (supabaseClient) {
+        supabaseClient.from('purchase_orders').insert({
+          folio: folio,
+          supplier_name: supplierName,
+          destination_branch: branch,
+          status: 'ORDENADA',
+          subtotal: total,
+          total: total,
+          balance_due: total,
+          expected_delivery_date: expDate,
+          notes: notes
+        }).then();
+      }
+
+      currentPurchaseItems = [];
+      closeModal('purchaseOrderModal');
+      renderPurchases();
+      renderSuppliers();
+      alert(`Orden de Compra ${folio} emitida con éxito por un monto de $${total.toLocaleString('es-MX', {minimumFractionDigits: 2})}.`);
+    }
+
+    function receivePurchaseMerchandise(folio) {
+      const po = erpState.purchases.find(p => p.folio === folio);
+      if (!po) return;
+
+      if (!confirm(`¿Confirmar recepción de mercancía para la orden ${folio} en la sede "${po.branch}"?\n\nSe actualizará inmediatamente el catálogo de existencias y se asentará el movimiento en Kardex.`)) return;
+
+      po.status = 'RECIBIDA_COMPLETA';
+      po.received_at = new Date().toLocaleDateString('es-MX') + ' ' + new Date().toLocaleTimeString('es-MX', {hour: '2-digit', minute: '2-digit'});
+
+      // Ingreso automático a Inventario y Kardex de cada partida
+      if (po.items && po.items.length > 0) {
+        po.items.forEach(it => {
+          it.qty_received = it.qty_ordered;
+          const prod = erpState.products.find(p => p.id === it.product_id || p.sku === it.sku);
+          if (prod) {
+            // Aumentar existencia en sucursal destino
+            if (po.branch === 'Independencia') prod.stock_independencia += it.qty_ordered;
+            else if (po.branch === 'Alfareros') prod.stock_alfareros += it.qty_ordered;
+            else if (po.branch === 'Tonalá') prod.stock_tonala += it.qty_ordered;
+            else {
+              prod.stock_independencia += Math.ceil(it.qty_ordered / 2);
+              prod.stock_alfareros += Math.floor(it.qty_ordered / 2);
+            }
+            prod.stock += it.qty_ordered;
+
+            // Asiento inmutable en Kardex
+            erpState.kardex.unshift({
+              id: 'k' + Date.now(),
+              folio: 'KAR-2026-' + String(Math.floor(Math.random() * 9000) + 1000),
+              date: new Date().toISOString().split('T')[0],
+              product_id: prod.id,
+              sku: prod.sku,
+              product_name: prod.name,
+              branch: po.branch,
+              type: 'ENTRADA_COMPRA',
+              qty_in: it.qty_ordered,
+              qty_out: 0,
+              balance_after: prod.stock,
+              unit_cost: it.unit_cost,
+              ref: po.folio,
+              reason: 'Recepción oficial de mercancía - ' + po.supplier,
+              authorized_by: 'Almacén y Compras'
+            });
+          }
+        });
+      }
+
+      renderPurchases();
+      renderInventory();
+      renderKardexTable();
+      alert(`¡Mercancía de la orden ${folio} recibida exitosamente!\n\nLas existencias y el Kardex han sido actualizados en tiempo real.`);
+    }
+
+    function confirmReceiveActivePO() {
+      if (activePODetailFolio) {
+        closeModal('purchaseDetailModal');
+        receivePurchaseMerchandise(activePODetailFolio);
+      }
+    }
+
+    function downloadPurchaseOrderPDF() {
+      if (!window.jspdf || !activePODetailFolio) return;
+      const po = erpState.purchases.find(p => p.folio === activePODetailFolio);
+      if (!po) return;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Encabezado Vizantino
+      doc.setFillColor(24, 18, 14);
+      doc.rect(0, 0, 210, 42, 'F');
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(22);
+      doc.setTextColor(198, 164, 119);
+      doc.text("VIZANTINO PIEL", 14, 20);
+
+      doc.setFontSize(9);
+      doc.setTextColor(245, 235, 225);
+      doc.text("Taller Central: Calle Independencia #245, San Pedro Tlaquepaque, Jal.", 14, 27);
+      doc.text("RFC: VIZ180512AB3 | Compras: compras@vizantinopiel.com", 14, 33);
+
+      doc.setFontSize(13);
+      doc.setTextColor(255, 255, 255);
+      doc.text("ORDEN DE COMPRA OFICIAL", 130, 18);
+      doc.setFontSize(10);
+      doc.setTextColor(198, 164, 119);
+      doc.text(`Folio: ${po.folio}`, 130, 26);
+      doc.text(`Fecha: ${po.date}`, 130, 32);
+
+      doc.setTextColor(50, 50, 50);
+      doc.setFontSize(11);
+      doc.text(`Proveedor: ${po.supplier}`, 14, 52);
+      doc.setFontSize(9);
+      doc.text(`Condiciones de Pago: ${po.terms || '30 Días'} | Destino: ${po.branch}`, 14, 58);
+
+      const items = po.items || [{ name: 'Material de Curtiduría', qty_ordered: 1, unit_cost: po.total, total: po.total }];
+      const tableRows = items.map(it => [it.name, it.qty_ordered.toString(), `$${it.unit_cost.toFixed(2)}`, `$${it.total.toFixed(2)}`]);
+
+      doc.autoTable({
+        startY: 65,
+        head: [['Material / Especificación', 'Cantidad', 'Costo Unit.', 'Importe']],
+        body: tableRows,
+        headStyles: { fillColor: [40, 30, 22], textColor: [245, 235, 225] }
+      });
+
+      const finalY = doc.lastAutoTable.finalY + 15;
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text(`TOTAL ORDEN DE COMPRA: $${po.total.toFixed(2)} MXN`, 120, finalY);
+
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(120, 120, 120);
+      doc.text("Autorizado por Dirección de Compras y Suministros Vizantino Piel.", 14, finalY + 12);
+
+      doc.save(`OrdenCompra_${po.folio}.pdf`);
     }
 
     function renderPaymentLedger() {
