@@ -1,80 +1,104 @@
-# MANUAL OPERATIVO DEL SISTEMA ERP + CRM + E-COMMERCE
-## VIZANTINO PIEL — GUÍA DE USUARIO Y ADMINISTRACIÓN
+# MANUAL OPERATIVO Y TÉCNICO: SUITE ERP + CRM + E-COMMERCE
+## VIZANTINO PIEL — GUÍA MAESTRA DE USUARIO Y ADMINISTRACIÓN
 
 ---
 
-### 1. Acceso a la Plataforma
-- **URL Directa Oficial**: `https://www.vizantinopiel.com/system` (o `vizantinopiel.com/system`).
-- **Desde la Tienda Pública**: En [index.html](file:///d:/Pagina%20Web%20Vizantino%20Piel/index.html), abre el modal de administración con tus credenciales y haz clic en el botón dorado **"Suite ERP & CRM"** (te redirige de inmediato a `/system`).
+### 1. ACCESO OFICIAL Y ARQUITECTURA
+- **URL Oficial en Producción**: [`https://www.vizantinopiel.com/system`](https://www.vizantinopiel.com/system) (o `https://vizantino.vercel.app/system`).
+- **Acceso Directo desde la Tienda**: Desde [`index.html`](file:///d:/Pagina%20Web%20Vizantino%20Piel/index.html), haciendo clic en el botón dorado **"Suite ERP & CRM"**.
 - **Credenciales Maestras Iniciales**:
   - **Usuario**: `direccion@vizantinopiel.com`
   - **Contraseña**: `Vizantino2026Master!`
-  - **Rol**: Administrador General (Permisos Totales)
+  - **Rol**: `Administrador General` (Acceso irrestricto)
+- **Base de Datos**: Supabase PostgreSQL (`zujfslxqgllzmxdoioie.supabase.co`) con Row Level Security (RLS) habilitado.
 
 ---
 
-### 2. Estructura de Módulos Operativos
+### 2. RESUMEN DE MÓDULOS OPERATIVOS
 
-#### FASE 2: CRM — Gestión de Clientes
-- Permite dar de alta clientes **Particulares** o **Empresas**.
-- Registra RFC, Razón Social, teléfono de contacto y WhatsApp para seguimiento comercial personalizado.
-- Monitorea en tiempo real el saldo deudor, límite de crédito otorgado e historial acumulado de compras.
-- Sincronización automática: Los pedidos finalizados en la tienda online se vinculan directamente al cliente en el CRM.
+#### Módulo 1: Dashboard Ejecutivo (Fase 1 y 9)
+- Indicadores en tiempo real: Ventas del Mes, Cuentas por Cobrar (CxC), Cuentas por Pagar (CxP), Valuación de Inventario a costo, Alertas de existencias mínimas y últimas transacciones en vivo.
 
-#### FASE 3: Proveedores y Suministros
-- Catálogo centralizado de curtidores y proveedores de herrajes (León, Tonalá, Guadalajara).
-- Control de términos de pago (Contado, Crédito a 15, 30 o 45 días) y tiempos promedio de entrega.
-- Generación de Órdenes de Compra vinculadas a cuentas por pagar (CxP).
+#### Módulo 2: CRM — Gestión de Clientes (Fase 2)
+- Clasificación entre **Particulares** y **Empresas** (Razón Social y RFC).
+- Historial 360°, saldo deudor, límite de crédito y enlaces directos a WhatsApp para cotizaciones personalizadas.
+- **Sincronización Transaccional**: Toda compra concretada en la tienda online (`index.html`) se asocia o registra automáticamente en el CRM sin duplicidad.
 
-#### FASE 4: Inventario & Kardex Multi-sucursal
-- Control de existencias desglosado por sede:
-  - **Sucursal Independencia** (Tlaquepaque Centro)
-  - **Sucursal Alfareros**
-  - **Sucursal Tonalá**
-  - **Almacén Central / E-Commerce**
-- **Kardex Transaccional**: Cada entrada por compra, salida por venta, merma o traspaso queda registrada con folio, fecha, usuario responsable y justificación.
-- **Alertas de Stock Mínimo**: El sistema notifica cuando un producto tiene $\le 4$ unidades disponibles para prevenir quiebres de inventario.
+#### Módulo 3: Proveedores & Cadena de Suministro (Fase 3)
+- Directorio de curtidores y proveedores de herrajes artesanales (León, Tonalá, Guadalajara).
+- Monitoreo de condiciones de crédito, plazos de entrega, saldos pendientes y emisión rápida de órdenes de compra.
 
-#### FASE 5: Ventas y Cotizaciones
-- **Venta Rápida (Punto de Venta Mostrador)**: Registro de ventas presenciales con descuento automático de inventario.
-- **Cotizaciones Formales**: Permite emitir cotizaciones comerciales a clientes mayoristas o empresas.
-- **Conversión a Venta con 1 Clic**: Una cotización autorizada se transforma de inmediato en venta oficial.
-- **Comprobantes en PDF**: Generación instantánea de comprobantes de venta con identidad gráfica Vizantino Piel, listos para imprimir o enviar por WhatsApp.
+#### Módulo 4: Inventario Multi-Sucursal & Kardex Inmutable (Fase 4)
+- Existencias desglosadas por almacén:
+  - **Sucursal Independencia** (Showroom principal).
+  - **Sucursal Alfareros** (Tienda y punto de entrega).
+  - **Almacén Tonalá** (Bodega de curtidos y stock central).
+- **Regla Estricta**: Prohibición de existencias negativas sin autorización expresa.
+- Kardex transaccional con auditoría de tipos de movimiento: `ENTRADA_COMPRA`, `SALIDA_VENTA`, `TRASPASO`, `AJUSTE_POSITIVO`, `AJUSTE_MERMA`, `DEVOLUCION_CLIENTE`.
+- Códigos SKU y EAN-13 integrados.
 
-#### FASE 6: Compras y Recepción de Mercancía
-- Emisión de Órdenes de Compra (OC) a proveedores autorizados.
-- **Botón de Recepción**: Al llegar el pedido al taller o sucursal, el encargado presiona "Recibir", sumando de forma automática las existencias al catálogo y Kardex.
+#### Módulo 5: Ventas, POS & Cotizaciones (Fase 5)
+- Unificación de ventas de mostrador (POS), órdenes web y cotizaciones mayoristas.
+- **Conversión en 1 Clic**: Cotización $\to$ Venta formal, descontando existencias en el Kardex de forma atómica.
+- Comprobantes de venta descargables en PDF con paleta de lujo Vizantino (`#120d0a` y `#c6a477`).
+- Soporte de anticipos, abonos y seguimiento de entregas.
 
-#### FASE 7: Control Financiero de Pagos (CxC / CxP)
-- Registro transparente de abonos, anticipos y liquidaciones tanto de clientes como a proveedores.
-- Métodos soportados: Efectivo, Transferencia Interbancaria SPEI, Terminal bancaria física y pasarela Mercado Pago.
-- Cálculo de saldos dinámico para garantizar conciliación bancaria sin duplicidad.
+#### Módulo 6: Compras & Recepción de Mercancía (Fase 6)
+- Flujo administrativo: Solicitud $\to$ Orden de Compra (`OC-2026-XXXX`) $\to$ Recepción de Mercancía $\to$ Cuenta por Pagar $\to$ Liquidación.
+- Al confirmar la recepción física, el sistema suma automáticamente el stock al almacén destino y crea la póliza de entrada en Kardex.
 
-#### FASE 8: Facturación Administrativa Interna
-> [!IMPORTANT]
-> **Normativa Legal y Fiscal:**
-> Todos los documentos emitidos en este módulo son de control administrativo interno. Cuentan de manera obligatoria y fija con la leyenda:
-> **"Documento administrativo sin validez fiscal. No constituye un CFDI."**
-> No se realiza timbrado ante el SAT ni se consumen timbres PAC.
+#### Módulo 7: Control Financiero de Pagos (Fase 7)
+- Panel de flujo de caja en vivo: Ingresos Cobrados, Egresos a Proveedores, Flujo Neto en Caja.
+- Conciliación de Cuentas por Cobrar (CxC) y Cuentas por Pagar (CxP).
+- Recibos de pago foliados (`REC-2026-XXXX`) con comprobante en PDF.
 
-- Cálculo automático de IVA (16%) y desglose de subtotales.
-- Generador de PDF comercial con marca de agua y diseño ejecutivo.
+#### Módulo 8: Facturación Administrativa Sin Timbrado (Fase 8)
+- Emisión de facturas proforma y comprobantes administrativos internos (`FAC-ADM-2026-XXXX`).
+- Desglose de Subtotal, IVA configurable (16% o 0%) y Total.
+- **Leyenda Legal Obligatoria**:
+  > *"Documento administrativo sin validez fiscal. No constituye un CFDI."*
+  (Cumple estrictamente con la normativa comercial sin emitir timbrado ante el SAT).
 
-#### FASE 9: Reportes y Exportación de Datos
-- **Métricas Clave (KPIs)**: Ventas del mes, cartera por cobrar (CxC), pasivos a proveedores (CxP) y valor del stock.
-- **Exportaciones con 1 Clic**: Descarga directa en formato `.CSV` compatible con Microsoft Excel, Google Sheets y sistemas contables.
+#### Módulo 9: Reportes & Business Intelligence (Fase 9)
+- 8 Tarjetas KPI avanzadas con filtros dinámicos (Fecha, Canal, Sucursal, Categoría).
+- Ranking de productos más vendidos y cartera de clientes VIP.
+- Fórmulas financieras documentadas y exportaciones multiformato a CSV (UTF-8 BOM con compatibilidad Excel) e Informes Gerenciales en PDF.
 
-#### FASE 10: Seguridad, Roles y Auditoría
-- Roles configurados: *Administrador General*, *Ventas*, *Inventario*, *Compras* y *Contabilidad*.
-- Auditoría de eventos sensibles para garantizar trazabilidad.
+#### Módulo 10: Usuarios, Roles & Seguridad (Fase 10)
+- Matriz de roles iniciales: Administrador General, Ventas & POS, Inventario & Almacén, Compras & Suministro, Contabilidad & Finanzas.
+- Permisos granulares (Ver, Crear, Editar, Eliminar, Autorizar, Exportar).
+- Bitácora de Auditoría en tiempo real con historial cronológico inmutable y exportación a CSV.
 
 ---
 
-### 3. Pasos para Aplicar la Migración en Supabase
+### 3. FÓRMULAS FINANCIERAS UTILIZADAS
+1. **Ingreso Neto**: Suma de ventas con estatus `PAGADO` o `ENTREGADO`.
+2. **Utilidad Bruta Proyectada**:
+   $$\text{Utilidad Bruta} = \text{Precio de Venta} - \text{Costo de Adquisición}$$
+   $$\text{Margen \%} = \left(\frac{\text{Utilidad Bruta}}{\text{Precio de Venta}}\right) \times 100$$
+3. **Saldos CxC y CxP**:
+   $$\text{Saldo Pendiente} = \text{Importe Total} - \sum(\text{Abonos Conciliados})$$
+4. **Flujo Neto de Efectivo**:
+   $$\text{Flujo Neto} = \sum(\text{Cobros Entrantes}) - \sum(\text{Egresos Pagados})$$
 
-1. Accede a tu panel en [Supabase Console](https://supabase.com/dashboard).
-2. Selecciona tu proyecto: `zujfslxqgllzmxdoioie`.
-3. Dirígete a la pestaña **SQL Editor** en el menú izquierdo.
-4. Abre el archivo local [supabase_erp_crm_migration.sql](file:///d:/Pagina%20Web%20Vizantino%20Piel/supabase_erp_crm_migration.sql).
-5. Copia todo su contenido, pégalo en el editor SQL de Supabase y haz clic en **Run**.
-6. Las tablas, vistas, roles y políticas RLS quedarán activadas inmediatamente.
+---
+
+### 4. MATRIZ DE PERMISOS POR ROL
+
+| Módulo | Administrador | Ventas & POS | Inventario | Compras | Contabilidad |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **CRM Clientes** | Total | Operativo | Solo Lectura | Sin Acceso | Cartera |
+| **Inventario & Kardex** | Total | Consulta Stock | Operativo / Traspasos | Recepción OC | Valuación |
+| **Ventas & Pedidos** | Total | Operativo | Sin Acceso | Sin Acceso | Auditoría |
+| **Compras & Proveedores** | Total | Sin Acceso | Recepción | Operativo | Pasivos |
+| **Control de Pagos** | Total | Cobro Mostrador | Sin Acceso | Sin Acceso | Total Finanzas |
+| **Facturación Admin** | Total | Emisión Proforma | Sin Acceso | Sin Acceso | Total |
+| **Reportes & BI** | Total | Metas | Rotación | Historial | Reportes CxC/CxP |
+| **Usuarios & Seguridad**| Total | Sin Acceso | Sin Acceso | Sin Acceso | Sin Acceso |
+
+---
+
+### 5. VERIFICACIÓN Y VALIDACIÓN (FASE 13)
+- **Tienda Pública**: `index.html` y catálogo en línea preservan las 65 imágenes oficiales sin alteración.
+- **Enrutamiento Limpio**: Configurado en `vercel.json` para servir `/system` sin extensiones `.html`.
+- **Diseño**: Paleta de lujo con café cuero oscuro (`#120d0a`, `#1c1511`), acentos dorados (`#c6a477`), beige (`#f5ebe1`) e interfaz 100% adaptable a computadoras de escritorio, tablets y smartphones.
