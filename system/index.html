@@ -3461,6 +3461,42 @@
       openEditCustomerModal(activeCustomer360Id);
     }
 
+    
+    async function loadProductsFromSupabase() {
+      if (!supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
+        if (!error && data && data.length > 0) {
+          // Filtrar items de preloader si existen y mapear a erpState.products
+          const cleanList = data.filter(p => p.category !== 'Preloader');
+          if (cleanList.length > 0) {
+            erpState.products = cleanList.map(p => ({
+              id: p.id,
+              sku: p.sku || ('VZ-' + p.id),
+              barcode: p.barcode || ('7501001000' + String(p.id).padStart(3, '0')),
+              name: p.name,
+              category: p.category || 'Bolsos',
+              cost: Number(p.cost) || Math.round(Number(p.price || 1000) * 0.45),
+              price: Number(p.price) || 0,
+              stock_independencia: Number(p.stock_independencia) || Math.ceil((Number(p.stock) || 0) * 0.5),
+              stock_alfareros: Number(p.stock_alfareros) || Math.floor((Number(p.stock) || 0) * 0.3),
+              stock_tonala: Number(p.stock_tonala) || Math.floor((Number(p.stock) || 0) * 0.2),
+              stock_reserved: Number(p.stock_reserved) || 0,
+              stock: Number(p.stock) || 0,
+              min_stock: Number(p.min_stock) || 4,
+              image: p.image || ''
+            }));
+            renderInventory();
+            renderReportsDashboard();
+            populateProductDropdown();
+            console.log('Sincronizados ' + erpState.products.length + ' productos reales desde Supabase al ERP.');
+          }
+        }
+      } catch (err) {
+        console.warn('Uso de inventario local:', err.message);
+      }
+    }
+
     async function loadCustomersFromSupabase() {
       if (!supabaseClient) return;
       try {
@@ -6754,6 +6790,7 @@ function exportFinancialSummary() {
     // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
       renderCRM();
+      loadProductsFromSupabase();
       loadCustomersFromSupabase();
       loadSuppliersFromSupabase();
       renderSuppliers();
