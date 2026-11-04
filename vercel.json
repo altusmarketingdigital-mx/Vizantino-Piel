@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
+    { "source": "/products/:path*", "destination": "https://vizantino.com/products/:path*" },
     { "source": "/caja", "destination": "/caja/index.html" },
     { "source": "/caja/", "destination": "/caja/index.html" },
     { "source": "/caja/:path*", "destination": "/caja/index.html" },

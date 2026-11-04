@@ -157,7 +157,7 @@
 
     <!-- Buscador Global / Atajos -->
     <div class="hidden md:flex items-center w-80 relative">
-      <input type="text" id="topbarSearchInput" onkeyup="filterCatalog(this.value)" placeholder="Buscar por SKU, nombre, cartera, bolsa..." class="w-full bg-[#120d0a] border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-1.5 outline-none focus:border-brandGold">
+      <input type="text" id="topbarSearchInput" onkeyup="filterCatalog(this.value)" placeholder="Buscar por Nombre, Descripción, SKU o Código de Barras..." class="w-full bg-[#120d0a] border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-1.5 outline-none focus:border-brandGold">
       <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-brandMuted text-xs"></i>
     </div>
 
@@ -197,7 +197,7 @@
       <!-- Buscador móvil si la pantalla es chica -->
       <div class="p-2 md:hidden bg-[#18120e] border-b border-brandBorder">
         <div class="relative">
-          <input type="text" onkeyup="filterCatalog(this.value)" placeholder="Buscar producto..." class="w-full bg-[#120d0a] border border-brandBorder text-xs text-white rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-brandGold">
+          <input type="text" onkeyup="filterCatalog(this.value)" placeholder="Buscar por Nombre, SKU o Código..." class="w-full bg-[#120d0a] border border-brandBorder text-xs text-white rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-brandGold">
           <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-brandMuted text-xs"></i>
         </div>
       </div>
@@ -401,6 +401,22 @@
     let activePaymentMethod = 'EFECTIVO';
     let ticketCounter = 101;
 
+    
+    function handleImageError(imgEl, category) {
+      // Reemplazo en cascada en caso de fallo
+      const defaultCategoryImages = {
+        'Bolsos': 'https://vizantino.com/products/bolsa-valentina/valentina-1.jpg',
+        'Carteras': 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=600&q=80',
+        'Mochilas': 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+        'Crossbody': 'https://vizantino.com/products/bolsa-cherry/cherry-1.jpg',
+        'Accesorios': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&q=80'
+      };
+      if (imgEl && !imgEl.getAttribute('data-retried')) {
+        imgEl.setAttribute('data-retried', 'true');
+        imgEl.src = defaultCategoryImages[category] || 'https://vizantino.com/products/elite/elite-1.jpg';
+      }
+    }
+
     // 1. Manejo de Sesión de Caja
     function checkCajaSession() {
       const session = sessionStorage.getItem('vizantino_caja_session');
@@ -492,7 +508,19 @@
       try {
         const { data, error } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
         if (!error && data && data.length > 0) {
-          catalogProducts = data.filter(p => p.category !== 'Preloader');
+          catalogProducts = data.filter(p => p.category !== 'Preloader').map(p => {
+            let imgUrl = p.image || '';
+            // Asegurar que si viene con vizantinopiel.com/products use vizantino.com/products (donde estan alojadas en 200 OK)
+            if (imgUrl.includes('vizantinopiel.com/products/')) {
+              imgUrl = imgUrl.replace('vizantinopiel.com/products/', 'vizantino.com/products/');
+            }
+            const fallbackBarcode = '75010010' + String(p.id).padStart(4, '0');
+            return {
+              ...p,
+              image: imgUrl,
+              barcode: p.barcode || fallbackBarcode
+            };
+          });
           renderProductsGrid();
         }
       } catch (err) {
@@ -525,14 +553,25 @@
         list = list.filter(p => p.category === currentCategory);
       }
       if (searchTerm) {
-        list = list.filter(p => 
-          (p.name && p.name.toLowerCase().includes(searchTerm)) ||
-          (p.sku && p.sku.toLowerCase().includes(searchTerm)) ||
-          (p.description && p.description.toLowerCase().includes(searchTerm))
-        );
+        // Búsqueda inteligente por NOMBRE, DESCRIPCIÓN, SKU y CÓDIGO DE BARRAS
+        const cleanTerm = searchTerm.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g, '').toLowerCase();
+        list = list.filter(p => {
+          const name = (p.name || '').toLowerCase();
+          const desc = (p.description || '').toLowerCase();
+          const sku = (p.sku || ('VZ-' + p.id)).toLowerCase();
+          const barcode = (p.barcode || '').toLowerCase();
+          const idStr = String(p.id);
+
+          return name.includes(searchTerm) ||
+                 desc.includes(searchTerm) ||
+                 sku.includes(searchTerm) ||
+                 barcode.includes(searchTerm) ||
+                 idStr === searchTerm ||
+                 (cleanTerm.length > 2 && (name.includes(cleanTerm) || sku.includes(cleanTerm) || barcode.includes(cleanTerm)));
+        });
       }
 
-      document.getElementById('catalogCountLabel').textContent = `${list.length} modelos mostrados`;
+      document.getElementById('catalogCountLabel').textContent = `${list.length} modelos encontrados`;
 
       if (list.length === 0) {
         container.innerHTML = '<div class="col-span-full py-12 text-center text-brandMuted text-xs">No se encontraron productos coincidentes.</div>';
@@ -548,18 +587,21 @@
         return `
           <div onclick="addProductToCart(${p.id})" class="bg-[#1c1511] hover:bg-[#241b15] border border-brandBorder hover:border-brandGold/60 rounded-xl p-2.5 flex flex-col justify-between transition-all cursor-pointer shadow-sm group">
             <div class="relative w-full aspect-square rounded-lg bg-[#120d0a] overflow-hidden mb-2">
-              <img src="${p.image || 'https://via.placeholder.com/300'}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <span class="absolute top-1.5 left-1.5 badge bg-black/70 text-brandGold border border-brandGold/30 text-[9px] backdrop-blur-sm">
+              <img src="${p.image || 'https://vizantino.com/products/elite/elite-1.jpg'}" onerror="handleImageError(this, '${p.category}')" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+              <span class="absolute top-1.5 left-1.5 badge bg-black/80 text-brandGold border border-brandGold/30 text-[9px] backdrop-blur-sm">
                 ${p.category}
               </span>
-              <span class="absolute bottom-1.5 right-1.5 badge ${isOutOfStock ? 'bg-rose-500/80 text-white' : (isLow ? 'bg-amber-500/80 text-carbon' : 'bg-black/70 text-emerald-300')} text-[9px] backdrop-blur-sm">
+              <span class="absolute bottom-1.5 right-1.5 badge ${isOutOfStock ? 'bg-rose-500/90 text-white' : (isLow ? 'bg-amber-500/90 text-carbon font-bold' : 'bg-black/80 text-emerald-300')} text-[9px] backdrop-blur-sm font-semibold">
                 ${stock} pzs
               </span>
             </div>
             
             <div class="space-y-1">
               <h3 class="font-bold text-xs text-white line-clamp-2 leading-snug group-hover:text-brandGold transition">${p.name}</h3>
-              <p class="text-[10px] text-brandMuted font-mono">${p.sku || 'VZ-' + p.id}</p>
+              <div class="flex items-center justify-between text-[10px] font-mono text-brandMuted">
+                <span class="text-brandGold">${p.sku || 'VZ-' + p.id}</span>
+                <span class="text-[9px] text-zinc-400" title="Código de barras"><i class="fa-solid fa-barcode mr-0.5"></i>${p.barcode || ('750100' + p.id)}</span>
+              </div>
             </div>
 
             <div class="flex items-baseline justify-between pt-2 border-t border-brandBorder/60 mt-2">
