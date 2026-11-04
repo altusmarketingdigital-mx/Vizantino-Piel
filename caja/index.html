@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-[#120d0a]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Terminal de Caja Mostrador (POS) — Vizantino Piel</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪙</text></svg>">
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Supabase JS Client & jsPDF para tickets -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandDark: '#120d0a',
+            brandSurface: '#1a130f',
+            brandCard: '#241b15',
+            brandBorder: '#3d2e23',
+            brandGold: '#c6a477',
+            brandGoldHover: '#d4b488',
+            brandBeige: '#f5ebe1',
+            brandMuted: '#9e897a'
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Scrollbar estilizada */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #120d0a; }
+    ::-webkit-scrollbar-thumb { background: #3d2e23; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #c6a477; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans antialiased bg-[#120d0a] text-white overflow-hidden select-none">
+
+  <!-- ======================================================== -->
+  <!-- 1. PANTALLA DE LOGIN EXCLUSIVA PARA VENDEDORES            -->
+  <!-- ======================================================== -->
+  <div id="cajaLoginOverlay" class="fixed inset-0 z-50 bg-[#120d0a] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#2e1d13] via-[#120d0a] to-[#0a0705] opacity-95"></div>
+
+    <div class="relative w-full max-w-sm bg-[#1c1511] border border-brandGold/40 rounded-2xl p-7 shadow-2xl space-y-5">
+      <div class="text-center space-y-1.5">
+        <div class="w-14 h-14 mx-auto rounded-full border border-brandGold/60 bg-[#120d0a] flex items-center justify-center shadow-md">
+          <i class="fa-solid fa-cash-register text-brandGold text-2xl"></i>
+        </div>
+        <h2 class="font-serif font-bold text-xl text-white tracking-wider">VIZANTINO PIEL</h2>
+        <p class="text-[11px] uppercase tracking-widest text-brandGold font-bold">Terminal de Caja & Mostrador</p>
+        <p class="text-xs text-brandMuted">Inicia sesión como vendedor para registrar ventas</p>
+      </div>
+
+      <form id="cajaLoginForm" onsubmit="handleCajaLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-brandBeige mb-1 font-semibold">Correo de Vendedor</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-brandMuted text-xs">
+              <i class="fa-solid fa-user-tag"></i>
+            </span>
+            <input type="email" id="cajaEmailInput" required value="ventas@vizantinopiel.com" placeholder="ventas@vizantinopiel.com" class="w-full bg-[#120d0a] border border-brandBorder text-white text-xs rounded-lg pl-9 pr-3 py-2.5 outline-none focus:border-brandGold transition">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-brandBeige mb-1 font-semibold">Contraseña</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-brandMuted text-xs">
+              <i class="fa-solid fa-key"></i>
+            </span>
+            <input type="password" id="cajaPasswordInput" required value="Ventas2026!" placeholder="••••••••••••" class="w-full bg-[#120d0a] border border-brandBorder text-white text-xs rounded-lg pl-9 pr-9 py-2.5 outline-none focus:border-brandGold transition">
+            <button type="button" onclick="toggleCajaPassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-brandMuted hover:text-white text-xs">
+              <i class="fa-solid fa-eye" id="cajaEyeIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-brandBeige mb-1 font-semibold">Sucursal de Venta</label>
+          <select id="cajaBranchSelect" class="w-full bg-[#120d0a] border border-brandBorder text-brandBeige text-xs rounded-lg px-3 py-2.5 outline-none focus:border-brandGold">
+            <option value="Independencia">Sucursal Independencia (Showroom)</option>
+            <option value="Alfareros">Sucursal Alfareros</option>
+            <option value="Tonalá">Almacén Tonalá</option>
+          </select>
+        </div>
+
+        <div id="cajaLoginError" class="hidden p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center space-x-2">
+          <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>
+          <span id="cajaLoginErrorMsg">Credenciales incorrectas.</span>
+        </div>
+
+        <button type="submit" class="w-full bg-brandGold hover:bg-brandGoldHover text-brandDark font-bold text-xs uppercase tracking-wider py-2.5 rounded-lg transition-all shadow-lg flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>Ingresar a Punto de Venta</span>
+        </button>
+      </form>
+
+      <div class="text-center pt-2 border-t border-brandBorder/60">
+        <a href="/" class="text-[11px] text-brandMuted hover:text-brandGold transition flex items-center justify-center gap-1">
+          <i class="fa-solid fa-store text-[10px]"></i>
+          <span>Ir a la Tienda en Línea</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 2. BARRA SUPERIOR DE LA TERMINAL DE CAJA                 -->
+  <!-- ======================================================== -->
+  <header class="h-16 bg-[#18120e] border-b border-brandBorder flex items-center justify-between px-4 sm:px-6 flex-shrink-0 z-20">
+    <!-- Identidad y Sucursal -->
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-full border border-brandGold/50 bg-[#120d0a] flex items-center justify-center">
+        <i class="fa-solid fa-crown text-brandGold text-base"></i>
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <h1 class="font-serif font-bold text-sm tracking-wider text-white">VIZANTINO PIEL</h1>
+          <span class="badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">POS CAJA</span>
+        </div>
+        <p class="text-[10px] text-brandMuted flex items-center gap-1.5">
+          <i class="fa-solid fa-location-dot text-brandGold text-[9px]"></i>
+          <span id="topbarBranchName">Sucursal Independencia</span>
+          <span class="text-brandBorder">•</span>
+          <span id="topbarShiftName">Turno Activo</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Buscador Global / Atajos -->
+    <div class="hidden md:flex items-center w-80 relative">
+      <input type="text" id="topbarSearchInput" onkeyup="filterCatalog(this.value)" placeholder="Buscar por SKU, nombre, cartera, bolsa..." class="w-full bg-[#120d0a] border border-brandBorder text-xs text-white rounded-lg pl-9 pr-3 py-1.5 outline-none focus:border-brandGold">
+      <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-brandMuted text-xs"></i>
+    </div>
+
+    <!-- Datos del Vendedor y Cerrar Sesión -->
+    <div class="flex items-center space-x-3">
+      <div class="text-right hidden sm:block">
+        <p class="text-xs font-bold text-white" id="topbarUserName">Vendedor</p>
+        <p class="text-[10px] text-brandGold font-mono">ID: CAJ-01</p>
+      </div>
+      <button onclick="logoutCaja()" class="bg-[#241b15] hover:bg-rose-500/20 hover:text-rose-300 border border-brandBorder hover:border-rose-500/40 text-brandBeige text-xs px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow" title="Cerrar sesión de caja">
+        <i class="fa-solid fa-power-off text-rose-400"></i>
+        <span class="hidden sm:inline">Salir</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- 3. CUERPO PRINCIPAL DIVIDIDO EN 2 COLUMNAS (POS)          -->
+  <!-- ======================================================== -->
+  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+
+    <!-- COLUMNA IZQUIERDA: CATÁLOGO DE PRODUCTOS (GRID TÁCTIL) -->
+    <section class="flex-1 flex flex-col overflow-hidden border-r border-brandBorder bg-[#140e0b]">
+      <!-- Barra de Filtros por Categoría -->
+      <div class="p-3 bg-[#18120e] border-b border-brandBorder flex items-center justify-between gap-2 overflow-x-auto flex-shrink-0">
+        <div class="flex items-center space-x-1.5" id="categoryPills">
+          <button onclick="setCategoryFilter('ALL')" class="cat-pill active px-3 py-1 rounded-full text-xs font-semibold bg-brandGold text-brandDark transition" data-cat="ALL">Todos</button>
+          <button onclick="setCategoryFilter('Bolsos')" class="cat-pill px-3 py-1 rounded-full text-xs font-medium bg-[#241b15] text-brandBeige hover:text-white transition" data-cat="Bolsos">Bolsos</button>
+          <button onclick="setCategoryFilter('Carteras')" class="cat-pill px-3 py-1 rounded-full text-xs font-medium bg-[#241b15] text-brandBeige hover:text-white transition" data-cat="Carteras">Carteras</button>
+          <button onclick="setCategoryFilter('Mochilas')" class="cat-pill px-3 py-1 rounded-full text-xs font-medium bg-[#241b15] text-brandBeige hover:text-white transition" data-cat="Mochilas">Mochilas</button>
+          <button onclick="setCategoryFilter('Crossbody')" class="cat-pill px-3 py-1 rounded-full text-xs font-medium bg-[#241b15] text-brandBeige hover:text-white transition" data-cat="Crossbody">Crossbody</button>
+          <button onclick="setCategoryFilter('Accesorios')" class="cat-pill px-3 py-1 rounded-full text-xs font-medium bg-[#241b15] text-brandBeige hover:text-white transition" data-cat="Accesorios">Accesorios</button>
+        </div>
+        <span class="text-[11px] text-brandMuted whitespace-nowrap hidden sm:inline" id="catalogCountLabel">65 modelos disponibles</span>
+      </div>
+
+      <!-- Buscador móvil si la pantalla es chica -->
+      <div class="p-2 md:hidden bg-[#18120e] border-b border-brandBorder">
+        <div class="relative">
+          <input type="text" onkeyup="filterCatalog(this.value)" placeholder="Buscar producto..." class="w-full bg-[#120d0a] border border-brandBorder text-xs text-white rounded-lg pl-8 pr-3 py-1.5 outline-none focus:border-brandGold">
+          <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-brandMuted text-xs"></i>
+        </div>
+      </div>
+
+      <!-- Cuadrícula de Productos -->
+      <div class="flex-1 overflow-y-auto p-3 sm:p-4 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3" id="productsGrid">
+        <!-- Render dinámico con JS -->
+      </div>
+    </section>
+
+    <!-- COLUMNA DERECHA: TICKET DE VENTA ACTUAL & COBRO           -->
+    <section class="w-full lg:w-[410px] xl:w-[450px] bg-[#1a130f] flex flex-col flex-shrink-0 h-full border-t lg:border-t-0 shadow-2xl">
+      <!-- Encabezado del Ticket -->
+      <div class="p-3.5 bg-[#201712] border-b border-brandBorder flex justify-between items-center flex-shrink-0">
+        <div>
+          <div class="flex items-center space-x-2">
+            <h2 class="font-serif font-bold text-sm text-white">Ticket de Venta</h2>
+            <span class="font-mono text-[11px] text-brandGold font-bold" id="currentTicketFolio">VEN-0001</span>
+          </div>
+          <p class="text-[10px] text-brandMuted">Venta mostrador de sucursal</p>
+        </div>
+        <button onclick="clearCurrentCart()" class="text-xs text-rose-400 hover:text-rose-300 transition flex items-center gap-1" title="Limpiar ticket actual">
+          <i class="fa-solid fa-trash-can"></i>
+          <span>Limpiar</span>
+        </button>
+      </div>
+
+      <!-- Selector Rápido de Cliente -->
+      <div class="p-3 bg-[#18120e] border-b border-brandBorder/70 flex items-center gap-2 flex-shrink-0">
+        <div class="w-8 h-8 rounded-lg bg-[#241b15] border border-brandBorder flex items-center justify-center text-brandGold text-xs">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="flex-1">
+          <select id="cartCustomerSelect" class="w-full bg-[#120d0a] border border-brandBorder text-white text-xs rounded-lg px-2.5 py-1.5 outline-none focus:border-brandGold">
+            <option value="PÚBLICO GENERAL">Público General (Mostrador)</option>
+            <option value="Elena Morales García">Elena Morales García (Particular)</option>
+            <option value="Corporativo Andares S.A.">Corporativo Andares S.A. (Empresa)</option>
+            <option value="Carlos Mendoza Ramos">Carlos Mendoza Ramos (Particular)</option>
+            <option value="Boutique Piel Dorada">Boutique Piel Dorada (Empresa)</option>
+          </select>
+        </div>
+        <button onclick="openQuickNewCustomerModal()" class="w-8 h-8 rounded-lg bg-brandGold/20 hover:bg-brandGold text-brandGold hover:text-brandDark border border-brandGold/40 flex items-center justify-center text-xs transition" title="Registrar cliente rápido">
+          <i class="fa-solid fa-user-plus"></i>
+        </button>
+      </div>
+
+      <!-- Lista de Artículos en el Ticket con Scroll -->
+      <div class="flex-1 overflow-y-auto p-3 space-y-2 divide-y divide-brandBorder/40" id="cartItemsContainer">
+        <div class="h-full flex flex-col items-center justify-center text-center p-6 text-brandMuted space-y-2">
+          <div class="w-14 h-14 rounded-full bg-[#241b15] flex items-center justify-center text-brandGold/60 text-2xl">
+            <i class="fa-solid fa-cart-arrow-down"></i>
+          </div>
+          <p class="text-xs font-medium text-brandBeige">El ticket está vacío</p>
+          <p class="text-[11px]">Toca cualquier producto del catálogo izquierdo para agregarlo a la venta.</p>
+        </div>
+      </div>
+
+      <!-- Resumen Financiero y Botón de Cobro -->
+      <div class="p-4 bg-[#201712] border-t border-brandBorder space-y-3 flex-shrink-0">
+        <!-- Subtotales -->
+        <div class="space-y-1.5 text-xs">
+          <div class="flex justify-between text-brandMuted">
+            <span>Artículos seleccionados:</span>
+            <span class="text-white font-medium" id="cartTotalItemsCount">0 pzs</span>
+          </div>
+          <div class="flex justify-between text-brandMuted">
+            <span>Subtotal:</span>
+            <span class="text-white font-medium" id="cartSubtotalText">$0.00</span>
+          </div>
+          <div class="flex justify-between text-brandMuted">
+            <span>Descuento aplicado:</span>
+            <span class="text-emerald-400 font-medium" id="cartDiscountText">$0.00</span>
+          </div>
+          <div class="flex justify-between items-baseline pt-2 border-t border-brandBorder/80">
+            <span class="font-serif font-bold text-sm text-brandGold">TOTAL A COBRAR:</span>
+            <span class="font-serif font-bold text-2xl text-emerald-400" id="cartTotalText">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Botón Grande de Cobro -->
+        <button onclick="openPaymentModal()" id="btnProceedToPay" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-[#2e231c] disabled:text-brandMuted disabled:cursor-not-allowed text-white font-bold text-sm py-3.5 rounded-xl shadow-lg flex items-center justify-center space-x-2 transition-all">
+          <i class="fa-solid fa-circle-check text-base"></i>
+          <span>COBRAR Y EMITIR TICKET</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL DE PAGO (EFECTIVO, TARJETA, TRANSFERENCIA)         -->
+  <!-- ======================================================== -->
+  <div id="paymentModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="relative w-full max-w-md bg-[#1c1511] border border-brandGold/40 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="p-4 bg-[#241b15] border-b border-brandBorder flex justify-between items-center">
+        <div>
+          <h3 class="font-serif font-bold text-base text-white">Finalizar Cobro de Venta</h3>
+          <p class="text-[11px] text-brandMuted">Selecciona el método de pago del cliente</p>
+        </div>
+        <button onclick="closeModal('paymentModal')" class="text-brandMuted hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-5 space-y-4 text-xs">
+        <!-- Total Destacado -->
+        <div class="p-3 rounded-xl bg-[#120d0a] border border-brandBorder text-center">
+          <span class="text-[11px] text-brandMuted uppercase tracking-wider block">Monto Total a Liquidar</span>
+          <span class="font-serif font-bold text-3xl text-emerald-400 mt-1 block" id="modalPaymentTotalText">$0.00</span>
+        </div>
+
+        <!-- Selector de Métodos de Pago -->
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-brandBeige mb-1.5 font-semibold">Método de Pago</label>
+          <div class="grid grid-cols-3 gap-2" id="paymentMethodButtons">
+            <button type="button" onclick="selectPaymentMethod('EFECTIVO')" class="pay-method-btn active p-2.5 rounded-xl border border-brandGold bg-brandGold/20 text-brandGold font-bold text-xs flex flex-col items-center gap-1 transition" data-method="EFECTIVO">
+              <i class="fa-solid fa-money-bill-wave text-base"></i>
+              <span>Efectivo</span>
+            </button>
+            <button type="button" onclick="selectPaymentMethod('TARJETA')" class="pay-method-btn p-2.5 rounded-xl border border-brandBorder bg-[#140e0b] text-brandBeige hover:text-white font-medium text-xs flex flex-col items-center gap-1 transition" data-method="TARJETA">
+              <i class="fa-solid fa-credit-card text-base"></i>
+              <span>Tarjeta</span>
+            </button>
+            <button type="button" onclick="selectPaymentMethod('TRANSFERENCIA')" class="pay-method-btn p-2.5 rounded-xl border border-brandBorder bg-[#140e0b] text-brandBeige hover:text-white font-medium text-xs flex flex-col items-center gap-1 transition" data-method="TRANSFERENCIA">
+              <i class="fa-solid fa-qrcode text-base"></i>
+              <span>Transferencia</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sección de Cambio en Efectivo -->
+        <div id="cashChangeSection" class="p-3 rounded-xl bg-[#140e0b] border border-brandBorder space-y-2">
+          <div class="flex justify-between items-center">
+            <label class="text-[11px] text-brandBeige font-semibold">Monto Recibido en Efectivo:</label>
+            <div class="flex items-center space-x-1">
+              <span class="text-brandGold font-bold">$</span>
+              <input type="number" id="cashReceivedInput" oninput="calculateChange()" step="50" class="w-24 bg-[#1c1511] border border-brandBorder text-right text-white font-bold px-2 py-1 rounded outline-none focus:border-brandGold">
+            </div>
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-brandBorder/60 text-xs">
+            <span class="font-bold text-brandMuted">Cambio a Entregar:</span>
+            <span class="font-bold text-lg text-emerald-400" id="cashChangeText">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Folio o Referencia para Tarjeta/Transferencia -->
+        <div id="cardRefSection" class="hidden">
+          <label class="block text-[11px] uppercase tracking-wider text-brandBeige mb-1 font-semibold">Últimos 4 Dígitos o Referencia de Terminal</label>
+          <input type="text" id="cardRefInput" placeholder="Ej. Auth-9821 / Terminal 02" class="w-full bg-[#120d0a] border border-brandBorder text-white text-xs rounded-lg px-3 py-2 outline-none focus:border-brandGold">
+        </div>
+      </div>
+
+      <div class="p-4 bg-[#241b15] border-t border-brandBorder flex justify-end space-x-2">
+        <button onclick="closeModal('paymentModal')" class="px-4 py-2 text-xs font-semibold text-brandMuted hover:text-white transition">Cancelar</button>
+        <button onclick="confirmAndFinishSale()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition shadow flex items-center gap-1.5">
+          <i class="fa-solid fa-print"></i>
+          <span>Confirmar e Imprimir Ticket</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: REGISTRO RÁPIDO DE NUEVO CLIENTE                  -->
+  <!-- ======================================================== -->
+  <div id="newCustomerModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="relative w-full max-w-sm bg-[#1c1511] border border-brandGold/40 rounded-2xl p-5 shadow-2xl space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b border-brandBorder pb-3">
+        <h3 class="font-serif font-bold text-white text-sm">Nuevo Cliente en Mostrador</h3>
+        <button onclick="closeModal('newCustomerModal')" class="text-brandMuted hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-brandBeige mb-1">Nombre Completo *</label>
+          <input type="text" id="quickCustName" placeholder="Ej. Roberto Salcedo" class="w-full bg-[#120d0a] border border-brandBorder text-white rounded-lg px-3 py-2 outline-none focus:border-brandGold">
+        </div>
+        <div>
+          <label class="block text-brandBeige mb-1">WhatsApp / Teléfono</label>
+          <input type="tel" id="quickCustPhone" placeholder="33 1234 5678" class="w-full bg-[#120d0a] border border-brandBorder text-white rounded-lg px-3 py-2 outline-none focus:border-brandGold">
+        </div>
+        <div>
+          <label class="block text-brandBeige mb-1">Correo Electrónico</label>
+          <input type="email" id="quickCustEmail" placeholder="cliente@gmail.com" class="w-full bg-[#120d0a] border border-brandBorder text-white rounded-lg px-3 py-2 outline-none focus:border-brandGold">
+        </div>
+      </div>
+      <div class="flex justify-end space-x-2 pt-2 border-t border-brandBorder">
+        <button onclick="closeModal('newCustomerModal')" class="px-3 py-1.5 text-brandMuted hover:text-white">Cancelar</button>
+        <button onclick="saveQuickCustomer()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-bold px-4 py-1.5 rounded-lg shadow">Guardar y Seleccionar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT DEL PUNTO DE VENTA EXCLUSIVO (POS) -->
+  <script>
+    const SUPABASE_URL = "https://zujfslxqgllzmxdoioie.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_wtDtY_vgZboOjEsob9Y4QQ_GpvMr3D8";
+    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+    // Estado del Punto de Venta
+    let posUser = null;
+    let catalogProducts = [];
+    let currentCategory = 'ALL';
+    let cart = [];
+    let activePaymentMethod = 'EFECTIVO';
+    let ticketCounter = 101;
+
+    // 1. Manejo de Sesión de Caja
+    function checkCajaSession() {
+      const session = sessionStorage.getItem('vizantino_caja_session');
+      const overlay = document.getElementById('cajaLoginOverlay');
+      if (!session) {
+        if (overlay) overlay.classList.remove('hidden');
+      } else {
+        if (overlay) overlay.classList.add('hidden');
+        posUser = JSON.parse(session);
+        document.getElementById('topbarUserName').textContent = posUser.name;
+        document.getElementById('topbarBranchName').textContent = posUser.branch;
+        document.getElementById('topbarShiftName').textContent = posUser.shift || 'Turno Activo';
+      }
+    }
+
+    function handleCajaLogin(e) {
+      if (e) e.preventDefault();
+      const email = document.getElementById('cajaEmailInput').value.trim().toLowerCase();
+      const pass = document.getElementById('cajaPasswordInput').value;
+      const branch = document.getElementById('cajaBranchSelect').value;
+      const errorBox = document.getElementById('cajaLoginError');
+      const errorMsg = document.getElementById('cajaLoginErrorMsg');
+
+      if (errorBox) errorBox.classList.add('hidden');
+
+      // Validar credenciales de vendedores
+      let valid = false;
+      let userName = "Vendedor Mostrador";
+
+      if (email === 'ventas@vizantinopiel.com' && pass === 'Ventas2026!') {
+        valid = true;
+        userName = "Ventas Mostrador";
+      } else if (email === 'direccion@vizantinopiel.com' && pass === 'Vizantino2026Master!') {
+        valid = true;
+        userName = "Dirección General (Modo POS)";
+      } else if (email === 'almacen@vizantinopiel.com' && pass === 'Almacen2026!') {
+        valid = true;
+        userName = "Encargado de Tienda";
+      }
+
+      if (valid) {
+        posUser = {
+          name: userName,
+          email: email,
+          branch: branch,
+          shift: "Matutino",
+          loginTime: new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })
+        };
+        sessionStorage.setItem('vizantino_caja_session', JSON.stringify(posUser));
+        document.getElementById('cajaLoginOverlay').classList.add('hidden');
+        document.getElementById('topbarUserName').textContent = posUser.name;
+        document.getElementById('topbarBranchName').textContent = posUser.branch;
+      } else {
+        if (errorBox && errorMsg) {
+          errorMsg.textContent = 'Correo o contraseña de vendedor incorrectos.';
+          errorBox.classList.remove('hidden');
+        }
+      }
+    }
+
+    function toggleCajaPassword() {
+      const input = document.getElementById('cajaPasswordInput');
+      const icon = document.getElementById('cajaEyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    function logoutCaja() {
+      if (confirm('¿Deseas cerrar tu turno en el Punto de Venta?')) {
+        sessionStorage.removeItem('vizantino_caja_session');
+        const overlay = document.getElementById('cajaLoginOverlay');
+        if (overlay) {
+          overlay.classList.remove('hidden');
+          document.getElementById('cajaPasswordInput').value = '';
+        }
+      }
+    }
+
+    // 2. Carga y Filtro del Catálogo de Productos
+    async function loadCatalog() {
+      if (!supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient.from('products').select('*').order('id', { ascending: true });
+        if (!error && data && data.length > 0) {
+          catalogProducts = data.filter(p => p.category !== 'Preloader');
+          renderProductsGrid();
+        }
+      } catch (err) {
+        console.warn('Error cargando catálogo en POS:', err.message);
+      }
+    }
+
+    function setCategoryFilter(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.getAttribute('data-cat') === cat) {
+          btn.className = 'cat-pill active px-3 py-1 rounded-full text-xs font-semibold bg-brandGold text-brandDark transition';
+        } else {
+          btn.className = 'cat-pill px-3 py-1 rounded-full text-xs font-medium bg-[#241b15] text-brandBeige hover:text-white transition';
+        }
+      });
+      renderProductsGrid();
+    }
+
+    function filterCatalog(term) {
+      renderProductsGrid(term.trim().toLowerCase());
+    }
+
+    function renderProductsGrid(searchTerm = '') {
+      const container = document.getElementById('productsGrid');
+      if (!container) return;
+
+      let list = catalogProducts;
+      if (currentCategory !== 'ALL') {
+        list = list.filter(p => p.category === currentCategory);
+      }
+      if (searchTerm) {
+        list = list.filter(p => 
+          (p.name && p.name.toLowerCase().includes(searchTerm)) ||
+          (p.sku && p.sku.toLowerCase().includes(searchTerm)) ||
+          (p.description && p.description.toLowerCase().includes(searchTerm))
+        );
+      }
+
+      document.getElementById('catalogCountLabel').textContent = `${list.length} modelos mostrados`;
+
+      if (list.length === 0) {
+        container.innerHTML = '<div class="col-span-full py-12 text-center text-brandMuted text-xs">No se encontraron productos coincidentes.</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(p => {
+        const stock = Number(p.stock) || 0;
+        const price = Number(p.price) || 0;
+        const isLow = stock <= 3;
+        const isOutOfStock = stock <= 0;
+
+        return `
+          <div onclick="addProductToCart(${p.id})" class="bg-[#1c1511] hover:bg-[#241b15] border border-brandBorder hover:border-brandGold/60 rounded-xl p-2.5 flex flex-col justify-between transition-all cursor-pointer shadow-sm group">
+            <div class="relative w-full aspect-square rounded-lg bg-[#120d0a] overflow-hidden mb-2">
+              <img src="${p.image || 'https://via.placeholder.com/300'}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              <span class="absolute top-1.5 left-1.5 badge bg-black/70 text-brandGold border border-brandGold/30 text-[9px] backdrop-blur-sm">
+                ${p.category}
+              </span>
+              <span class="absolute bottom-1.5 right-1.5 badge ${isOutOfStock ? 'bg-rose-500/80 text-white' : (isLow ? 'bg-amber-500/80 text-carbon' : 'bg-black/70 text-emerald-300')} text-[9px] backdrop-blur-sm">
+                ${stock} pzs
+              </span>
+            </div>
+            
+            <div class="space-y-1">
+              <h3 class="font-bold text-xs text-white line-clamp-2 leading-snug group-hover:text-brandGold transition">${p.name}</h3>
+              <p class="text-[10px] text-brandMuted font-mono">${p.sku || 'VZ-' + p.id}</p>
+            </div>
+
+            <div class="flex items-baseline justify-between pt-2 border-t border-brandBorder/60 mt-2">
+              <span class="font-serif font-bold text-sm text-emerald-400">$${price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</span>
+              <span class="w-6 h-6 rounded-full bg-brandGold/10 group-hover:bg-brandGold text-brandGold group-hover:text-brandDark flex items-center justify-center text-xs transition">
+                <i class="fa-solid fa-plus"></i>
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 3. Manejo del Carrito de Venta Actual
+    function addProductToCart(productId) {
+      const prod = catalogProducts.find(p => p.id === productId);
+      if (!prod) return;
+
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id: prod.id,
+          name: prod.name,
+          sku: prod.sku || ('VZ-' + prod.id),
+          price: Number(prod.price) || 0,
+          image: prod.image || '',
+          qty: 1
+        });
+      }
+      renderCart();
+    }
+
+    function updateCartItemQty(productId, delta) {
+      const item = cart.find(i => i.id === productId);
+      if (!item) return;
+
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== productId);
+      }
+      renderCart();
+    }
+
+    function removeCartItem(productId) {
+      cart = cart.filter(i => i.id !== productId);
+      renderCart();
+    }
+
+    function clearCurrentCart() {
+      if (cart.length === 0) return;
+      if (confirm('¿Deseas vaciar el ticket de venta actual?')) {
+        cart = [];
+        renderCart();
+      }
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cartItemsContainer');
+      const payBtn = document.getElementById('btnProceedToPay');
+      const totalItemsEl = document.getElementById('cartTotalItemsCount');
+      const subtotalEl = document.getElementById('cartSubtotalText');
+      const totalEl = document.getElementById('cartTotalText');
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-center p-6 text-brandMuted space-y-2">
+            <div class="w-14 h-14 rounded-full bg-[#241b15] flex items-center justify-center text-brandGold/60 text-2xl">
+              <i class="fa-solid fa-cart-arrow-down"></i>
+            </div>
+            <p class="text-xs font-medium text-brandBeige">El ticket está vacío</p>
+            <p class="text-[11px]">Toca cualquier producto del catálogo izquierdo para agregarlo a la venta.</p>
+          </div>
+        `;
+        if (payBtn) payBtn.disabled = true;
+        if (totalItemsEl) totalItemsEl.textContent = '0 pzs';
+        if (subtotalEl) subtotalEl.textContent = '$0.00';
+        if (totalEl) totalEl.textContent = '$0.00';
+        return;
+      }
+
+      let totalQty = 0;
+      let totalAmount = 0;
+
+      container.innerHTML = cart.map(item => {
+        totalQty += item.qty;
+        const itemSubtotal = item.price * item.qty;
+        totalAmount += itemSubtotal;
+
+        return `
+          <div class="pt-2 flex items-center justify-between gap-2">
+            <div class="w-10 h-10 rounded bg-[#120d0a] overflow-hidden flex-shrink-0 border border-brandBorder">
+              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-bold text-xs text-white truncate">${item.name}</p>
+              <p class="text-[10px] text-brandMuted">$${item.price.toLocaleString('es-MX', { minimumFractionDigits: 2 })} c/u</p>
+            </div>
+            <div class="flex items-center space-x-1.5 bg-[#120d0a] border border-brandBorder rounded-lg px-1.5 py-0.5">
+              <button onclick="updateCartItemQty(${item.id}, -1)" class="w-5 h-5 flex items-center justify-center text-brandBeige hover:text-white text-xs">-</button>
+              <span class="text-xs font-bold text-white px-1">${item.qty}</span>
+              <button onclick="updateCartItemQty(${item.id}, 1)" class="w-5 h-5 flex items-center justify-center text-brandBeige hover:text-white text-xs">+</button>
+            </div>
+            <div class="text-right min-w-[70px]">
+              <p class="font-bold text-xs text-emerald-400">$${itemSubtotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</p>
+              <button onclick="removeCartItem(${item.id})" class="text-[10px] text-rose-400 hover:underline">Eliminar</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (payBtn) payBtn.disabled = false;
+      if (totalItemsEl) totalItemsEl.textContent = `${totalQty} pzs`;
+      if (subtotalEl) subtotalEl.textContent = `$${totalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+      if (totalEl) totalEl.textContent = `$${totalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+    }
+
+    // 4. Modal de Pago y Emisión de Ticket
+    function openPaymentModal() {
+      if (cart.length === 0) return;
+      const totalAmount = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      document.getElementById('modalPaymentTotalText').textContent = `$${totalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+      document.getElementById('cashReceivedInput').value = totalAmount;
+      calculateChange();
+      document.getElementById('paymentModal').classList.remove('hidden');
+    }
+
+    function selectPaymentMethod(method) {
+      activePaymentMethod = method;
+      document.querySelectorAll('.pay-method-btn').forEach(btn => {
+        if (btn.getAttribute('data-method') === method) {
+          btn.className = 'pay-method-btn active p-2.5 rounded-xl border border-brandGold bg-brandGold/20 text-brandGold font-bold text-xs flex flex-col items-center gap-1 transition';
+        } else {
+          btn.className = 'pay-method-btn p-2.5 rounded-xl border border-brandBorder bg-[#140e0b] text-brandBeige hover:text-white font-medium text-xs flex flex-col items-center gap-1 transition';
+        }
+      });
+
+      const cashSection = document.getElementById('cashChangeSection');
+      const cardSection = document.getElementById('cardRefSection');
+
+      if (method === 'EFECTIVO') {
+        cashSection.classList.remove('hidden');
+        cardSection.classList.add('hidden');
+      } else {
+        cashSection.classList.add('hidden');
+        cardSection.classList.remove('hidden');
+      }
+    }
+
+    function calculateChange() {
+      const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const received = parseFloat(document.getElementById('cashReceivedInput').value) || 0;
+      const change = Math.max(0, received - total);
+      document.getElementById('cashChangeText').textContent = `$${change.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+    }
+
+    async function confirmAndFinishSale() {
+      const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const customer = document.getElementById('cartCustomerSelect').value;
+      const folio = `TK-${new Date().getFullYear()}-${ticketCounter++}`;
+
+      // Descontar inventario local y en Supabase si es posible
+      for (const item of cart) {
+        const prod = catalogProducts.find(p => p.id === item.id);
+        if (prod) {
+          prod.stock = Math.max(0, prod.stock - item.qty);
+          if (supabaseClient) {
+            try {
+              await supabaseClient.from('products').update({ stock: prod.stock }).eq('id', prod.id);
+            } catch (e) {}
+          }
+        }
+      }
+
+      // Imprimir Ticket Térmico en PDF
+      printSaleTicketPDF(folio, customer, total, activePaymentMethod);
+
+      alert(`¡Venta ${folio} concretada con éxito por $${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN!`);
+
+      // Resetear ticket
+      cart = [];
+      closeModal('paymentModal');
+      renderCart();
+      renderProductsGrid();
+      document.getElementById('currentTicketFolio').textContent = `VEN-0${ticketCounter}`;
+    }
+
+    function printSaleTicketPDF(folio, customer, total, method) {
+      if (!window.jspdf || !window.jspdf.jsPDF) return;
+      const { jsPDF } = window.jspdf;
+      
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: [80, 160] // Formato ticket térmico 80mm
+      });
+
+      // Encabezado
+      doc.setFillColor(18, 13, 10);
+      doc.rect(0, 0, 80, 15, 'F');
+
+      doc.setTextColor(198, 164, 119);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.text('VIZANTINO PIEL', 40, 7, { align: 'center' });
+
+      doc.setTextColor(245, 235, 225);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(6.5);
+      doc.text('TICKET DE VENTA MOSTRADOR', 40, 11, { align: 'center' });
+
+      let y = 20;
+      doc.setTextColor(20, 20, 20);
+      doc.setFontSize(7);
+      doc.text(`Folio: ${folio}`, 5, y);
+      y += 4;
+      doc.text(`Fecha: ${new Date().toLocaleDateString('es-MX')} ${new Date().toLocaleTimeString('es-MX')}`, 5, y);
+      y += 4;
+      doc.text(`Sucursal: ${posUser ? posUser.branch : 'Independencia'}`, 5, y);
+      y += 4;
+      doc.text(`Atendido por: ${posUser ? posUser.name : 'Ventas Mostrador'}`, 5, y);
+      y += 4;
+      doc.text(`Cliente: ${customer}`, 5, y);
+
+      y += 3;
+      doc.setDrawColor(200, 200, 200);
+      doc.line(5, y, 75, y);
+      y += 4;
+
+      // Artículos
+      doc.setFont('helvetica', 'bold');
+      doc.text('CANT  DESCRIPCIÓN', 5, y);
+      doc.text('IMPORTE', 75, y, { align: 'right' });
+      y += 4;
+      doc.line(5, y, 75, y);
+      y += 4;
+
+      doc.setFont('helvetica', 'normal');
+      cart.forEach(item => {
+        const lineTotal = item.price * item.qty;
+        doc.text(`${item.qty}x   ${item.name.substring(0, 22)}`, 5, y);
+        doc.text(`$${lineTotal.toFixed(2)}`, 75, y, { align: 'right' });
+        y += 4;
+      });
+
+      doc.line(5, y, 75, y);
+      y += 5;
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.text('TOTAL:', 5, y);
+      doc.text(`$${total.toFixed(2)} MXN`, 75, y, { align: 'right' });
+      y += 5;
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.text(`Método de Pago: ${method}`, 5, y);
+      y += 6;
+
+      doc.setFontSize(6.5);
+      doc.setTextColor(100, 100, 100);
+      doc.text('¡Gracias por su compra!', 40, y, { align: 'center' });
+      y += 3.5;
+      doc.text('Marroquinería Fina Mexicana • vizantinopiel.com', 40, y, { align: 'center' });
+
+      doc.save(`Ticket_${folio}.pdf`);
+    }
+
+    // Modal Helpers
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    function openQuickNewCustomerModal() {
+      document.getElementById('newCustomerModal').classList.remove('hidden');
+    }
+
+    function saveQuickCustomer() {
+      const name = document.getElementById('quickCustName').value.trim();
+      if (!name) {
+        alert('Por favor ingresa al menos el nombre del cliente.');
+        return;
+      }
+      const select = document.getElementById('cartCustomerSelect');
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = `${name} (Nuevo)`;
+      opt.selected = true;
+      select.appendChild(opt);
+
+      closeModal('newCustomerModal');
+      document.getElementById('quickCustName').value = '';
+    }
+
+    // Inicialización al cargar la ventana
+    document.addEventListener('DOMContentLoaded', () => {
+      checkCajaSession();
+      loadCatalog();
+    });
+  </script>
+</body>
+</html>

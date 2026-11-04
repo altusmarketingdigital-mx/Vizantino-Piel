@@ -1,6 +1,10 @@
 {
   "cleanUrls": true,
   "rewrites": [
+    { "source": "/caja", "destination": "/caja/index.html" },
+    { "source": "/caja/", "destination": "/caja/index.html" },
+    { "source": "/caja/:path*", "destination": "/caja/index.html" },
+    { "source": "/pos", "destination": "/caja/index.html" },
     { "source": "/system", "destination": "/system/index.html" },
     { "source": "/system/", "destination": "/system/index.html" },
     { "source": "/system/:path*", "destination": "/system/index.html" },
