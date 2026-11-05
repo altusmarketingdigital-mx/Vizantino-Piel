@@ -190,13 +190,36 @@
     </div>
   </header>
 
+  <!-- BARRA DE PESTAÑAS MÓVIL (SÓLO PANTALLAS PEQUEÑAS) -->
+  <div class="lg:hidden flex bg-[#16100c] border-b border-brandBorder flex-shrink-0 z-20">
+    <button 
+      type="button" 
+      id="tabBtnCatalog" 
+      onclick="switchMobileTab('catalog')" 
+      class="flex-1 py-3 text-xs font-bold flex items-center justify-center gap-2 border-b-2 border-brandGold text-brandGold bg-brandGold/10 transition"
+    >
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <span>Buscar Productos</span>
+    </button>
+    <button 
+      type="button" 
+      id="tabBtnTicket" 
+      onclick="switchMobileTab('ticket')" 
+      class="flex-1 py-3 text-xs font-bold flex items-center justify-center gap-2 border-b-2 border-transparent text-brandMuted hover:text-white transition relative"
+    >
+      <i class="fa-solid fa-receipt"></i>
+      <span>Ticket Actual</span>
+      <span id="mobileCartBadge" class="hidden px-1.5 py-0.2 rounded-full bg-emerald-500 text-black font-extrabold text-[10px]">0</span>
+    </button>
+  </div>
+
   <!-- ======================================================== -->
   <!-- 3. CUERPO PRINCIPAL DIVIDIDO EN 2 COLUMNAS (POS)          -->
   <!-- ======================================================== -->
-  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
 
     <!-- COLUMNA IZQUIERDA: BÚSQUEDA Y RESULTADOS DEL PRODUCTO -->
-    <section class="flex-1 flex flex-col overflow-hidden border-r border-brandBorder bg-[#0f0b08]">
+    <section id="sectionCatalog" class="flex-1 flex flex-col overflow-hidden border-r border-brandBorder bg-[#0f0b08] w-full h-full">
       
       <!-- BARRA DE BÚSQUEDA PRINCIPAL (GRANDE Y PROMINENTE) -->
       <div class="p-4 bg-[#140e0b] border-b border-brandBorder flex-shrink-0 shadow-sm">
@@ -265,7 +288,7 @@
     </section>
 
     <!-- COLUMNA DERECHA: TICKET DE VENTA ACTUAL & COBRO           -->
-    <section class="w-full lg:w-[410px] xl:w-[440px] bg-[#140e0b] flex flex-col flex-shrink-0 h-full border-t lg:border-t-0 shadow-2xl">
+    <section id="sectionTicket" class="hidden lg:flex w-full lg:w-[410px] xl:w-[440px] bg-[#140e0b] flex-col flex-shrink-0 h-full border-t lg:border-t-0 shadow-2xl">
       <!-- Encabezado del Ticket -->
       <div class="p-3.5 bg-[#1a120e] border-b border-brandBorder flex justify-between items-center flex-shrink-0">
         <div>
@@ -511,6 +534,46 @@
       if (imgEl && !imgEl.getAttribute('data-retried')) {
         imgEl.setAttribute('data-retried', 'true');
         imgEl.src = defaultCategoryImages[category] || 'https://vizantino.com/products/elite/elite-1.jpg';
+      }
+    }
+
+    // Control de Pestañas en Móvil (Buscar Productos vs Ticket Actual)
+    function switchMobileTab(tab) {
+      const sectionCatalog = document.getElementById('sectionCatalog');
+      const sectionTicket = document.getElementById('sectionTicket');
+      const tabCatalog = document.getElementById('tabBtnCatalog');
+      const tabTicket = document.getElementById('tabBtnTicket');
+
+      if (tab === 'catalog') {
+        if (sectionCatalog) {
+          sectionCatalog.classList.remove('hidden');
+          sectionCatalog.classList.add('flex');
+        }
+        if (sectionTicket) {
+          sectionTicket.classList.add('hidden');
+          sectionTicket.classList.remove('flex');
+        }
+        if (tabCatalog) {
+          tabCatalog.className = 'flex-1 py-3 text-xs font-bold flex items-center justify-center gap-2 border-b-2 border-brandGold text-brandGold bg-brandGold/10 transition';
+        }
+        if (tabTicket) {
+          tabTicket.className = 'flex-1 py-3 text-xs font-bold flex items-center justify-center gap-2 border-b-2 border-transparent text-brandMuted hover:text-white transition relative';
+        }
+      } else {
+        if (sectionCatalog) {
+          sectionCatalog.classList.add('hidden');
+          sectionCatalog.classList.remove('flex');
+        }
+        if (sectionTicket) {
+          sectionTicket.classList.remove('hidden');
+          sectionTicket.classList.add('flex');
+        }
+        if (tabCatalog) {
+          tabCatalog.className = 'flex-1 py-3 text-xs font-bold flex items-center justify-center gap-2 border-b-2 border-transparent text-brandMuted hover:text-white transition';
+        }
+        if (tabTicket) {
+          tabTicket.className = 'flex-1 py-3 text-xs font-bold flex items-center justify-center gap-2 border-b-2 border-brandGold text-brandGold bg-brandGold/10 transition relative';
+        }
       }
     }
 
@@ -865,6 +928,17 @@
       if (totalItemsEl) totalItemsEl.textContent = `${totalQty} pzs`;
       if (subtotalEl) subtotalEl.textContent = `$${totalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
       if (totalEl) totalEl.textContent = `$${totalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+
+      // Actualizar contador flotante en la pestaña móvil
+      const mobileBadge = document.getElementById('mobileCartBadge');
+      if (mobileBadge) {
+        if (totalQty > 0) {
+          mobileBadge.textContent = totalQty;
+          mobileBadge.classList.remove('hidden');
+        } else {
+          mobileBadge.classList.add('hidden');
+        }
+      }
     }
 
     // 4. Modal de Pago Exclusivo: Efectivo o Tarjeta
