@@ -350,7 +350,7 @@
       <div class="p-4 bg-[#1e1510] border-b border-brandBorder flex justify-between items-center">
         <div>
           <h3 class="font-serif font-bold text-base text-white">Finalizar Venta Mostrador</h3>
-          <p class="text-[11px] text-brandMuted">Método de pago (Efectivo o Transferencia)</p>
+          <p class="text-[11px] text-brandMuted">Método de pago (Efectivo o Tarjeta)</p>
         </div>
         <button onclick="closeModal('paymentModal')" class="text-brandMuted hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
@@ -362,7 +362,7 @@
           <span class="font-serif font-bold text-3xl text-emerald-400 mt-1 block" id="modalPaymentTotalText">$0.00</span>
         </div>
 
-        <!-- Selector de Métodos de Pago: EFECTIVO o TRANSFERENCIA -->
+        <!-- Selector de Métodos de Pago: EFECTIVO o TARJETA -->
         <div>
           <label class="block text-[11px] uppercase tracking-wider text-brandGoldLight mb-2 font-semibold">Selecciona Método de Pago</label>
           <div class="grid grid-cols-2 gap-3" id="paymentMethodButtons">
@@ -377,15 +377,15 @@
               <span class="text-sm">Efectivo</span>
             </button>
 
-            <!-- Botón Transferencia -->
+            <!-- Botón Tarjeta (Débito / Crédito) -->
             <button 
               type="button" 
-              onclick="selectPaymentMethod('TRANSFERENCIA')" 
+              onclick="selectPaymentMethod('TARJETA')" 
               class="pay-method-btn p-3 rounded-2xl border-2 border-brandBorder bg-[#0d0907] text-zinc-400 hover:text-white font-medium text-xs flex flex-col items-center justify-center gap-1.5 transition" 
-              data-method="TRANSFERENCIA"
+              data-method="TARJETA"
             >
-              <i class="fa-solid fa-building-columns text-xl text-brandGold"></i>
-              <span class="text-sm">Transferencia SPEI</span>
+              <i class="fa-solid fa-credit-card text-xl text-brandGold"></i>
+              <span class="text-sm">Tarjeta</span>
             </button>
           </div>
         </div>
@@ -413,21 +413,33 @@
           </div>
         </div>
 
-        <!-- Sección de Datos para Transferencia SPEI -->
-        <div id="transferSection" class="hidden p-4 rounded-2xl bg-[#0d0907] border border-brandBorder space-y-3">
-          <div class="p-2.5 rounded-xl bg-brandGold/10 border border-brandGold/30 text-[11px] text-brandGoldLight space-y-1">
+        <!-- Sección de Tarjeta (Terminal Bancaria / TPV) -->
+        <div id="cardSection" class="hidden p-4 rounded-2xl bg-[#0d0907] border border-brandBorder space-y-3">
+          <div class="p-3 rounded-xl bg-brandGold/10 border border-brandGold/30 text-[11px] text-brandGoldLight space-y-1">
             <p class="font-bold text-brandGold flex items-center gap-1.5">
-              <i class="fa-solid fa-circle-info"></i>
-              <span>Datos Bancarios para Transferencia</span>
+              <i class="fa-solid fa-credit-card"></i>
+              <span>Terminal Bancaria / TPV</span>
             </p>
-            <p class="text-[10px] text-zinc-300">Banco: <b>BBVA Bancomer</b></p>
-            <p class="text-[10px] text-zinc-300">Beneficiario: <b>Vizantino Piel S.A. de C.V.</b></p>
-            <p class="text-[10px] text-zinc-300 font-mono">CLABE: <b>012 320 0011 2233 4455</b></p>
+            <p class="text-[10px] text-zinc-300">Pasa o inserta la tarjeta (Débito / Crédito) en la terminal de mostrador.</p>
           </div>
 
           <div>
-            <label class="block text-[11px] uppercase tracking-wider text-brandGoldLight mb-1 font-semibold">Folio de Rastreo o Referencia SPEI *</label>
-            <input type="text" id="transferRefInput" placeholder="Ej. SPEI-984321 / BBVA-774" class="w-full bg-[#1a120e] border border-brandBorder text-white text-xs rounded-xl px-3 py-2.5 outline-none focus:border-brandGold">
+            <label class="block text-[11px] uppercase tracking-wider text-brandGoldLight mb-1.5 font-semibold">Tipo de Tarjeta</label>
+            <div class="grid grid-cols-2 gap-2 mb-2.5">
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-[#1a120e] border border-brandBorder cursor-pointer hover:border-brandGold/50">
+                <input type="radio" name="cardTypeRadio" value="Débito" checked class="accent-brandGold">
+                <span class="text-xs text-white">Débito</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-[#1a120e] border border-brandBorder cursor-pointer hover:border-brandGold/50">
+                <input type="radio" name="cardTypeRadio" value="Crédito" class="accent-brandGold">
+                <span class="text-xs text-white">Crédito</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] uppercase tracking-wider text-brandGoldLight mb-1 font-semibold">Folio de Autorización o Últimos 4 Dígitos (Opcional)</label>
+            <input type="text" id="cardAuthInput" placeholder="Ej. Auth-58392 / Term 01" class="w-full bg-[#1a120e] border border-brandBorder text-white text-xs rounded-xl px-3 py-2.5 outline-none focus:border-brandGold">
           </div>
         </div>
       </div>
@@ -855,7 +867,7 @@
       if (totalEl) totalEl.textContent = `$${totalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
     }
 
-    // 4. Modal de Pago Exclusivo: Efectivo o Transferencia
+    // 4. Modal de Pago Exclusivo: Efectivo o Tarjeta
     function openPaymentModal() {
       if (cart.length === 0) return;
       const totalAmount = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
@@ -877,14 +889,14 @@
       });
 
       const cashSection = document.getElementById('cashChangeSection');
-      const transferSection = document.getElementById('transferSection');
+      const cardSection = document.getElementById('cardSection');
 
       if (method === 'EFECTIVO') {
         cashSection.classList.remove('hidden');
-        transferSection.classList.add('hidden');
+        cardSection.classList.add('hidden');
       } else {
         cashSection.classList.add('hidden');
-        transferSection.classList.remove('hidden');
+        cardSection.classList.remove('hidden');
       }
     }
 
@@ -898,7 +910,6 @@
     function quickCashAmount(amount) {
       const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
       const input = document.getElementById('cashReceivedInput');
-      // Si el monto del billete es menor al total, aproximar al siguiente múltiplo
       let val = amount;
       while (val < total) {
         val += amount;
@@ -919,15 +930,37 @@
       const customer = document.getElementById('cartCustomerSelect').value;
       const folio = `TK-${new Date().getFullYear()}-${ticketCounter++}`;
 
-      if (activePaymentMethod === 'TRANSFERENCIA') {
-        const ref = (document.getElementById('transferRefInput').value || '').trim();
-        if (!ref) {
-          alert('Por favor ingresa la clave de rastreo o referencia de la transferencia.');
-          return;
-        }
+      let methodDetail = activePaymentMethod;
+      if (activePaymentMethod === 'TARJETA') {
+        const cardType = document.querySelector('input[name="cardTypeRadio"]:checked')?.value || 'Débito';
+        methodDetail = `Tarjeta (${cardType})`;
       }
 
       // Descontar inventario local y en Supabase si está disponible
+      for (const item of cart) {
+        const prod = catalogProducts.find(p => p.id === item.id);
+        if (prod) {
+          prod.stock = Math.max(0, prod.stock - item.qty);
+          if (supabaseClient) {
+            try {
+              await supabaseClient.from('products').update({ stock: prod.stock }).eq('id', prod.id);
+            } catch (e) {}
+          }
+        }
+      }
+
+      // Imprimir Ticket Térmico en PDF
+      printSaleTicketPDF(folio, customer, total, methodDetail);
+
+      alert(`¡Venta ${folio} concretada con éxito por $${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN con pago en ${methodDetail}!`);
+
+      // Resetear ticket
+      cart = [];
+      closeModal('paymentModal');
+      renderCart();
+      renderProductsGrid(currentSearchTerm);
+      document.getElementById('currentTicketFolio').textContent = `VEN-0${ticketCounter}`;
+    }
       for (const item of cart) {
         const prod = catalogProducts.find(p => p.id === item.id);
         if (prod) {
@@ -1033,10 +1066,12 @@
         y += 3.5;
         doc.text(`Cambio: $${change.toFixed(2)}`, 5, y);
         y += 4;
-      } else if (method === 'TRANSFERENCIA') {
-        const ref = (document.getElementById('transferRefInput').value || 'Sin Ref');
-        doc.text(`Rastreo SPEI: ${ref}`, 5, y);
-        y += 4;
+      } else if (method.includes('Tarjeta')) {
+        const auth = (document.getElementById('cardAuthInput')?.value || '').trim();
+        if (auth) {
+          doc.text(`Aut/Ref: ${auth}`, 5, y);
+          y += 4;
+        }
       }
 
       y += 6;
