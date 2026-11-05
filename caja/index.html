@@ -535,6 +535,84 @@
 
   <!-- JAVASCRIPT DEL PUNTO DE VENTA EXCLUSIVO (POS) -->
   <script>
+    // 0. Función global accesible inmediatamente para el botón de login
+    window.handleCajaLogin = function(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      
+      const emailEl = document.getElementById('cajaEmailInput');
+      const passEl = document.getElementById('cajaPasswordInput');
+      const branchEl = document.getElementById('cajaBranchSelect');
+      const errorBox = document.getElementById('cajaLoginError');
+      const errorMsg = document.getElementById('cajaLoginErrorMsg');
+
+      const email = emailEl ? emailEl.value.trim().toLowerCase() : '';
+      const pass = passEl ? passEl.value.trim() : '';
+      const branch = branchEl ? branchEl.value : 'Independencia';
+
+      let valid = false;
+      let userName = 'Ventas Mostrador';
+
+      if (email === 'ventas@vizantinopiel.com' && pass === 'Ventas2026!') {
+        valid = true;
+        userName = 'Ventas Mostrador';
+      } else if (email === 'direccion@vizantinopiel.com' && pass === 'Vizantino2026Master!') {
+        valid = true;
+        userName = 'Dirección General';
+      } else if (email === 'almacen@vizantinopiel.com' && pass === 'Almacen2026!') {
+        valid = true;
+        userName = 'Almacén Central';
+      } else if (email === 'admin@vizantino.com' && pass === 'Vizantino2026!') {
+        valid = true;
+        userName = 'Administrador General';
+      }
+
+      if (valid) {
+        if (errorBox) errorBox.classList.add('hidden');
+        const sessionData = {
+          email,
+          name: userName,
+          branch,
+          shift: 'Turno ' + (new Date().getHours() < 14 ? 'Matutino' : 'Vespertino'),
+          loggedAt: new Date().toISOString()
+        };
+        try {
+          sessionStorage.setItem('vizantino_caja_session', JSON.stringify(sessionData));
+          localStorage.setItem('vizantino_caja_session', JSON.stringify(sessionData));
+        } catch (err) {}
+        
+        // Ocultar modal de login inmediatamente
+        const overlay = document.getElementById('cajaLoginOverlay');
+        if (overlay) {
+          overlay.classList.add('hidden');
+          overlay.style.display = 'none';
+        }
+        if (typeof checkCajaSession === 'function') checkCajaSession();
+      } else {
+        if (errorBox) {
+          errorBox.classList.remove('hidden');
+          if (errorMsg) errorMsg.textContent = 'Correo o contraseña incorrectos. Verifica tus credenciales de vendedor.';
+        }
+      }
+      return false;
+    };
+
+    window.toggleCajaPassword = function() {
+      const input = document.getElementById('cajaPasswordInput');
+      const icon = document.getElementById('cajaEyeIcon');
+      if (input) {
+        if (input.type === 'password') {
+          input.type = 'text';
+          if (icon) icon.className = 'fa-solid fa-eye-slash';
+        } else {
+          input.type = 'password';
+          if (icon) icon.className = 'fa-solid fa-eye';
+        }
+      }
+    };
+
     const SUPABASE_URL = "https://zujfslxqgllzmxdoioie.supabase.co";
     const SUPABASE_KEY = "sb_publishable_wtDtY_vgZboOjEsob9Y4QQ_GpvMr3D8";
     const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
@@ -1077,30 +1155,6 @@
       printSaleTicketPDF(folio, customer, total, methodDetail);
 
       alert(`¡Venta ${folio} concretada con éxito por $${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN con pago en ${methodDetail}!`);
-
-      // Resetear ticket
-      cart = [];
-      closeModal('paymentModal');
-      renderCart();
-      renderProductsGrid(currentSearchTerm);
-      document.getElementById('currentTicketFolio').textContent = `VEN-0${ticketCounter}`;
-    }
-      for (const item of cart) {
-        const prod = catalogProducts.find(p => p.id === item.id);
-        if (prod) {
-          prod.stock = Math.max(0, prod.stock - item.qty);
-          if (supabaseClient) {
-            try {
-              await supabaseClient.from('products').update({ stock: prod.stock }).eq('id', prod.id);
-            } catch (e) {}
-          }
-        }
-      }
-
-      // Imprimir Ticket Térmico en PDF
-      printSaleTicketPDF(folio, customer, total, activePaymentMethod);
-
-      alert(`¡Venta ${folio} concretada con éxito por $${total.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN con pago en ${activePaymentMethod}!`);
 
       // Resetear ticket
       cart = [];
