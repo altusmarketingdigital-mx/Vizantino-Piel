@@ -151,12 +151,13 @@
         </div>
 
         <button 
-          type="submit" 
+          type="button" 
           id="btnSubmitCajaLogin"
-          class="w-full bg-gradient-to-r from-brandGold to-brandGoldHover text-brandDark font-extrabold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-lg shadow-brandGold/10 active:scale-[0.98] flex items-center justify-center space-x-2 cursor-pointer"
+          onclick="handleCajaLogin(event)"
+          class="w-full bg-gradient-to-r from-brandGold to-brandGoldHover text-brandDark font-extrabold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-lg shadow-brandGold/10 active:scale-[0.98] flex items-center justify-center space-x-2 cursor-pointer select-none touch-manipulation"
         >
-          <i class="fa-solid fa-right-to-bracket text-sm"></i>
-          <span>Ingresar a Punto de Venta</span>
+          <i class="fa-solid fa-right-to-bracket text-sm pointer-events-none"></i>
+          <span class="pointer-events-none">Ingresar a Punto de Venta</span>
         </button>
       </form>
 
@@ -615,7 +616,7 @@
         document.getElementById('topbarBranchName').textContent = posUser.branch;
         document.getElementById('topbarShiftName').textContent = posUser.shift || 'Turno Activo';
         
-        // Poner foco en el buscador principal sólo en pantallas grandes (evitar disparar teclado en móvil al cargar)
+        // Poner foco en el buscador principal sólo en computadoras (nunca en móvil)
         if (window.innerWidth >= 1024) {
           setTimeout(() => {
             const input = document.getElementById('mainSearchInput');
@@ -627,14 +628,19 @@
 
     function handleCajaLogin(e) {
       if (e) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
       }
-      const email = (document.getElementById('cajaEmailInput').value || '').trim().toLowerCase();
-      const pass = (document.getElementById('cajaPasswordInput').value || '').trim();
-      const branch = document.getElementById('cajaBranchSelect').value;
+      
+      const emailEl = document.getElementById('cajaEmailInput');
+      const passEl = document.getElementById('cajaPasswordInput');
+      const branchEl = document.getElementById('cajaBranchSelect');
       const errorBox = document.getElementById('cajaLoginError');
       const errorMsg = document.getElementById('cajaLoginErrorMsg');
+
+      const email = emailEl ? emailEl.value.trim().toLowerCase() : '';
+      const pass = passEl ? passEl.value.trim() : '';
+      const branch = branchEl ? branchEl.value : 'Independencia';
 
       let valid = false;
       let userName = 'Vendedor';
@@ -651,7 +657,7 @@
       }
 
       if (valid) {
-        errorBox.classList.add('hidden');
+        if (errorBox) errorBox.classList.add('hidden');
         const sessionData = {
           email,
           name: userName,
@@ -663,10 +669,19 @@
           sessionStorage.setItem('vizantino_caja_session', JSON.stringify(sessionData));
           localStorage.setItem('vizantino_caja_session', JSON.stringify(sessionData));
         } catch (err) {}
+        
+        // Ocultar modal de login inmediatamente
+        const overlay = document.getElementById('cajaLoginOverlay');
+        if (overlay) {
+          overlay.classList.add('hidden');
+          overlay.style.display = 'none';
+        }
         checkCajaSession();
       } else {
-        errorBox.classList.remove('hidden');
-        errorMsg.textContent = 'Correo o contraseña incorrectos. Verifica tus credenciales de vendedor.';
+        if (errorBox) {
+          errorBox.classList.remove('hidden');
+          errorMsg.textContent = 'Correo o contraseña incorrectos. Verifica tus credenciales de vendedor.';
+        }
       }
       return false;
     }
