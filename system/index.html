@@ -188,6 +188,11 @@
         <span>Inventario & Kardex</span>
       </button>
 
+      <button onclick="switchTab('workshop')" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all text-brandMuted hover:text-white hover:bg-brandCard" data-tab="workshop">
+        <i class="fa-solid fa-scissors w-5 text-brandMuted"></i>
+        <span>Taller & Producción (BOM)</span>
+      </button>
+
       <button onclick="switchTab('sales')" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all text-brandMuted hover:text-white hover:bg-brandCard" data-tab="sales">
         <i class="fa-solid fa-receipt w-5 text-brandMuted"></i>
         <span>Ventas & Cotizaciones</span>
@@ -738,6 +743,138 @@
                 </thead>
                 <tbody class="divide-y divide-brandBorder/60" id="invCriticalAlertsTbody">
                   <!-- Se poblará dinámicamente con JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB: TALLER & MANUFACTURA ARTESANAL (FASE 4 - BOM)        -->
+      <!-- ======================================================== -->
+      <section id="tab-workshop" class="hidden space-y-6">
+        <!-- Indicadores de Taller y Producción -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Órdenes de Trabajo Activas</p>
+            <h4 class="text-xl font-bold font-serif text-brandGold mt-1" id="woActiveCount">4 Órdenes</h4>
+            <p class="text-[11px] text-amber-300 font-medium mt-1">En proceso de corte y confección</p>
+          </div>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Piezas en Confección</p>
+            <h4 class="text-xl font-bold font-serif text-white mt-1" id="woPiecesInProgress">22 Piezas</h4>
+            <p class="text-[11px] text-brandMuted mt-1">Destinadas a Almacén Tonalá</p>
+          </div>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Consumo de Piel del Mes</p>
+            <h4 class="text-xl font-bold font-serif text-emerald-400 mt-1" id="woLeatherConsumed">480 dm²</h4>
+            <p class="text-[11px] text-emerald-400 font-medium mt-1">Flor entera vacuno de León</p>
+          </div>
+          <div class="bg-brandCard border border-brandBorder p-4 rounded-xl">
+            <p class="text-[10px] uppercase text-brandMuted font-medium">Costo Promedio Manufactura</p>
+            <h4 class="text-xl font-bold font-serif text-brandBeige mt-1">$485.00 MXN</h4>
+            <p class="text-[11px] text-brandMuted mt-1">Materia prima + mano de obra</p>
+          </div>
+        </div>
+
+        <!-- Subtabs de Taller: Órdenes de Trabajo (OT) y Escandallos (BOM) -->
+        <div class="flex border-b border-brandBorder space-x-4">
+          <button onclick="switchWorkshopSubtab('orders')" id="wsSubtabBtnOrders" class="pb-3 text-xs font-bold text-brandGold border-b-2 border-brandGold transition flex items-center space-x-2">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Órdenes de Trabajo (OT)</span>
+          </button>
+          <button onclick="switchWorkshopSubtab('bom')" id="wsSubtabBtnBom" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Escandallo de Materiales (BOM)</span>
+          </button>
+          <button onclick="switchWorkshopSubtab('materials')" id="wsSubtabBtnMaterials" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2">
+            <i class="fa-solid fa-boxes-packing"></i>
+            <span>Inventario de Materia Prima</span>
+          </button>
+        </div>
+
+        <!-- SUBTAB 1: ÓRDENES DE TRABAJO -->
+        <div id="wsSubtabOrders" class="space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-hammer text-brandGold"></i>
+                Lotes de Fabricación en Taller Artesanal
+              </h3>
+              <p class="text-xs text-brandMuted mt-0.5">Control de avance: Corte, Rebajado, Costura, Herrajes y Calidad.</p>
+            </div>
+            <button onclick="openNewWorkOrderModal()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
+              <i class="fa-solid fa-plus"></i>
+              <span>Nueva Orden de Trabajo</span>
+            </button>
+          </div>
+
+          <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                  <tr>
+                    <th class="p-3.5">Folio OT</th>
+                    <th class="p-3.5">Fecha Inicio</th>
+                    <th class="p-3.5">Modelo / Pieza</th>
+                    <th class="p-3.5 text-center">Cant. Lote</th>
+                    <th class="p-3.5">Maestro Artesano</th>
+                    <th class="p-3.5 text-center">Etapa Actual</th>
+                    <th class="p-3.5 text-center">Estatus</th>
+                    <th class="p-3.5 text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-brandBorder/60" id="workshopOrdersTbody">
+                  <!-- Se poblará con JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBTAB 2: ESCANDALLO DE MATERIALES (BOM) -->
+        <div id="wsSubtabBom" class="hidden space-y-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-sm font-bold text-white">Receta de Confección & Estructura de Materiales (BOM)</h3>
+              <p class="text-xs text-brandMuted mt-0.5">Consumo estándar de piel, herrajes y consumibles por cada producto.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="workshopBomGrid">
+            <!-- Se poblará con JS -->
+          </div>
+        </div>
+
+        <!-- SUBTAB 3: INVENTARIO DE MATERIA PRIMA -->
+        <div id="wsSubtabMaterials" class="hidden space-y-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-sm font-bold text-white">Existencias de Materia Prima en Taller</h3>
+              <p class="text-xs text-brandMuted mt-0.5">Pieles curtidas de León, herrajes de Guadalajara e insumos de marroquinería.</p>
+            </div>
+            <button onclick="alert('Materia prima abastecida automáticamente desde el módulo de Compras & Proveedores.')" class="bg-brandCard border border-brandBorder text-brandBeige text-xs px-3.5 py-2 rounded-lg hover:bg-brandBorder transition">
+              <i class="fa-solid fa-circle-info mr-1"></i> Origen de Insumos
+            </button>
+          </div>
+
+          <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                  <tr>
+                    <th class="p-3.5">Código Insumo</th>
+                    <th class="p-3.5">Descripción del Material</th>
+                    <th class="p-3.5">Categoría</th>
+                    <th class="p-3.5 text-center">Unidad</th>
+                    <th class="p-3.5 text-right">Existencia Actual</th>
+                    <th class="p-3.5 text-right">Costo Promedio</th>
+                    <th class="p-3.5 text-center">Estatus</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-brandBorder/60" id="workshopMaterialsTbody">
+                  <!-- Se poblará con JS -->
                 </tbody>
               </table>
             </div>
@@ -3219,6 +3356,65 @@
     </div>
   </div>
 
+  <!-- Modal Nueva Orden de Trabajo (Taller & BOM) -->
+  <div id="newWorkOrderModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <h3 class="font-serif font-bold text-lg text-white flex items-center gap-2">
+          <i class="fa-solid fa-hammer text-brandGold"></i>
+          Nueva Orden de Trabajo (Taller)
+        </h3>
+        <button onclick="closeModal('newWorkOrderModal')" class="text-brandMuted hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4 text-xs">
+        <div>
+          <label class="block text-brandMuted mb-1 font-medium">Pieza / Modelo a Confeccionar *</label>
+          <select id="woProductSelect" onchange="updateWorkOrderBomPreview()" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+            <!-- Dinámico -->
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-brandMuted mb-1 font-medium">Cantidad del Lote *</label>
+            <input type="number" id="woQtyInput" min="1" value="5" onchange="updateWorkOrderBomPreview()" onkeyup="updateWorkOrderBomPreview()" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg p-2.5 outline-none focus:border-brandGold font-mono text-center">
+          </div>
+          <div>
+            <label class="block text-brandMuted mb-1 font-medium">Maestro Artesano Asignado *</label>
+            <select id="woArtisanSelect" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+              <option value="Don Mateo Rivas (Maestro Curtidor)">Don Mateo Rivas (Maestro Curtidor)</option>
+              <option value="Javier Saucedo (Corte & Costura)">Javier Saucedo (Corte & Costura)</option>
+              <option value="Carmen Valdivia (Herrajes & Acabados)">Carmen Valdivia (Herrajes & Acabados)</option>
+              <option value="Taller Central Tonalá">Taller Central Tonalá (Equipo General)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3 bg-brandDark rounded-lg border border-brandBorder space-y-2">
+          <div class="flex items-center justify-between text-brandMuted border-b border-brandBorder pb-1">
+            <span class="font-bold text-white flex items-center gap-1.5"><i class="fa-solid fa-receipt text-brandGold"></i> Consumo de Materiales Proyectado (BOM)</span>
+            <span class="text-[10px] text-brandGold font-mono" id="woBomBatchLabel">Lote de 5 pzas</span>
+          </div>
+          <div class="space-y-1 text-[11px]" id="woBomPreviewList">
+            <!-- Dinámico -->
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-brandMuted mb-1 font-medium">Notas o Especificaciones Especiales</label>
+          <input type="text" id="woNotesInput" placeholder="Ej. Curtido vegetal especial con herrajes dorados premium" class="w-full bg-brandDark border border-brandBorder text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+        </div>
+      </div>
+      <div class="p-4 border-t border-brandBorder bg-brandCard flex justify-end space-x-3">
+        <button onclick="closeModal('newWorkOrderModal')" class="px-4 py-2 rounded-lg text-xs text-brandMuted hover:text-white">Cancelar</button>
+        <button onclick="submitNewWorkOrder()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-5 py-2 rounded-lg shadow flex items-center gap-2">
+          <i class="fa-solid fa-circle-play"></i>
+          <span>Lanzar Orden a Taller</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Nuevo Traspaso entre Sucursales -->
   <div id="newTransferModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
@@ -3624,7 +3820,7 @@
       });
 
       // Ocultar todos los sections y mostrar el activo
-      const sections = ['dashboard', 'crm', 'suppliers', 'inventory', 'sales', 'cashier', 'purchases', 'payments', 'billing', 'reports', 'users'];
+      const sections = ['dashboard', 'crm', 'suppliers', 'inventory', 'workshop', 'sales', 'cashier', 'purchases', 'payments', 'billing', 'reports', 'users'];
       sections.forEach(s => {
         const el = document.getElementById(`tab-${s}`);
         if (el) el.classList.add('hidden');
@@ -3639,6 +3835,7 @@
         crm: 'CRM — Gestión de Clientes',
         suppliers: 'Proveedores & Cadena de Suministro',
         inventory: 'Inventario & Kardex Multi-sucursal',
+        workshop: 'Taller & Manufactura Artesanal (BOM)',
         sales: 'Ventas & Cotizaciones',
         cashier: 'Control de Caja & Mostrador (POS)',
         purchases: 'Compras & Recepción de Mercancía',
@@ -3648,6 +3845,7 @@
         users: 'Usuarios, Roles & Seguridad'
       };
       document.getElementById('viewTitle').textContent = titles[tabId] || 'ERP Suite';
+      if (tabId === 'workshop') { renderWorkshopModule(); }
       if (tabId === 'reports' || tabId === 'dashboard') { renderReportsDashboard(); }
       if (tabId === 'cashier' && typeof renderCashierModule === 'function') { renderCashierModule(); }
     }
@@ -4978,6 +5176,330 @@
           </td>
         </tr>
       `).join('');
+    }
+
+    // ==========================================
+    // FASE 4: MÓDULO DE TALLER & MANUFACTURA (BOM)
+    // ==========================================
+    let erpWorkOrders = [
+      { folio: 'OT-2026-001', date: '2026-11-05', prod_id: 1, prod_name: 'Bolsa Sienna', sku: 'VZ-BOL-001', qty: 5, artisan: 'Don Mateo Rivas (Maestro Curtidor)', stage: 'Costura & Montaje', status: 'EN_PROCESO', notes: 'Piel vacuno grano entero tono Miel' },
+      { folio: 'OT-2026-002', date: '2026-11-04', prod_id: 10, prod_name: 'Mochila Dora', sku: 'VZ-MOC-010', qty: 8, artisan: 'Javier Saucedo (Corte & Costura)', stage: 'Corte de Piezas', status: 'EN_PROCESO', notes: 'Refuerzo en correas y herrajes dorados' },
+      { folio: 'OT-2026-003', date: '2026-11-03', prod_id: 4, prod_name: 'Porta pasaporte', sku: 'VZ-BOL-004', qty: 15, artisan: 'Carmen Valdivia (Herrajes & Acabados)', stage: 'Control de Calidad', status: 'POR_LIBERAR', notes: 'Lustrado final y troquelado de logo' },
+      { folio: 'OT-2026-004', date: '2026-10-30', prod_id: 6, prod_name: 'Bolsa Valentina + strap', sku: 'VZ-BOL-006', qty: 6, artisan: 'Taller Central Tonalá', stage: 'Terminado & Empacado', status: 'TERMINADO', notes: 'Lote liberado y enviado a Tonalá' }
+    ];
+
+    let erpRawMaterials = [
+      { code: 'MP-PIEL-01', name: 'Piel Vacuno Flor Entera Grano Fino (Miel)', cat: 'Pieles Naturales', unit: 'dm²', stock: 850, cost: 7.50, status: 'ÓPTIMO' },
+      { code: 'MP-PIEL-02', name: 'Piel Vacuno Crazy Horse (Café Chocolate)', cat: 'Pieles Naturales', unit: 'dm²', stock: 620, cost: 8.20, status: 'ÓPTIMO' },
+      { code: 'MP-PIEL-03', name: 'Piel con Pelo de Vaca Natural Seleccionado', cat: 'Pieles Exóticas/Especiales', unit: 'dm²', stock: 180, cost: 14.00, status: 'MEDIO' },
+      { code: 'MP-HERR-01', name: 'Mosquetones y Bandolas de Latón Dorado 25mm', cat: 'Herrajes', unit: 'Pieza', stock: 120, cost: 28.00, status: 'ÓPTIMO' },
+      { code: 'MP-HERR-02', name: 'Hebillas de Rodillo Macizo Latón 30mm', cat: 'Herrajes', unit: 'Pieza', stock: 85, cost: 34.00, status: 'MEDIO' },
+      { code: 'MP-CIER-01', name: 'Cierres Metálicos YKK Diente Dorado #5 (Metro)', cat: 'Cierres', unit: 'Metro', stock: 95, cost: 42.00, status: 'ÓPTIMO' },
+      { code: 'MP-FORR-01', name: 'Forro Textil Sarga Algodón Alta Resistencia', cat: 'Forros', unit: 'Metro', stock: 140, cost: 55.00, status: 'ÓPTIMO' },
+      { code: 'MP-HILO-01', name: 'Hilo Encerado Italiano Calibre 1.0mm', cat: 'Consumibles', unit: 'Bobina (500m)', stock: 14, cost: 180.00, status: 'ÓPTIMO' }
+    ];
+
+    const erpProductBomRecipes = {
+      1: { name: 'Bolsa Sienna', leather: 45, leatherType: 'Piel Vacuno Grano Fino', lining: 0.6, hardware: 4, zipper: 0.45, laborCost: 320 },
+      10: { name: 'Mochila Dora', leather: 65, leatherType: 'Piel Vacuno Crazy Horse', lining: 1.2, hardware: 6, zipper: 1.1, laborCost: 550 },
+      4: { name: 'Porta pasaporte', leather: 8, leatherType: 'Piel Vacuno Grano Fino', lining: 0.1, hardware: 1, zipper: 0, laborCost: 90 },
+      6: { name: 'Bolsa Valentina + strap', leather: 38, leatherType: 'Piel Vacuno Grano Fino', lining: 0.5, hardware: 6, zipper: 0.35, laborCost: 280 }
+    };
+
+    function switchWorkshopSubtab(subtab) {
+      ['orders', 'bom', 'materials'].forEach(s => {
+        const el = document.getElementById('wsSubtab' + s.charAt(0).toUpperCase() + s.slice(1));
+        const btn = document.getElementById('wsSubtabBtn' + s.charAt(0).toUpperCase() + s.slice(1));
+        if (el) el.classList.add('hidden');
+        if (btn) {
+          btn.classList.remove('text-brandGold', 'border-brandGold', 'font-bold');
+          btn.classList.add('text-brandMuted', 'border-transparent');
+        }
+      });
+
+      const activeEl = document.getElementById('wsSubtab' + subtab.charAt(0).toUpperCase() + subtab.slice(1));
+      const activeBtn = document.getElementById('wsSubtabBtn' + subtab.charAt(0).toUpperCase() + subtab.slice(1));
+      if (activeEl) activeEl.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.classList.add('text-brandGold', 'border-brandGold', 'font-bold');
+        activeBtn.classList.remove('text-brandMuted', 'border-transparent');
+      }
+
+      if (subtab === 'orders') renderWorkshopOrders();
+      if (subtab === 'bom') renderWorkshopBom();
+      if (subtab === 'materials') renderWorkshopMaterials();
+    }
+
+    function renderWorkshopModule() {
+      renderWorkshopOrders();
+      renderWorkshopBom();
+      renderWorkshopMaterials();
+    }
+
+    function renderWorkshopOrders() {
+      const tbody = document.getElementById('workshopOrdersTbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = erpWorkOrders.map(wo => {
+        let stageBadge = 'bg-amber-950 text-amber-300 border-amber-500/40';
+        if (wo.stage === 'Control de Calidad') stageBadge = 'bg-blue-950 text-blue-300 border-blue-500/40';
+        if (wo.stage === 'Terminado & Empacado') stageBadge = 'bg-emerald-950 text-emerald-300 border-emerald-500/40';
+
+        let statusBadge = wo.status === 'TERMINADO' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300';
+
+        return `
+          <tr class="hover:bg-brandSurface/40 transition">
+            <td class="p-3.5 font-mono text-brandGold font-bold">${wo.folio}</td>
+            <td class="p-3.5 text-brandMuted">${wo.date}</td>
+            <td class="p-3.5">
+              <span class="font-bold text-white block">${wo.prod_name}</span>
+              <span class="text-[10px] text-brandMuted font-mono">${wo.sku}</span>
+            </td>
+            <td class="p-3.5 text-center font-bold text-amber-300 font-mono">${wo.qty} pzas</td>
+            <td class="p-3.5 text-white font-medium">${wo.artisan}</td>
+            <td class="p-3.5 text-center">
+              <span class="px-2 py-0.5 rounded text-[10px] font-semibold border ${stageBadge}">${wo.stage}</span>
+            </td>
+            <td class="p-3.5 text-center">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${statusBadge}">${wo.status}</span>
+            </td>
+            <td class="p-3.5 text-right space-x-1">
+              ${wo.status !== 'TERMINADO' ? `
+                <button onclick="advanceWorkOrderStage('${wo.folio}')" class="px-2.5 py-1 rounded bg-brandGold text-brandDark font-bold text-[10px] hover:bg-brandGoldHover transition shadow" title="Avanzar etapa">
+                  <i class="fa-solid fa-forward-step mr-1"></i> Avanzar
+                </button>
+                <button onclick="finishWorkOrder('${wo.folio}')" class="px-2.5 py-1 rounded bg-emerald-600 text-white font-bold text-[10px] hover:bg-emerald-500 transition shadow" title="Finalizar e ingresar a inventario">
+                  <i class="fa-solid fa-check mr-1"></i> Liberar Lote
+                </button>
+              ` : `
+                <span class="text-xs text-emerald-400 font-medium"><i class="fa-solid fa-circle-check mr-1"></i> Almacén Tonalá</span>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function advanceWorkOrderStage(folio) {
+      const wo = erpWorkOrders.find(o => o.folio === folio);
+      if (!wo) return;
+      const stages = ['Corte de Piezas', 'Rebajado de Cantos', 'Costura & Montaje', 'Herrajes & Acabados', 'Control de Calidad', 'Terminado & Empacado'];
+      const idx = stages.indexOf(wo.stage);
+      if (idx >= 0 && idx < stages.length - 1) {
+        wo.stage = stages[idx + 1];
+        renderWorkshopOrders();
+        alert(`Orden ${wo.folio} avanzada a la etapa: "${wo.stage}".`);
+      } else {
+        alert(`La orden ${wo.folio} ya está en la etapa final de "${wo.stage}". Procede a liberarla a inventario.`);
+      }
+    }
+
+    function finishWorkOrder(folio) {
+      const wo = erpWorkOrders.find(o => o.folio === folio);
+      if (!wo) return;
+
+      if (!confirm(`¿Confirmas la liberación del lote ${wo.folio}?\n\nSe sumarán ${wo.qty} piezas de "${wo.prod_name}" al Almacén Central Tonalá automáticamente.`)) return;
+
+      wo.stage = 'Terminado & Empacado';
+      wo.status = 'TERMINADO';
+
+      const prod = erpState.products.find(p => p.id === wo.prod_id || p.sku === wo.sku);
+      if (prod) {
+        prod.stock_tonala = (prod.stock_tonala || 0) + wo.qty;
+        prod.stock = (prod.stock_independencia || 0) + (prod.stock_alfareros || 0) + (prod.stock_tonala || 0);
+
+        if (supabaseClient) {
+          supabaseClient.from('products').update({
+            stock: prod.stock,
+            stock_tonala: prod.stock_tonala
+          }).eq('id', prod.id).then();
+
+          supabaseClient.from('inventory_kardex').insert({
+            folio: 'KAR-PROD-' + Date.now().toString(36).toUpperCase(),
+            product_id: prod.id,
+            product_name: prod.name,
+            sku: prod.sku,
+            branch: 'Tonalá',
+            movement_type: 'ENTRADA_TALLER',
+            quantity: wo.qty,
+            notes: `Liberación lote de fabricación ${wo.folio} (${wo.artisan})`,
+            created_at: new Date().toISOString()
+          }).then();
+        }
+      }
+
+      renderWorkshopOrders();
+      renderInventory();
+      alert(`¡Lote ${wo.folio} concluido exitosamente!\n\nSe ingresaron ${wo.qty} piezas terminadas al Almacén Central Tonalá con bitácora en Kárdex.`);
+    }
+
+    function renderWorkshopBom() {
+      const grid = document.getElementById('workshopBomGrid');
+      if (!grid) return;
+
+      const prods = erpState.products.slice(0, 6);
+      grid.innerHTML = prods.map(p => {
+        const recipe = erpProductBomRecipes[p.id] || {
+          leather: Math.round(p.price * 0.015),
+          leatherType: 'Piel Vacuno Flor Entera',
+          lining: 0.5,
+          hardware: 4,
+          zipper: 0.4,
+          laborCost: Math.round(p.price * 0.12)
+        };
+        const leatherCost = recipe.leather * 7.50;
+        const liningCost = recipe.lining * 55.00;
+        const hardwareCost = recipe.hardware * 28.00;
+        const matCost = leatherCost + liningCost + hardwareCost;
+        const totalMfgCost = matCost + recipe.laborCost;
+        const grossMargin = p.price - totalMfgCost;
+        const marginPct = ((grossMargin / p.price) * 100).toFixed(1);
+
+        return `
+          <div class="bg-brandCard border border-brandBorder rounded-xl p-4 flex flex-col justify-between space-y-3 shadow">
+            <div>
+              <div class="flex items-center justify-between border-b border-brandBorder pb-2">
+                <div>
+                  <h4 class="font-serif font-bold text-white text-sm">${p.name}</h4>
+                  <span class="text-[10px] text-brandGold font-mono">${p.sku}</span>
+                </div>
+                <span class="text-xs font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-500/40 px-2 py-0.5 rounded">
+                  ${marginPct}% Margen
+                </span>
+              </div>
+
+              <div class="mt-3 space-y-1.5 text-[11px]">
+                <div class="flex justify-between text-brandMuted">
+                  <span>Piel requerida:</span>
+                  <strong class="text-brandBeige">${recipe.leather} dm² (${recipe.leatherType})</strong>
+                </div>
+                <div class="flex justify-between text-brandMuted">
+                  <span>Forro textil:</span>
+                  <strong class="text-white">${recipe.lining} m</strong>
+                </div>
+                <div class="flex justify-between text-brandMuted">
+                  <span>Herrajes finos:</span>
+                  <strong class="text-white">${recipe.hardware} pzas latón</strong>
+                </div>
+                <div class="flex justify-between text-brandMuted">
+                  <span>Mano de obra artesanal:</span>
+                  <strong class="text-brandGold font-mono">$${recipe.laborCost} MXN</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-brandBorder/60 flex items-center justify-between text-xs font-mono">
+              <div>
+                <span class="text-[10px] text-brandMuted block">Costo Fabricación:</span>
+                <strong class="text-amber-300 font-bold">$${totalMfgCost.toFixed(2)}</strong>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-brandMuted block">PVP Catálogo:</span>
+                <strong class="text-brandGold font-bold">$${p.price.toFixed(2)}</strong>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderWorkshopMaterials() {
+      const tbody = document.getElementById('workshopMaterialsTbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = erpRawMaterials.map(m => `
+        <tr class="hover:bg-brandSurface/40 transition">
+          <td class="p-3.5 font-mono text-brandGold font-bold">${m.code}</td>
+          <td class="p-3.5 text-white font-medium">${m.name}</td>
+          <td class="p-3.5 text-brandBeige">${m.cat}</td>
+          <td class="p-3.5 text-center text-brandMuted">${m.unit}</td>
+          <td class="p-3.5 text-right font-bold text-white font-mono">${m.stock}</td>
+          <td class="p-3.5 text-right text-brandGold font-mono">$${m.cost.toFixed(2)}</td>
+          <td class="p-3.5 text-center">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${m.status === 'ÓPTIMO' ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/40' : 'bg-amber-950 text-amber-300 border border-amber-500/40'}">
+              ${m.status}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openNewWorkOrderModal() {
+      const select = document.getElementById('woProductSelect');
+      if (select) {
+        select.innerHTML = erpState.products.map(p => `
+          <option value="${p.id}">${p.sku || ('VZ-' + p.id)} - ${p.name} ($${p.price})</option>
+        `).join('');
+      }
+      updateWorkOrderBomPreview();
+      openModal('newWorkOrderModal');
+    }
+
+    function updateWorkOrderBomPreview() {
+      const prodId = parseInt(document.getElementById('woProductSelect')?.value);
+      const qty = parseInt(document.getElementById('woQtyInput')?.value) || 1;
+      const previewList = document.getElementById('woBomPreviewList');
+      const batchLabel = document.getElementById('woBomBatchLabel');
+      if (batchLabel) batchLabel.textContent = `Lote de ${qty} pzas`;
+
+      const prod = erpState.products.find(p => p.id === prodId) || erpState.products[0];
+      if (!prod || !previewList) return;
+
+      const recipe = erpProductBomRecipes[prod.id] || {
+        leather: Math.round(prod.price * 0.015),
+        leatherType: 'Piel Vacuno Flor Entera',
+        lining: 0.5,
+        hardware: 4,
+        zipper: 0.4
+      };
+
+      const totLeather = recipe.leather * qty;
+      const totLining = (recipe.lining * qty).toFixed(2);
+      const totHardware = recipe.hardware * qty;
+
+      previewList.innerHTML = `
+        <div class="flex justify-between text-brandMuted">
+          <span>• ${recipe.leatherType}:</span>
+          <strong class="text-brandBeige">${totLeather} dm²</strong>
+        </div>
+        <div class="flex justify-between text-brandMuted">
+          <span>• Forro textil resistente:</span>
+          <strong class="text-white">${totLining} m</strong>
+        </div>
+        <div class="flex justify-between text-brandMuted">
+          <span>• Herrajes latón y remaches:</span>
+          <strong class="text-white">${totHardware} pzas</strong>
+        </div>
+      `;
+    }
+
+    function submitNewWorkOrder() {
+      const prodId = parseInt(document.getElementById('woProductSelect').value);
+      const qty = parseInt(document.getElementById('woQtyInput').value) || 1;
+      const artisan = document.getElementById('woArtisanSelect').value;
+      const notes = document.getElementById('woNotesInput').value.trim() || 'Confección artesanal estándar';
+
+      const prod = erpState.products.find(p => p.id === prodId);
+      if (!prod) return;
+
+      const folio = 'OT-2026-' + String(Math.floor(Math.random() * 900) + 100);
+      const newWO = {
+        folio,
+        date: new Date().toISOString().split('T')[0],
+        prod_id: prod.id,
+        prod_name: prod.name,
+        sku: prod.sku,
+        qty,
+        artisan,
+        stage: 'Corte de Piezas',
+        status: 'EN_PROCESO',
+        notes
+      };
+
+      erpWorkOrders.unshift(newWO);
+      closeModal('newWorkOrderModal');
+      renderWorkshopOrders();
+      alert(`¡Orden de Trabajo ${folio} lanzada a taller con éxito!\n\nLote: ${qty} pzas de "${prod.name}"\nArtesano: ${artisan}\nEtapa: Corte de Piezas.`);
     }
 
     function exportSingleProductKardexCSV() {
