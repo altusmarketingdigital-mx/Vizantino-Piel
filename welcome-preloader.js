@@ -59,56 +59,62 @@
     }
   }
 
-  // Obtener una selección variable y aleatoria de productos reales con fotografía
+  // Obtener una selección variable y aleatoria exclusivamente de los PRODUCTOS DESTACADOS
   function pickDynamicCatalogProducts() {
-    let pool = [];
+    let allProducts = [];
 
-    // Prioridad 1: Productos ya en memoria de la aplicación
+    // Prioridad 1: Productos en memoria global de la tienda
     if (window.products && Array.isArray(window.products) && window.products.length > 0) {
-      pool = window.products.filter(p => p && p.active !== false && p.image && !p.image.includes('Preloader'));
+      allProducts = window.products;
     }
 
     // Prioridad 2: Buscar en window.INITIAL_PRODUCTS
-    if (pool.length < 5 && window.INITIAL_PRODUCTS && Array.isArray(window.INITIAL_PRODUCTS)) {
-      const initPool = window.INITIAL_PRODUCTS.filter(p => p && p.active !== false && p.image);
-      pool = pool.concat(initPool);
+    if (allProducts.length === 0 && window.INITIAL_PRODUCTS && Array.isArray(window.INITIAL_PRODUCTS)) {
+      allProducts = window.INITIAL_PRODUCTS;
     }
 
     // Prioridad 3: Intentar desde localStorage si existe
-    if (pool.length < 5) {
+    if (allProducts.length === 0) {
       try {
         const stored = localStorage.getItem('vizantino_products_v1') || localStorage.getItem('vizantino_products_v2');
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed)) {
-            const valid = parsed.filter(p => p && p.image);
-            pool = pool.concat(valid);
-          }
+          if (Array.isArray(parsed)) allProducts = parsed;
         }
       } catch (e) {}
     }
 
-    // Fallback de alta calidad con piezas emblemáticas
+    // Filtrar estrictamente productos DESTACADOS (barcode === 'FEATURED' o featured === true) con fotografía y activos
+    let featuredPool = allProducts.filter(p => {
+      if (!p || p.active === false || !p.image) return false;
+      const isFeatured = p.barcode === 'FEATURED' || p.featured === true || p.is_featured === true;
+      return isFeatured;
+    });
+
+    // Fallback de respaldo en caso de que aún no carguen o no existan marcados
     const fallbacks = [
-      { name: "Bolso Sienna", category: "Bolsos", price: 3000, image: "https://vizantino.com/products/elite/elite-1.jpg" },
-      { name: "Bolsa Valentina + Strap", category: "Bolsos", price: 980, image: "https://vizantino.com/products/bolsa-valentina/valentina-1.jpg" },
-      { name: "Mochila Dora Piel Genuina", category: "Mochilas", price: 3400, image: "https://vizantino.com/products/mochila-rains/mochila-rains-studio-img-18.jpg" },
-      { name: "Porta Pasaporte Artesanal", category: "Accesorios", price: 480, image: "https://vizantino.com/products/tarjetero-vacuno/tarjetero-vacuno-studio-img-07.jpg" },
-      { name: "Crossbody de Piel Vacuno", category: "Crossbody", price: 1500, image: "https://vizantino.com/products/crossbody-cesar/cesar-1.jpg" }
+      { name: "Bolsa Sienna", category: "Bolsos", price: 3000, barcode: "FEATURED", image: "https://vizantino.com/products/elite/elite-1.jpg" },
+      { name: "Bolsa Cincelada Minerva", category: "Bolsos", price: 2600, barcode: "FEATURED", image: "https://vizantino.com/products/bolsa-valentina/valentina-1.jpg" },
+      { name: "Bolsa Mel + Strap", category: "Bolsos", price: 980, barcode: "FEATURED", image: "https://vizantino.com/products/crossbody-cesar/cesar-1.jpg" },
+      { name: "Crossbody Pull-up Mantarraya", category: "Crossbody", price: 3500, barcode: "FEATURED", image: "https://vizantino.com/products/tarjetero-vacuno/tarjetero-vacuno-studio-img-07.jpg" },
+      { name: "Pechera en Piel Corte Vacuno", category: "Accesorios", price: 850, barcode: "FEATURED", image: "https://vizantino.com/products/mochila-rains/mochila-rains-studio-img-18.jpg" }
     ];
 
-    if (pool.length === 0) {
-      return fallbacks;
+    if (featuredPool.length === 0) {
+      // Si no hay ninguno marcado explícitamente, usar los primeros productos emblemáticos activos
+      featuredPool = allProducts.filter(p => p && p.active !== false && p.image && !p.image.includes('Preloader')).slice(0, 6);
     }
 
-    // Desordenar aleatoriamente (shuffle Fisher-Yates) para que sea VARIABLE en cada recarga
-    const shuffled = [...pool];
+    const poolToUse = featuredPool.length > 0 ? featuredPool : fallbacks;
+
+    // Desordenar aleatoriamente (shuffle Fisher-Yates) entre los productos DESTACADOS para que varíen en cada visita
+    const shuffled = [...poolToUse];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
 
-    // Tomar 5 o 6 productos únicos y variados
+    // Tomar hasta 6 piezas destacadas únicas
     const unique = [];
     const seenNames = new Set();
     for (const prod of shuffled) {
@@ -119,7 +125,7 @@
       }
     }
 
-    return unique.length >= 3 ? unique : fallbacks;
+    return unique.length >= 2 ? unique : fallbacks;
   }
 
   function startSequence() {
