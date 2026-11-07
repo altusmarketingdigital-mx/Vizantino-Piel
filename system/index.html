@@ -538,17 +538,21 @@
           </div>
         </div>
 
-        <!-- Sub-navegación de Inventario (Existencias, Libro Mayor Kardex, Alertas de Rotación) -->
-        <div class="flex border-b border-brandBorder space-x-4">
-          <button onclick="switchInventorySubtab('stocks')" id="subtabBtnStocks" class="pb-3 text-xs font-bold text-brandGold border-b-2 border-brandGold transition flex items-center space-x-2">
+        <!-- Sub-navegación de Inventario (Existencias, Libro Mayor Kardex, Alertas de Rotación, Traspasos) -->
+        <div class="flex border-b border-brandBorder space-x-4 overflow-x-auto">
+          <button onclick="switchInventorySubtab('stocks')" id="subtabBtnStocks" class="pb-3 text-xs font-bold text-brandGold border-b-2 border-brandGold transition flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-boxes-stacked"></i>
             <span>Existencias Multi-sucursal</span>
           </button>
-          <button onclick="switchInventorySubtab('kardex')" id="subtabBtnKardex" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2">
+          <button onclick="switchInventorySubtab('transfers')" id="subtabBtnTransfers" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2 whitespace-nowrap">
+            <i class="fa-solid fa-truck-ramp-box"></i>
+            <span>Traspasos entre Sucursales</span>
+          </button>
+          <button onclick="switchInventorySubtab('kardex')" id="subtabBtnKardex" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-book-bookmark"></i>
             <span>Libro Mayor Kardex Transaccional</span>
           </button>
-          <button onclick="switchInventorySubtab('alerts')" id="subtabBtnAlerts" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2">
+          <button onclick="switchInventorySubtab('alerts')" id="subtabBtnAlerts" class="pb-3 text-xs font-medium text-brandMuted hover:text-white border-b-2 border-transparent transition flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-bell"></i>
             <span>Alertas de Stock & Rotación</span>
           </button>
@@ -605,6 +609,46 @@
                 </thead>
                 <tbody class="divide-y divide-brandBorder/60" id="inventoryProductsTbody">
                   <!-- Se poblará dinámicamente con JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBTAB: TRASPASOS ENTRE SUCURSALES (FASE 1) -->
+        <div id="invSubtabTransfers" class="hidden space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-truck-ramp-box text-brandGold"></i>
+                Control y Solicitud de Traspasos Multialmacén
+              </h3>
+              <p class="text-xs text-brandMuted mt-0.5">Traslada piezas entre Almacén Central Tonalá, Independencia y Alfareros con trazabilidad.</p>
+            </div>
+            <button onclick="openNewTransferModal()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-4 py-2.5 rounded-lg flex items-center space-x-2 transition shadow">
+              <i class="fa-solid fa-plus"></i>
+              <span>Nuevo Traspaso</span>
+            </button>
+          </div>
+
+          <div class="bg-brandCard border border-brandBorder rounded-xl overflow-hidden shadow">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brandSurface text-brandMuted uppercase tracking-wider text-[10px] border-b border-brandBorder">
+                  <tr>
+                    <th class="p-3.5">Folio</th>
+                    <th class="p-3.5">Fecha</th>
+                    <th class="p-3.5">Producto</th>
+                    <th class="p-3.5 text-center">Cantidad</th>
+                    <th class="p-3.5">Origen</th>
+                    <th class="p-3.5">Destino</th>
+                    <th class="p-3.5">Estatus</th>
+                    <th class="p-3.5">Solicitó</th>
+                    <th class="p-3.5 text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-brandBorder/60" id="inventoryTransfersTbody">
+                  <!-- Se poblará con JS -->
                 </tbody>
               </table>
             </div>
@@ -3136,6 +3180,68 @@
     </div>
   </div>
 
+  <!-- Modal Nuevo Traspaso entre Sucursales -->
+  <div id="newTransferModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brandSurface border border-brandBorder rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-5 border-b border-brandBorder flex justify-between items-center bg-brandCard">
+        <h3 class="font-serif font-bold text-lg text-white flex items-center gap-2">
+          <i class="fa-solid fa-truck-ramp-box text-brandGold"></i>
+          Solicitud de Traspaso entre Sucursales
+        </h3>
+        <button onclick="closeModal('newTransferModal')" class="text-brandMuted hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4">
+        <div>
+          <label class="block text-xs text-brandMuted mb-1 font-medium">Producto a Trasladar *</label>
+          <select id="transferProductSelect" onchange="updateTransferAvailableStock()" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+            <!-- Dinámico -->
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-brandMuted mb-1 font-medium">Almacén Origen *</label>
+            <select id="transferOriginBranch" onchange="updateTransferAvailableStock()" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+              <option value="Tonalá">Tonalá (Almacén Central)</option>
+              <option value="Independencia">Independencia</option>
+              <option value="Alfareros">Alfareros</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-brandMuted mb-1 font-medium">Sucursal Destino *</label>
+            <select id="transferDestBranch" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+              <option value="Independencia">Independencia</option>
+              <option value="Alfareros">Alfareros</option>
+              <option value="Tonalá">Tonalá (Almacén Central)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-brandDark/80 border border-brandBorder p-3 rounded-lg flex items-center justify-between text-xs">
+          <span class="text-brandMuted">Stock disponible en origen:</span>
+          <strong id="transferAvailableStockLabel" class="text-brandGold font-mono text-sm">0 pzas</strong>
+        </div>
+
+        <div>
+          <label class="block text-xs text-brandMuted mb-1 font-medium">Cantidad de Piezas *</label>
+          <input type="number" id="transferQtyInput" min="1" value="1" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+        </div>
+
+        <div>
+          <label class="block text-xs text-brandMuted mb-1 font-medium">Motivo o Justificación del Traspaso</label>
+          <input type="text" id="transferNotesInput" placeholder="Ej. Reabastecimiento de mostrador fin de semana" class="w-full bg-brandDark border border-brandBorder text-xs text-white rounded-lg p-2.5 outline-none focus:border-brandGold">
+        </div>
+      </div>
+      <div class="p-4 border-t border-brandBorder bg-brandCard flex justify-end space-x-3">
+        <button onclick="closeModal('newTransferModal')" class="px-4 py-2 rounded-lg text-xs text-brandMuted hover:text-white">Cancelar</button>
+        <button onclick="submitNewTransfer()" class="bg-brandGold hover:bg-brandGoldHover text-brandDark font-semibold text-xs px-5 py-2 rounded-lg shadow flex items-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>Registrar y Aplicar Traspaso</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
   <script>
     // Inicializar conexión con Supabase
@@ -4029,7 +4135,7 @@
         let activeProduct360Id = null;
 
     function switchInventorySubtab(subtab) {
-      ['stocks', 'kardex', 'alerts'].forEach(s => {
+      ['stocks', 'transfers', 'kardex', 'alerts'].forEach(s => {
         const el = document.getElementById('invSubtab' + s.charAt(0).toUpperCase() + s.slice(1));
         const btn = document.getElementById('subtabBtn' + s.charAt(0).toUpperCase() + s.slice(1));
         if (el) el.classList.add('hidden');
@@ -4047,6 +4153,7 @@
         activeBtn.classList.remove('text-brandMuted', 'border-transparent');
       }
 
+      if (subtab === 'transfers') renderTransfersTable();
       if (subtab === 'kardex') renderKardexTable();
       if (subtab === 'alerts') renderCriticalAlerts();
     }
@@ -4593,6 +4700,188 @@
 `;
       });
       downloadCSV(csv, "Libro_Mayor_Kardex_Vizantino.csv");
+    }
+
+    // ==========================================
+    // GESTIÓN DE TRASPASOS ENTRE SUCURSALES (FASE 1)
+    // ==========================================
+    let erpTransfers = [];
+
+    function openNewTransferModal(preselectedProdId = null) {
+      const select = document.getElementById('transferProductSelect');
+      if (select) {
+        select.innerHTML = erpState.products.map(p => `
+          <option value="${p.id}" ${preselectedProdId && preselectedProdId === p.id ? 'selected' : ''}>
+            ${p.sku || ('VZ-' + p.id)} - ${p.name} (Total: ${p.stock || 0} pzas)
+          </option>
+        `).join('');
+      }
+      updateTransferAvailableStock();
+      openModal('newTransferModal');
+    }
+
+    function updateTransferAvailableStock() {
+      const prodId = parseInt(document.getElementById('transferProductSelect')?.value);
+      const origin = document.getElementById('transferOriginBranch')?.value || 'Tonalá';
+      const label = document.getElementById('transferAvailableStockLabel');
+      const prod = erpState.products.find(p => p.id === prodId);
+      if (!prod || !label) return;
+
+      let stock = 0;
+      if (origin === 'Independencia') stock = prod.stock_independencia || 0;
+      else if (origin === 'Alfareros') stock = prod.stock_alfareros || 0;
+      else stock = prod.stock_tonala || 0;
+
+      label.textContent = `${stock} pzas`;
+      if (stock <= 0) {
+        label.className = "text-rose-400 font-mono text-sm";
+      } else {
+        label.className = "text-brandGold font-mono text-sm";
+      }
+    }
+
+    async function submitNewTransfer() {
+      const prodId = parseInt(document.getElementById('transferProductSelect').value);
+      const origin = document.getElementById('transferOriginBranch').value;
+      const dest = document.getElementById('transferDestBranch').value;
+      const qty = parseInt(document.getElementById('transferQtyInput').value) || 0;
+      const notes = document.getElementById('transferNotesInput').value.trim() || 'Traspaso logístico entre sucursales';
+
+      if (origin === dest) {
+        alert("El almacén de origen y el destino no pueden ser iguales.");
+        return;
+      }
+      if (qty <= 0) {
+        alert("Ingresa una cantidad mayor a 0.");
+        return;
+      }
+
+      const prod = erpState.products.find(p => p.id === prodId);
+      if (!prod) {
+        alert("Producto no encontrado.");
+        return;
+      }
+
+      // Validar existencias en origen
+      let stockOrigin = origin === 'Independencia' ? (prod.stock_independencia || 0) : (origin === 'Alfareros' ? (prod.stock_alfareros || 0) : (prod.stock_tonala || 0));
+      if (qty > stockOrigin) {
+        alert(`Stock insuficiente en origen (${origin}). Solo hay ${stockOrigin} piezas disponibles.`);
+        return;
+      }
+
+      // Aplicar traspaso en memoria
+      if (origin === 'Independencia') prod.stock_independencia -= qty;
+      else if (origin === 'Alfareros') prod.stock_alfareros -= qty;
+      else prod.stock_tonala -= qty;
+
+      if (dest === 'Independencia') prod.stock_independencia = (prod.stock_independencia || 0) + qty;
+      else if (dest === 'Alfareros') prod.stock_alfareros = (prod.stock_alfareros || 0) + qty;
+      else prod.stock_tonala = (prod.stock_tonala || 0) + qty;
+
+      prod.stock = (prod.stock_independencia || 0) + (prod.stock_alfareros || 0) + (prod.stock_tonala || 0);
+
+      const folio = 'TRA-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 9000) + 1000);
+      const transferRecord = {
+        folio,
+        date: new Date().toISOString().split('T')[0],
+        product_id: prod.id,
+        product_name: prod.name,
+        sku: prod.sku,
+        qty,
+        origin,
+        dest,
+        status: 'COMPLETADO',
+        user: 'Almacén Central',
+        notes
+      };
+
+      erpTransfers.unshift(transferRecord);
+
+      // Registrar salida en kardex
+      const folioKardex = 'KAR-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
+      erpState.kardex.unshift({
+        id: 'k' + Date.now(),
+        folio: folioKardex,
+        date: new Date().toISOString().split('T')[0],
+        product_id: prod.id,
+        sku: prod.sku,
+        product_name: prod.name,
+        branch: `${origin} ➔ ${dest}`,
+        type: 'TRASPASO',
+        qty_in: 0,
+        qty_out: qty,
+        balance_after: prod.stock,
+        unit_cost: prod.cost || prod.price * 0.45,
+        ref: folio,
+        reason: `${notes} (${origin} a ${dest})`,
+        authorized_by: 'Logística Vizantino'
+      });
+
+      // Sincronizar en Supabase
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('products').update({
+            stock: prod.stock,
+            stock_independencia: prod.stock_independencia,
+            stock_alfareros: prod.stock_alfareros,
+            stock_tonala: prod.stock_tonala
+          }).eq('id', prod.id);
+
+          await supabaseClient.from('inventory_kardex').insert({
+            folio: folioKardex,
+            product_id: prod.id,
+            product_name: prod.name,
+            sku: prod.sku,
+            branch: origin,
+            movement_type: 'TRASPASO',
+            quantity: -qty,
+            notes: `Traspaso a ${dest} (Folio ${folio}): ${notes}`,
+            created_at: new Date().toISOString()
+          });
+        } catch (e) {
+          console.warn("Aviso al guardar traspaso en Supabase:", e);
+        }
+      }
+
+      closeModal('newTransferModal');
+      renderInventory();
+      renderTransfersTable();
+      renderKardexTable();
+      alert(`¡Traspaso ${folio} realizado con éxito! Se movieron ${qty} pza(s) de "${prod.name}" desde ${origin} a ${dest}.`);
+    }
+
+    function renderTransfersTable() {
+      const tbody = document.getElementById('inventoryTransfersTbody');
+      if (!tbody) return;
+
+      if (erpTransfers.length === 0) {
+        // Mock inicial de muestra
+        erpTransfers = [
+          { folio: 'TRA-2026-0012', date: '2026-10-27', product_id: 4, product_name: 'Porta pasaporte', sku: 'VZ-BOL-004', qty: 3, origin: 'Tonalá', dest: 'Alfareros', status: 'COMPLETADO', user: 'almacen@vizantinopiel.com', notes: 'Reabastecimiento de mostrador' },
+          { folio: 'TRA-2026-0011', date: '2026-10-25', product_id: 1, product_name: 'Bolsa Sienna', sku: 'VZ-BOL-001', qty: 2, origin: 'Tonalá', dest: 'Independencia', status: 'COMPLETADO', user: 'direccion@vizantinopiel.com', notes: 'Exhibición escaparate' }
+        ];
+      }
+
+      tbody.innerHTML = erpTransfers.map(t => `
+        <tr class="hover:bg-brandSurface/40 transition">
+          <td class="p-3.5 font-mono text-brandGold font-bold">${t.folio}</td>
+          <td class="p-3.5 text-brandMuted">${t.date}</td>
+          <td class="p-3.5">
+            <span class="font-bold text-white block">${t.product_name}</span>
+            <span class="text-[10px] text-brandMuted font-mono">${t.sku}</span>
+          </td>
+          <td class="p-3.5 text-center font-bold text-amber-300 font-mono">${t.qty} pzas</td>
+          <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-brandDark text-brandBeige border border-brandBorder">${t.origin}</span></td>
+          <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-brandGold/20 text-brandGold font-semibold border border-brandGold/30">${t.dest}</span></td>
+          <td class="p-3.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-500/40">${t.status}</span></td>
+          <td class="p-3.5 text-brandMuted text-[11px]">${t.user}</td>
+          <td class="p-3.5 text-right">
+            <button onclick="alert('Traspaso ${t.folio}: ${t.notes}')" class="px-2.5 py-1 rounded bg-brandDark border border-brandBorder text-brandGold text-[11px] hover:bg-brandBorder transition">
+              <i class="fa-solid fa-eye mr-1"></i> Detalle
+            </button>
+          </td>
+        </tr>
+      `).join('');
     }
 
     function exportSingleProductKardexCSV() {
