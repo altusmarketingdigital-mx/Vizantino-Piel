@@ -1138,15 +1138,55 @@
         methodDetail = `Tarjeta (${cardType})`;
       }
 
-      // Descontar inventario local y en Supabase si está disponible
+      // Identificar sucursal activa del vendedor
+      const activeBranch = (posUser && posUser.branch) ? posUser.branch : 'Independencia';
+      let branchStockField = 'stock_independencia';
+      if (activeBranch.toLowerCase().includes('alfarero')) {
+        branchStockField = 'stock_alfareros';
+      } else if (activeBranch.toLowerCase().includes('tonal')) {
+        branchStockField = 'stock_tonala';
+      }
+
+      // Descontar inventario por almacén específico y global
       for (const item of cart) {
         const prod = catalogProducts.find(p => p.id === item.id);
         if (prod) {
-          prod.stock = Math.max(0, prod.stock - item.qty);
+          // Descontar de la sucursal actual
+          const currentBranchStock = typeof prod[branchStockField] === 'number' ? prod[branchStockField] : Math.max(0, prod.stock);
+          const newBranchStock = Math.max(0, currentBranchStock - item.qty);
+          prod[branchStockField] = newBranchStock;
+
+          // Recalcular stock global sumando los almacenes
+          const indStock = typeof prod.stock_independencia === 'number' ? prod.stock_independencia : 0;
+          const alfStock = typeof prod.stock_alfareros === 'number' ? prod.stock_alfareros : 0;
+          const tonStock = typeof prod.stock_tonala === 'number' ? prod.stock_tonala : 0;
+          prod.stock = indStock + alfStock + tonStock;
+
           if (supabaseClient) {
             try {
-              await supabaseClient.from('products').update({ stock: prod.stock }).eq('id', prod.id);
-            } catch (e) {}
+              const updatePayload = {
+                stock: prod.stock,
+                [branchStockField]: newBranchStock,
+                active: prod.stock > 0
+              };
+              await supabaseClient.from('products').update(updatePayload).eq('id', prod.id);
+
+              // Registrar automáticamente movimiento en el Kárdex del ERP
+              await supabaseClient.from('inventory_kardex').insert({
+                product_id: prod.id,
+                product_name: prod.name,
+                sku: prod.sku || `VZ-${prod.id}`,
+                branch: activeBranch,
+                movement_type: 'VENTA',
+                quantity: -item.qty,
+                previous_stock: currentBranchStock,
+                current_stock: newBranchStock,
+                notes: `Venta Mostrador POS Folio ${folio} (${methodDetail})`,
+                created_at: new Date().toISOString()
+              });
+            } catch (e) {
+              console.warn("Aviso al sincronizar venta con inventario:", e);
+            }
           }
         }
       }
