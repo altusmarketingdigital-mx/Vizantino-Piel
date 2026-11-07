@@ -3573,12 +3573,27 @@
             .select('*')
             .order('id', { ascending: true });
 
-          if (!error && data) {
+          if (!error && data && data.length > 0) {
             products = data.map(p => ({
               ...p,
               price: parseFloat(p.price)
             }));
-            localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+            try {
+              // Guardar solo metadatos ligeros en localStorage para evitar exceder la cuota (QuotaExceededError)
+              const lightweightProducts = products.map(p => {
+                const copy = { ...p };
+                if (copy.image && copy.image.length > 1000) {
+                  copy.image = ''; // No saturar localStorage con base64 de 5MB
+                }
+                if (Array.isArray(copy.images)) {
+                  copy.images = copy.images.filter(img => img && img.length <= 1000);
+                }
+                return copy;
+              });
+              localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(lightweightProducts));
+            } catch (storageErr) {
+              console.warn("Aviso: LocalStorage lleno, continuando con productos de Supabase en memoria:", storageErr);
+            }
             updateCategoryCounts();
             renderFeaturedProducts();
             renderCatalog();
@@ -3601,6 +3616,7 @@
         products = [];
       }
       updateCategoryCounts();
+      renderFeaturedProducts();
       renderCatalog();
     }
 
@@ -3626,8 +3642,19 @@
     }
 
     async function saveProductsToStorage() {
-      localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+      try {
+        const lightweightProducts = products.map(p => {
+          const copy = { ...p };
+          if (copy.image && copy.image.length > 1000) copy.image = '';
+          if (Array.isArray(copy.images)) copy.images = copy.images.filter(img => img && img.length <= 1000);
+          return copy;
+        });
+        localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(lightweightProducts));
+      } catch (err) {
+        console.warn("LocalStorage no pudo almacenar la lista completa:", err);
+      }
       updateCategoryCounts();
+      if (typeof renderFeaturedProducts === 'function') renderFeaturedProducts();
       renderCatalog();
       if (isAdminLoggedIn()) {
         renderAdminDashboard();
@@ -5779,7 +5806,7 @@
       prod.barcode = newStatus;
 
       // Update local storage
-      localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+      saveProductsToStorage();
       renderAdminTable();
       if (typeof renderFeaturedProducts === 'function') {
         renderFeaturedProducts();
