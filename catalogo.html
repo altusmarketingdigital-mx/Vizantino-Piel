@@ -3585,6 +3585,7 @@
             }
             updateCategoryCounts();
             renderCatalog();
+            window.dispatchEvent(new CustomEvent('vizantino:products-loaded', { detail: products }));
             return;
           }
         } catch (e) {
