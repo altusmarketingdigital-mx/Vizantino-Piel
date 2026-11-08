@@ -1,8 +1,7 @@
 /**
  * VIZANTINO PIEL — WelcomePreloader
  * Controlador de la secuencia cinematográfica de bienvenida (~4.8 segundos)
- * Muestra dinámicamente fotografías variables y reales de los productos del catálogo
- * sincronizados desde Supabase / LocalStorage.
+ * Muestra dinámicamente fotografías variables y reales de los productos DESTACADOS del catálogo.
  */
 
 (function initWelcomePreloader() {
@@ -40,6 +39,90 @@
       return;
     }
   } catch (e) {}
+
+  // Catálogo estático optimizado de productos destacados (garantía 0 ms de retraso)
+  const LOCAL_FEATURED_PRODUCTS = [
+    {
+      id: 8,
+      name: "Bolsa Cincelada Minerva",
+      category: "Bolsos",
+      price: 2600,
+      image: "products/featured/bolsa-cincelada-minerva.webp",
+      barcode: "FEATURED"
+    },
+    {
+      id: 1,
+      name: "Bolsa Sienna",
+      category: "Bolsos",
+      price: 3000,
+      image: "products/featured/bolsa-sienna.webp",
+      barcode: "FEATURED"
+    },
+    {
+      id: 3,
+      name: "Bolsa Sultana",
+      category: "Bolsos",
+      price: 1900,
+      image: "products/featured/bolsa-sultana.webp",
+      barcode: "FEATURED"
+    },
+    {
+      id: 2,
+      name: "Maletín/Bolsa Chelsea Pelo de Vaca",
+      category: "Bolsos",
+      price: 3000,
+      image: "products/featured/malet-n-bolsa-chelsea-pelo-de-vaca.webp",
+      barcode: "FEATURED"
+    },
+    {
+      id: 4,
+      name: "Porta Pasaporte en Piel",
+      category: "Accesorios",
+      price: 480,
+      image: "products/featured/porta-pasaporte.webp",
+      barcode: "FEATURED"
+    },
+    {
+      id: 24,
+      name: "Bolsa Mel + Strap",
+      category: "Bolsos",
+      price: 980,
+      image: "products/featured/bolsa-mel-strap.webp",
+      barcode: "FEATURED"
+    },
+    {
+      id: 5,
+      name: "Bolsa Combo Dior 2 en 1",
+      category: "Bolsos",
+      price: 2100,
+      image: "products/featured/bolsa-combo-dior-2-en-1-strap.webp",
+      barcode: "FEATURED"
+    },
+    {
+      id: 42,
+      name: "Crossbody Pull-Up Mantarraya",
+      category: "Crossbody",
+      price: 3500,
+      image: "products/featured/crossbody-pull-up-mantarraya.webp",
+      barcode: "FEATURED"
+    },
+    {
+      id: 61,
+      name: "Pechera en Piel Corte Vacuno",
+      category: "Accesorios",
+      price: 850,
+      image: "products/featured/pechera-en-piel-corte-vacuno.webp",
+      barcode: "FEATURED"
+    },
+    {
+      id: 64,
+      name: "Mandil Completo en Piel Vacuno",
+      category: "Accesorios",
+      price: 1390,
+      image: "products/featured/mandil-completo-en-piel-vacuno.webp",
+      barcode: "FEATURED"
+    }
+  ];
 
   // 3. Ejecutar la secuencia
   if (document.readyState === 'loading') {
@@ -91,24 +174,13 @@
       return isFeatured;
     });
 
-    // Fallback de respaldo en caso de que aún no carguen o no existan marcados
-    const fallbacks = [
-      { name: "Bolsa Sienna", category: "Bolsos", price: 3000, barcode: "FEATURED", image: "https://vizantino.com/products/elite/elite-1.jpg" },
-      { name: "Bolsa Cincelada Minerva", category: "Bolsos", price: 2600, barcode: "FEATURED", image: "https://vizantino.com/products/bolsa-valentina/valentina-1.jpg" },
-      { name: "Bolsa Mel + Strap", category: "Bolsos", price: 980, barcode: "FEATURED", image: "https://vizantino.com/products/crossbody-cesar/cesar-1.jpg" },
-      { name: "Crossbody Pull-up Mantarraya", category: "Crossbody", price: 3500, barcode: "FEATURED", image: "https://vizantino.com/products/tarjetero-vacuno/tarjetero-vacuno-studio-img-07.jpg" },
-      { name: "Pechera en Piel Corte Vacuno", category: "Accesorios", price: 850, barcode: "FEATURED", image: "https://vizantino.com/products/mochila-rains/mochila-rains-studio-img-18.jpg" }
-    ];
-
+    // Si aún no están cargados en memoria o BD, usar el catálogo estático optimizado
     if (featuredPool.length === 0) {
-      // Si no hay ninguno marcado explícitamente, usar los primeros productos emblemáticos activos
-      featuredPool = allProducts.filter(p => p && p.active !== false && p.image && !p.image.includes('Preloader')).slice(0, 6);
+      featuredPool = LOCAL_FEATURED_PRODUCTS;
     }
 
-    const poolToUse = featuredPool.length > 0 ? featuredPool : fallbacks;
-
     // Desordenar aleatoriamente (shuffle Fisher-Yates) entre los productos DESTACADOS para que varíen en cada visita
-    const shuffled = [...poolToUse];
+    const shuffled = [...featuredPool];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -118,14 +190,14 @@
     const unique = [];
     const seenNames = new Set();
     for (const prod of shuffled) {
-      if (prod && prod.image && !seenNames.has(prod.name)) {
-        seenNames.add(prod.name);
+      if (prod && prod.image && !seenNames.has(prod.name.toLowerCase().trim())) {
+        seenNames.add(prod.name.toLowerCase().trim());
         unique.push(prod);
         if (unique.length >= 6) break;
       }
     }
 
-    return unique.length >= 2 ? unique : fallbacks;
+    return unique.length >= 2 ? unique : LOCAL_FEATURED_PRODUCTS.slice(0, 5);
   }
 
   function startSequence() {
@@ -157,15 +229,23 @@
     if (stage && dynamicProducts.length > 0) {
       stage.innerHTML = dynamicProducts.map((p, idx) => `
         <div class="vp-cinematic-slide ${idx === 0 ? 'active' : ''}" data-index="${idx}">
-          <img src="${p.image}" alt="${p.name}" loading="eager" fetchpriority="${idx === 0 ? 'high' : 'auto'}">
+          <img src="${p.image}" alt="${p.name}" loading="eager" fetchpriority="${idx === 0 ? 'high' : 'auto'}" onerror="this.onerror=null;this.src='products/featured/bolsa-sienna.webp';">
           <div class="vp-slide-product-badge ${idx === 0 ? 'badge-active' : ''}">
-            <span class="vp-slide-badge-cat">${p.category || 'Piel Genuina'} · Hecho en México</span>
+            <span class="vp-slide-badge-cat">${p.category || 'Piel Genuina'} · Destacado</span>
             <span class="vp-slide-badge-title">${p.name}</span>
             <span class="vp-slide-badge-price">$${typeof p.price === 'number' ? p.price.toLocaleString('es-MX') : p.price} MXN</span>
           </div>
         </div>
       `).join('');
     }
+
+    // Pre-cargar imágenes en segundo plano para fluidez instantánea
+    dynamicProducts.forEach(p => {
+      if (p && p.image) {
+        const img = new Image();
+        img.src = p.image;
+      }
+    });
 
     const slides = preloader.querySelectorAll('.vp-cinematic-slide');
     const badges = preloader.querySelectorAll('.vp-slide-product-badge');
@@ -181,7 +261,7 @@
       }
     });
 
-    // Secuencia variable de cambio de fotografías (intervalo de ~900ms entre cada pieza)
+    // Secuencia variable de cambio de fotografías (intervalo equilibrado entre cada pieza)
     const slideTimers = [];
     const interval = Math.floor(3600 / Math.max(1, totalSlides));
     for (let i = 1; i < totalSlides; i++) {
@@ -211,14 +291,14 @@
       if (isDismissed) return;
       if (logo) logo.classList.add('show');
       if (sub) sub.classList.add('show');
-    }, 1500);
+    }, 1200);
 
     const textTimer2 = setTimeout(() => {
       if (isDismissed) return;
       if (title) title.classList.add('show');
       if (divider) divider.classList.add('show');
       if (tagline) tagline.classList.add('show');
-    }, 2000);
+    }, 1800);
 
     // Finalización automática de la intro (~4.8 segundos)
     const exitTimer = setTimeout(() => {

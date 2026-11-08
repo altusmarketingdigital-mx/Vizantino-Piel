@@ -1,0 +1,72 @@
+[
+  {
+    "id": 8,
+    "name": "Bolsa cincelada minerva",
+    "category": "Bolsos",
+    "price": 2600,
+    "image": "products/featured/bolsa-cincelada-minerva.webp"
+  },
+  {
+    "id": 1,
+    "name": "Bolsa Sienna",
+    "category": "Bolsos",
+    "price": 3000,
+    "image": "products/featured/bolsa-sienna.webp"
+  },
+  {
+    "id": 3,
+    "name": "Bolsa sultana",
+    "category": "Bolsos",
+    "price": 1900,
+    "image": "products/featured/bolsa-sultana.webp"
+  },
+  {
+    "id": 2,
+    "name": "Maletín/Bolsa Chelsea pelo de vaca",
+    "category": "Bolsos",
+    "price": 3000,
+    "image": "products/featured/malet-n-bolsa-chelsea-pelo-de-vaca.webp"
+  },
+  {
+    "id": 4,
+    "name": "Porta pasaporte",
+    "category": "Bolsos",
+    "price": 480,
+    "image": "products/featured/porta-pasaporte.webp"
+  },
+  {
+    "id": 24,
+    "name": "Bolsa mel + strap",
+    "category": "Bolsos",
+    "price": 980,
+    "image": "products/featured/bolsa-mel-strap.webp"
+  },
+  {
+    "id": 5,
+    "name": "Bolsa combo Dior 2 en 1 + strap",
+    "category": "Bolsos",
+    "price": 2100,
+    "image": "products/featured/bolsa-combo-dior-2-en-1-strap.webp"
+  },
+  {
+    "id": 42,
+    "name": "Crossbody pull-up mantarraya",
+    "category": "Crossbody",
+    "price": 3500,
+    "image": "products/featured/crossbody-pull-up-mantarraya.webp"
+  },
+  {
+    "id": 61,
+    "name": "Pechera en piel corte vacuno",
+    "category": "Accesorios",
+    "price": 850,
+    "image": "products/featured/pechera-en-piel-corte-vacuno.webp"
+  },
+  {
+    "id": 64,
+    "name": "Mandil completo en piel vacuno",
+    "category": "Accesorios",
+    "price": 1390,
+    "image": "products/featured/mandil-completo-en-piel-vacuno.webp"
+  }
+]
